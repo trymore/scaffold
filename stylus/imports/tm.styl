@@ -1,0 +1,253 @@
+blank-png = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVQI12NgYAAAAAMAASDVlMcAAAAASUVORK5CYII='
+
+//サイズ指定
+size(width, height = width)
+  width width
+  height height
+
+// 最小サイズ指定
+min-size(width, height = width)
+  min-width width
+  min-height height
+
+//100%指定
+full-size()
+  width 100%
+  height 100%
+
+//画像を可変にする
+liquid-image()
+  img
+    max-width 100%
+
+//画像を100%にする
+full-sized-image()
+  img
+    width 100%
+
+//可変時の画像の親の大きさを指定
+variable-image-container(width)
+  width width
+
+//画像の大きさを指定する
+assigned-image-width(width)
+  img
+    width width
+
+//パーセントのサイズを割り出す
+percent-size(size, base-size)
+  (size / base-size * 100)%
+
+//widthをパーセント指定してセンタリング
+percent-width-centering(width, base-width)
+  width (width / base-width * 100)%
+  margin-left auto
+  margin-right auto
+
+// コンテンツをセンタリング
+container-centering(width)
+  position relative
+  width width
+  margin-right auto
+  margin-left auto
+
+//背景画像指定
+//- 使い方
+//- bg-img("aaa.jpg", left, top, no-repeat, #fff)
+bg-img(file-name, position-x = left, position-y = top, repeat-type = null, bg-color = null, bg-size = false)
+  background url(image-path + file-name) position-x position-y repeat-type bg-color
+  if bg-size
+    background-size bg-size
+
+//背景画像指定（複数）
+//- 使い方
+//-  bg-img-multiple(
+//-    {
+//-      '1': "aaa.jpg" (left top) no-repeat
+//-      '2': "bbb.jpg" (left top) no-repeat #fff
+//-    },
+//-    {
+//-      '1': (50px 100px)
+//-      '2': (50px 100px)
+//-    }
+//-  )
+bg-img-multiple(imagesHash, sizesHash = false)
+  images = null
+  for i, props in imagesHash
+    for prop, j in props
+      if j is 0
+        if i is 1
+          images = images url(prop)
+        else
+          images = images, url(prop)
+      else
+        if prop
+          images = images prop
+  background images
+
+  if sizesHash
+    sizes = null
+    for i, prop in sizesHash
+      if prop
+        if i is 1
+          sizes = sizes prop
+        else
+          sizes = sizes, prop
+    background-size sizes
+
+//aタグをブロック要素にする
+a-block()
+  a
+    display block
+
+//要素をボタンとして扱う
+button()
+  display block
+  cursor pointer
+
+//10pxより小さいfont-size指定
+small-text(size)
+  display inline-block
+  transform scale(size)
+  transform-origin 0px 0px
+
+//文字置換
+text-replace()
+  text-indent 100%
+  text-decoration none
+  white-space nowrap
+  overflow hidden
+
+// 2行目以降を一文字下げる
+second-line-indent(width)
+  padding-left width
+  text-indent -1 * width
+
+//IE8・9・ハック
+ie8(value)
+  return value unquote("\9")
+
+//selectカスタマイズ
+select-customize(width, height)
+  width width
+  height height
+  line-height height
+  border none
+  cursor pointer
+  appearance button
+  &:focus
+    outline none
+
+// radioカスタマイズ
+radio-customize(width, height)
+  position relative
+  width width
+  height height
+  line-height height
+  border none
+  cursor pointer
+  appearance button
+  &:focus
+    outline none
+  &:checked:after
+    display block
+    absolute left top
+    size(width, height)
+    content ""
+
+//テーブル風dl
+dl-list(list-size, dt-width, dd-width)
+  width list-size
+  dt
+    float left
+    width dt-width
+    clear both
+  dd
+    width dd-width
+    margin-left dt-width
+
+// Android4 文章の折り返し位置のバグ対応
+// jquery-tm v0.5.8~ $.fn.env() と共に使う
+fix-android-word-wrap()
+  .android4
+    body, div, span, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, abbr, address, cite, code, del, dfn, em, img, ins, kbd, q, samp, small, strong, sub, sup, var, b, i, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, figcaption, figure, footer, header, hgroup, menu, nav, section, summary, time, mark, audio, video
+      background url(blank-png) no-repeat
+
+// 背景に透明画像を指定する（IE対策を含める）
+// IEではalphaで背景を消すと表示範囲を確保できないため透明画像を配置する必要がある。
+transparent()
+  background url(blank-png)
+
+// IE10でinputに出てくるクリアボタンを表示させない
+input-clear-invisible()
+  &::-ms-clear
+    display none
+
+// アスペクト比で出し分け（iPhone）
+iphone-device-aspect-ratio()
+  @media screen and (device-aspect-ratio: 2/3)
+    .iphone-under5
+      display block
+    .iphone-over5
+      display none
+  @media screen and (device-aspect-ratio: 40/71)
+    .iphone-under5
+      display none
+    .iphone-over5
+      display block
+  @media screen and (device-aspect-ratio: 3/4)
+    .iphone-under5
+      display none
+    .iphone-over5
+      display block
+
+// 三角形を生成
+triangle(shape = 'left', size = 10px, color = #000, top = auto, right = auto, bottom = auto, left = auto)
+  content ""
+  display block
+  width 0
+  height 0
+  if shape is 'top'
+    colors = color transparent transparent
+  else if shape is 'right'
+    colors = transparent color transparent transparent
+  else if shape is 'bottom'
+    colors = transparent transparent color
+  else if shape is 'left'
+    colors = transparent transparent transparent color
+  else if shape is 'topLeft'
+    colors = color transparent transparent color
+  else if shape is 'topRight'
+    colors = color color transparent transparent
+  else if shape is 'bottomRight'
+    colors = transparent color color transparent
+  else if shape is 'bottomLeft'
+    colors = transparent transparent color color
+  border-width size
+  border-style solid
+  border-color colors
+  position absolute
+  top top
+  right right
+  bottom bottom
+  left left
+
+// スプライト
+//- 使い方
+//-▼hover 無し
+//-sprites('images/button/logo.png')
+//-▼hover 有り
+//-sprites('images/button/logo', '-hover', '.png')
+//-▼hover & selector 有り
+//-sprites('images/button/logo', '-hover', '.png', '&.is-located')
+sprites(path, suffix = false, extension = false, selector = false)
+  if !suffix and !extension
+    sprite path
+  if suffix
+    sprite path + extension
+    if selector
+      &:hover, {selector}
+        sprite path + suffix + extension
+    else
+      &:hover
+        sprite path + suffix + extension

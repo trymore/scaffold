@@ -1,0 +1,20 @@
+extends /extends/pc/pc-template
+
+append vars
+  - var title       = 'top title'
+  - var description = 'top description'
+  - var keywords    = 'top keywords'
+  - var bodyAttrs = { 'id': 'body-id', 'class': 'body-class' };
+
+{{vars}}
+
+//- append metas
+//-   meta()
+//- append styles
+//-   link(rel="stylesheet", href="", media="all")
+//- append scripts
+//-   script(src="")
+
+block body-contents
+  h1 #{ factoryTitle }
+  p #{ factoryContents }
