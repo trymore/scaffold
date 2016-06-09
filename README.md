@@ -177,7 +177,7 @@ $ gulp coding --php
 /images/sprites/ 以下の画像をスプライト化して /htdocs/ 以下に出力します。  
 最終ディレクトリ名がファイル名になります。
 
-> 例
+> 例  
 /images/sprites/images/sample/a.png  
 /images/sprites/images/sample/b.png  
 ↓  
