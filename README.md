@@ -1,6 +1,6 @@
-# ビルド環境の構築
+# 開発環境の構築
 
-このプロジェクトは[Gulp](http://gulpjs.com/)で管理されています。
+このプロジェクトは [Gulp](http://gulpjs.com/) で管理されています。
 
 ## グローバルにインストールが必要なモジュール
 - [node.js](https://nodejs.org/en/)
