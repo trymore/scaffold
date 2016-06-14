@@ -1,8 +1,7 @@
-extends /extends/site-base
+extends /extends/site-base.pug
 
 append vars
   //- PC全体のmeta情報
-  //-
     - var title    = ['タイトル', 'ogタグ用タイトル'];
     - var desc     = ['ディスクリプション', 'ogディスクリプション'];
     - var keyword  = 'キーワード,キーワード';
@@ -11,12 +10,12 @@ append vars
     - var ogImg    = 'http://hoge.com/hoge.png';
     - var ogType   = 'website';
 
-block append meta
-  meta(http-equiv="X-UA-Compatible", content="IE=edge")
-block else
-  //-link(rel="shortcut icon", href=favicon)
-  //-link(href="/favicon.ico", rel="shortcut icon", type="image/ico")
-block css
-  link(rel="stylesheet", href=relative('styles/style.css'))
-block js
+append meta
+  meta(http-equiv="X-UA-Compatible" content="IE=edge")
+block styles
+  link(rel="stylesheet" href=relative('styles/style.css'))
+block scripts
   script(src=relative('scripts/index.js'))
+//-block else
+  link(rel="shortcut icon" href=favicon)
+  link(href="/favicon.ico" rel="shortcut icon", type="image/ico")

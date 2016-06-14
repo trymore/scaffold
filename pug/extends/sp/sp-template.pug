@@ -1,8 +1,7 @@
-extends /extends/site-base
+extends /extends/site-base.pug
 
 append vars
   //- SP全体のmeta情報
-  //-
     - var title    = ['タイトル', 'ogタグ用タイトル'];
     - var desc     = ['ディスクリプション', 'ogディスクリプション'];
     - var keyword  = 'キーワード,キーワード';
@@ -12,11 +11,14 @@ append vars
     - var ogType   = 'website';
 
 block meta
-  include /includes/meta
-    meta(name="viewport", content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=0")
-block else
-  //-link(href="/apple-touch-icon-precomposed.png", rel="apple-touch-icon-precomposed", type="image/png")
-block css
-  link(rel="stylesheet", href=relative('sp/styles/style.css'))
-block js
+  include /includes/meta.pug
+    //- ピンチでズームさせない
+    meta(name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no,maximum-scale=1")
+    //- ピンチでズームさせる
+      meta(content="width=device-width,initial-scale=1" name="viewport")
+block styles
+  link(rel="stylesheet" href=relative('sp/styles/style.css'))
+block scripts
   script(src=relative('sp/scripts/index.js'))
+//-block else
+  link(href="/apple-touch-icon-precomposed.png" rel="apple-touch-icon-precomposed" type="image/png")

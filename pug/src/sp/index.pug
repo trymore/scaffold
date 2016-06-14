@@ -1,8 +1,7 @@
-extends /extends/sp/sp-template
+extends /extends/sp/sp-template.pug
 
 append vars
   //- 各ページのmeta情報
-  //-
     - var title    = ['タイトル', 'ogタグ用タイトル'];
     - var desc     = ['ディスクリプション', 'ogディスクリプション'];
     - var keyword  = 'キーワード,キーワード';
@@ -13,15 +12,5 @@ append vars
 
   //- body の id, class 設定
     - var bodyAttrs = { 'id': 'body-id', 'class': 'body-class' };
-
-//- head内の各要素の後に追記する場合は以下に追記
-  append meta
-    meta()
-  append ogp
-    meta()
-  append css
-    link(rel="stylesheet", href="", media="all")
-  append js
-    script(src="")
 
 block body-contents
