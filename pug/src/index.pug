@@ -1,4 +1,4 @@
-extends /extends/pc/pc-template
+extends /extends/pc/pc-template.pug
 
 append vars
   //- 各ページのmeta情報
@@ -12,15 +12,5 @@ append vars
 
   //- body の id, class 設定
     - var bodyAttrs = { 'id': 'body-id', 'class': 'body-class' };
-
-//- head内の各要素の後に追記する場合は以下に追記
-  append meta
-    meta()
-  append ogp
-    meta()
-  append css
-    link(rel="stylesheet", href="", media="all")
-  append js
-    script(src="")
 
 block body-contents

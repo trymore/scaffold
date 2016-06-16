@@ -27,12 +27,12 @@ block html
     block head
       head
         block meta
-          include /includes/meta
-        block ogp
-          include /includes/ogp
+          include /includes/meta.pug
+        //-block ogp
+          include /includes/ogp.pug
         block else
-        block css
-        block js
+        block styles
+        block scripts
     block body
       body&attributes(bodyAttrs)
         block body-contents
