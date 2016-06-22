@@ -90,5 +90,8 @@ td {
 a img {
   border: none;
 }
+body {
+  -webkit-text-size-adjust: 100%;
+}
 
 /*# sourceMappingURL=style.css.map */

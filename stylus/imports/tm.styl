@@ -46,6 +46,21 @@ percent-container-centering(width, base-width)
   margin-left auto
   margin-right auto
 
+//アスペクト比を固定したままリサイズ（IE8以上）
+aspect-ratio-kept-container(width, height)
+  position relative
+  width 100%
+  &::before
+    content ""
+    display block
+    padding-top (height / width * 100)%
+  *
+    position absolute
+    top 0
+    left 0
+    bottom 0
+    right 0
+
 //aタグをブロック要素にする
 a-block()
   a
