@@ -50,8 +50,6 @@
 	
 	Anchor = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"pencil/views/ui/anchor\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
 	
-	__webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"html5shiv\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
-	
 	$(document).one('ready', function() {
 	  return $('a[href^="#"]').each(function(arg, el) {
 	    arg;
