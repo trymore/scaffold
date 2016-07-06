@@ -112,7 +112,7 @@ const IMAGES_BASE = 'images';
 
 const SPRITE_SRC      = join(IMAGES_BASE, 'sprites');
 const SPRITE_DEST     = DEST_ROOT;
-const SPRITE_CSS_DEST = join(STYLUS_BASE,'imports');
+const SPRITE_CSS_DEST = join(STYLUS_BASE, 'imports');
 
 const IMAGEMIN_SRC  = join(IMAGES_BASE, 'src');
 const IMAGEMIN_DEST = DEST_ROOT;
@@ -124,7 +124,6 @@ const WEBPACK_DEST  = DEST_ROOT;
 
 const TEST_CONFIG_SRC = `${ __dirname }/karma.conf.js`;
 const TEST_SRC        = 'test';
-
 
 const URL_LIST = 'url-list';
 
@@ -153,45 +152,66 @@ const PLUMBER_OPTS = { errorHandler: notify.onError('<%= error.message %>') };
 /**
  * default
  */
-gulp.task('default', [ 'development' ]);
+gulp.task('default', (done) => {
+  runSequence('development', done);
+});
 
 
 /**
  * development
  */
-gulp.task('development', [ 'all' ]);
+gulp.task('development', (done) => {
+  runSequence('all', done);
+});
 
 
 /**
  * production
  */
-gulp.task('production', () => {
+gulp.task('production', (done) => {
   isProduction = true;
-  gulp.start('all');
+  runSequence('all', done);
 });
 
 
 /**
  * coding
  */
-gulp.task('coding', () => {
-  runSequence(
-    'coding-watch',
-    (() => isProduction ? [ 'sprite', 'imagemin' ] : 'sprite')(),
-    [ 'pug', 'pug-factory', 'stylus' ],
-    [ 'browser-sync', 'url-list' ]
-  );
+gulp.task('coding', (done) => {
+  const sequence = (() => {
+    if(isProduction) {
+      return [
+        'sprite',
+        'imagemin',
+        [ 'pug', 'pug-factory', 'stylus' ],
+        'url-list',
+        'browser-sync',
+        'coding-watch',
+      ]
+    } else {
+      return [
+        'sprite',
+        [ 'pug', 'pug-factory', 'stylus' ],
+        'url-list',
+        'browser-sync',
+        'coding-watch',
+      ]
+    }
+  })();
+
+runSequence(...union(sequence, [done]));
 });
 
 
 /**
  * scripting
  */
-gulp.task('scripting', () => {
+gulp.task('scripting', (done) => {
   runSequence(
-    'scripting-watch',
     'webpack-first',
-    'browser-sync'
+    'browser-sync',
+    'scripting-watch',
+    done
   );
 });
 
@@ -199,87 +219,114 @@ gulp.task('scripting', () => {
 /**
  * all
  */
-gulp.task('all', () => {
-  runSequence(
-    (() => isProduction ? 'production-watch' : 'all-watch')(),
-    (() => isProduction ? [ 'sprite', 'imagemin' ] : 'sprite')(),
-    [ 'pug', 'pug-factory', 'stylus', 'webpack-first' ],
-    (() => isProduction ? [ 'browser-sync', 'clean' ] : 'browser-sync')()
-  );
+gulp.task('all', (done) => {
+  const sequence = (() => {
+    if(isProduction) {
+      return [
+        'sprite',
+        'imagemin',
+        [ 'pug', 'pug-factory', 'stylus', 'webpack-first' ],
+        'clean',
+        'browser-sync',
+        'production-watch',
+      ]
+    } else {
+      return [
+        'sprite',
+        [ 'pug', 'pug-factory', 'stylus', 'webpack-first' ],
+        'browser-sync',
+        'all-watch',
+      ]
+    }
+  })();
+
+  runSequence(...union(sequence, [done]));
 });
 
 
 /**
  * watch
  */
-gulp.task('watch', [ 'all-watch', 'browser-sync' ]);
+gulp.task('watch', (done) => {
+  runSequence([ 'all-watch', 'browser-sync' ], done);
+});
 
 
 /**
  * watch start
  */
-const watchStart = (files, cb) => {
-  watch(files, { ignoreInitial: false }, cb);
+const watchStart = (files, cb = null) => {
+  watch(files, { ignoreInitial: true }, cb);
 };
 
 
 /**
  * coding watch
  */
-gulp.task('coding-watch', () => {
+gulp.task('coding-watch', (done) => {
+  return (() => {
 
-  watchStart([ join(PUG_SRC    , '/**/*.pug') ], () => gulp.start('pug'));
-  watchStart([ join(PUG_OTHER  , '/**/*.pug') ], () => gulp.start('pug-all'));
-  watchStart([ join(PUG_FACTORY, '/**/*.json') ], () => gulp.start('pug-factory'));
-  watchStart([ join(PUG_FACTORY, '/**/*.pug') ], () => gulp.start('pug-factory-all'));
+    watchStart([ join(PUG_SRC    , '/**/*.pug') ], () => gulp.start('pug'));
+    watchStart([ join(PUG_OTHER  , '/**/*.pug') ], () => gulp.start('pug-all'));
+    watchStart([ join(PUG_FACTORY, '/**/*.json') ], () => gulp.start('pug-factory'));
+    watchStart([ join(PUG_FACTORY, '/**/*.pug') ], () => gulp.start('pug-factory-all'));
 
-  const styleTask = (stylusTask) => {
-    runSequence.apply(this, [ 'sprite', stylusTask ]);
-  };
-  watchStart([ join(STYLUS_SRC   , '/**/*.styl') ], () => styleTask('stylus'));
-  watchStart([ join(STYLUS_OTHER , '/**/*.styl') ], () => styleTask('stylus-all'));
+    const styleTask = (stylusTask) => {
+      runSequence.apply(this, [ 'sprite', stylusTask ]);
+    };
+    watchStart([ join(STYLUS_SRC   , '/**/*.styl') ], () => styleTask('stylus'));
+    watchStart([ join(STYLUS_OTHER , '/**/*.styl') ], () => styleTask('stylus-all'));
 
-  watchStart([ join(IMAGEMIN_SRC, '/**/*.+(png|jpg|gif|svg)') ], () => isImagesChanged  = true);
-  watchStart([ join(SPRITE_SRC  , '/**/*.+(png|jpg|gif|svg)') ], () => isSpritesChanged = true);
+    watchStart([ join(IMAGEMIN_SRC, '/**/*.+(png|jpg|gif|svg)') ], () => isImagesChanged  = true);
+    watchStart([ join(SPRITE_SRC  , '/**/*.+(png|jpg|gif|svg)') ], () => isSpritesChanged = true);
 
-  watchStart([ join(DEST_ROOT , '/**/*.+(html|php)') ], (file) => {
-    const page = viewingPage ? join(__dirname, DEST_ROOT, viewingPage) : '*.+(html|php)';
+    watchStart([ join(DEST_ROOT , '/**/*.+(html|php)') ], (file) => {
+      const page = viewingPage ? join(__dirname, DEST_ROOT, viewingPage) : '*.+(html|php)';
 
-    gulp.src(file.path)
-      .pipe(gulpif(page, browserSync.reload({ stream: true })))
-      .pipe(gulpif('*.html', htmlhint()));
-  });
+      gulp.src(file.path)
+        .pipe(gulpif(page, browserSync.reload({ stream: true })))
+        .pipe(gulpif('*.html', htmlhint()));
+    });
 
-  watchStart([ join(DEST_ROOT , '/**/*.+(css|js|png|jpg|jpeg|gif|svg)') ], (file) => {
-    gulp.src(file.path)
-      .pipe(browserSync.reload({ stream: true }));
-  });
+    watchStart([ join(DEST_ROOT , '/**/*.+(css|js|png|jpg|jpeg|gif|svg)') ], (file) => {
+      gulp.src(file.path)
+        .pipe(browserSync.reload({ stream: true }));
+    });
 
+    done();
+
+  })();
 });
 
 
 /**
  * scripting watch
  */
-gulp.task('scripting-watch', () => {
-
-  watchStart([ join(WEBPACK_SRC  , '/**/*.+(js|coffee)') ], () => gulp.start('webpack'));
-  watchStart([ join(WEBPACK_OTHER, '/**/*.+(js|coffee)') ], () => gulp.start('webpack-all'));
-
+gulp.task('scripting-watch', (done) => {
+  return (() => {
+    watchStart([ join(WEBPACK_SRC  , '/**/*.+(js|coffee)') ], () => gulp.start('webpack'));
+    watchStart([ join(WEBPACK_OTHER, '/**/*.+(js|coffee)') ], () => gulp.start('webpack-all'));
+    done();
+  })();
 });
 
 
 /**
  * all watch
  */
-gulp.task('all-watch', [ 'coding-watch', 'scripting-watch' ]);
+gulp.task('all-watch', (done) => {
+  return runSequence([ 'coding-watch', 'scripting-watch' ], done);
+});
 
 
 /**
  * production watch
  */
-gulp.task('production-watch', () => {
-  watchStart(join(DEST_ROOT, '/**/*.+(html|php|css|js|png|jpg|jpeg|gif|svg)'));
+gulp.task('production-watch', (done) => {
+  return (() => {
+    watchStart(join(DEST_ROOT, '/**/*.+(html|php|css|js|png|jpg|jpeg|gif|svg)'));
+    done();
+  })();
 });
 
 
@@ -300,7 +347,7 @@ const browserSyncMiddleware = (req, res, next) => {
   next();
 };
 
-gulp.task('browser-sync', () => {
+gulp.task('browser-sync', (done) => {
   if(!argv.php) {
     browserSync.init({
       server: {
@@ -315,8 +362,8 @@ gulp.task('browser-sync', () => {
   }
   else {
     connect.server({
-      port     : 3002,
-      base     : DEST_ROOT,
+      port: 3002,
+      base: DEST_ROOT,
       keepalive: false,
     });
     browserSync.init({
@@ -327,9 +374,9 @@ gulp.task('browser-sync', () => {
       reloadOnRestart: true,
     });
   }
-  browserSyncUrlList.init({
+  return browserSyncUrlList.init({
     server: {
-      baseDir   : URL_LIST,
+      baseDir: URL_LIST,
       middleware: (req, res, next) => {
         gulp.start('url-list');
         next();
@@ -340,7 +387,7 @@ gulp.task('browser-sync', () => {
     open  : false,
     notify: false,
     reloadOnRestart: true,
-  });
+  }, done);
 });
 
 
@@ -363,12 +410,12 @@ const pugMember = (file, callback) => {
       })();
     },
     isProduction: isProduction,
-  }
+  };
   callback(null, ret);
-}
+};
 
 gulp.task('pug', (done) => {
-  pugTask(join(PUG_SRC, '/**/*.pug'), PUG_DEST, true, done);
+  return pugTask(join(PUG_SRC, '/**/*.pug'), PUG_DEST, true, done);
 });
 
 gulp.task('pug-all', (done) => {
@@ -376,22 +423,22 @@ gulp.task('pug-all', (done) => {
     const path = `${ viewingPage.match(/^(.+)(\.)(html|php)$/)[1] }.pug`;
     const dest = viewingPage.match(/^(.*\/)(.+\.)(html|php)$/)[1];
     pugTask(join(PUG_SRC, path), join(PUG_DEST, dest), false);
-    pugTask([join(PUG_SRC, '/**/*.pug'), `!(${ join(PUG_SRC, path) })`], PUG_DEST, false, done);
+    return pugTask([join(PUG_SRC, '/**/*.pug'), join(PUG_SRC, `!${ path }`)], PUG_DEST, false, done);
   } else {
-    pugTask(join(PUG_SRC, '/**/*.pug'), PUG_DEST, false, done);
+    return pugTask(join(PUG_SRC, '/**/*.pug'), PUG_DEST, false, done);
   }
 });
 
 gulp.task('pug-factory', (done) => {
-  pugFactoryTask(true, done);
+  return pugFactoryTask(true, done);
 });
 
 gulp.task('pug-factory-all', (done) => {
-  pugFactoryTask(false, done);
+  return pugFactoryTask(false, done);
 });
 
 const pugOpts = {
-  pug    : pug,
+  pug   : pug,
   pretty : true,
   // pretty : !isProduction,
   basedir: join(__dirname, PUG_BASE),
@@ -416,60 +463,64 @@ const pugOpts = {
 // const pugExtensonChangeFilter = ['*'];
 
 const pugTask = (srcPath, destPath, isSrcDirUpdate, done = null) => {
-  return gulp.src(srcPath)
-    .pipe(plumber(PLUMBER_OPTS))
-    .pipe(gulpif(isSrcDirUpdate, cache('pug')))
-    .pipe(data(pugMember))
-    .pipe(gulpPug(pugOpts))
-    // .pipe(crLfReplace({ changeCode: 'CR+LF' }))
-    // .pipe(gulpif(isProduction, iconv({ encoding: 'shift_jis' })))
-    .pipe(gulp.dest(destPath))
-    // .pipe(filter(pugExtensonChangeFilter))
-    // .pipe(extensonChange({
-    //   afterExtension: 'php',
-    //   copy: true,
-    // }))
-    // .pipe(gulp.dest(PUG_DEST))
-    .on('end', () => {
-      if(done) done()
-    });
+  return (() => {
+    gulp.src(srcPath)
+      .pipe(plumber(PLUMBER_OPTS))
+      .pipe(gulpif(isSrcDirUpdate, cache('pug')))
+      .pipe(data(pugMember))
+      .pipe(gulpPug(pugOpts))
+      // .pipe(crLfReplace({ changeCode: 'CR+LF' }))
+      // .pipe(gulpif(isProduction, iconv({ encoding: 'shift_jis' })))
+      .pipe(gulp.dest(destPath))
+      // .pipe(filter(pugExtensonChangeFilter))
+      // .pipe(extensonChange({
+      //   afterExtension: 'php',
+      //   copy: true,
+      // }))
+      // .pipe(gulp.dest(PUG_DEST))
+      .on('end', () => {
+        if(done) done();
+      });
+  })();
 };
 
 const pugFactoryTask = (isJsonFileUpdate, done) => {
+  return (() => {
 
-  const factory = () => {
-    const transform = function(data, encode, callback) {
-      const tmps = JSON.parse(data.contents.toString());
-      forEach(tmps, (pages, tmpPath) => {
-        forEach(pages, (page, destPath) => {
-          const vals = reduce(page, (memo, val, key) => {
-            return `${ memo }  - var ${ key } = ${ JSON.stringify(val) }\n`;
-          }, '');
-          const tmpContent = fs.readFileSync(join(PUG_BASE, tmpPath)).toString().split('{{vars}}');
-          const contents   = tmpContent[0] + vals + tmpContent[1];
-          this.push(new File({
-            path    : destPath,
-            contents: new Buffer(contents),
-          }));
+    const factory = () => {
+      const transform = function(data, encode, callback) {
+        const tmps = JSON.parse(data.contents.toString());
+        forEach(tmps, (pages, tmpPath) => {
+          forEach(pages, (page, destPath) => {
+            const vals = reduce(page, (memo, val, key) => {
+              return `${ memo }  - var ${ key } = '${ val }'\n`;
+            }, '');
+            const tmpContent = fs.readFileSync(join(PUG_BASE, tmpPath)).toString().split('{{vars}}');
+            const contents   = tmpContent[0] + vals + tmpContent[1];
+            this.push(new File({
+              path    : destPath,
+              contents: new Buffer(contents),
+            }));
+          });
         });
-      });
-      callback();
+        callback();
+      };
+      const flush = (callback) => {
+        callback();
+      };
+      return through.obj(transform, flush);
     };
-    const flush = (callback) => {
-      callback();
-    };
-    return through.obj(transform, flush);
-  };
 
-  gulp.src(join(PUG_FACTORY, '/**/*.json'))
-    .pipe(plumber(PLUMBER_OPTS))
-    .pipe(gulpif(isJsonFileUpdate, cache('pug-factory')))
-    .pipe(factory())
-    .pipe(data(pugMember))
-    .pipe(gulpPug(pugOpts))
-    .pipe(gulp.dest(PUG_DEST))
-    .on('end', done);
+    gulp.src(join(PUG_FACTORY, '/**/*.json'))
+      .pipe(plumber(PLUMBER_OPTS))
+      .pipe(gulpif(isJsonFileUpdate, cache('pug-factory')))
+      .pipe(factory())
+      .pipe(data(pugMember))
+      .pipe(gulpPug(pugOpts))
+      .pipe(gulp.dest(PUG_DEST))
+      .on('end', done);
 
+  })();
 };
 
 
@@ -485,78 +536,83 @@ gulp.task('stylus-all', (done) => {
 });
 
 const stylusTask = (isSrcDirUpdate, done) => {
+  return (() => {
 
-  const stylusOpts = {
-    use     : [ nib() ],
-    compress: false,
-    // compress: isProduction,
-  };
-  if(!isProduction) {
-    merge(stylusOpts, {
-      sourcemap: { inline: true },
-    });
-  }
+    const stylusOpts = {
+      use     : [ nib() ],
+      compress: false,
+      // compress: isProduction,
+    };
+    if(!isProduction) {
+      merge(stylusOpts, {
+        sourcemap: { inline: true },
+      });
+    }
 
-  gulp.src(join(STYLUS_SRC, '/**/*.styl'))
-    .pipe(plumber(PLUMBER_OPTS))
-    .pipe(gulpif(isSrcDirUpdate, cache('stylus')))
-    .pipe(stylus(stylusOpts))
-    .pipe(gulpif(!isProduction, sourcemaps.init({ loadMaps: true })))
-    .pipe(gulpif(!isProduction, sourcemaps.write('.')))
-    .pipe(bust({ base: 'htdocs' }))
-    .pipe(gulp.dest(STYLUS_DEST))
-    .pipe(url({
-      mode: 'relative',
-      base: STYLUS_DEST,
-    }))
-    .pipe(gulp.dest(STYLUS_DEST))
-    .on('end', done);
-
+    gulp.src(join(STYLUS_SRC, '/**/*.styl'))
+      .pipe(plumber(PLUMBER_OPTS))
+      .pipe(gulpif(isSrcDirUpdate, cache('stylus')))
+      .pipe(stylus(stylusOpts))
+      .pipe(gulpif(!isProduction, sourcemaps.init({ loadMaps: true })))
+      .pipe(gulpif(!isProduction, sourcemaps.write('.')))
+      .pipe(bust({ base: 'htdocs' }))
+      .pipe(gulp.dest(STYLUS_DEST))
+      .pipe(url({
+        mode: 'relative',
+        base: STYLUS_DEST,
+      }))
+      .pipe(gulp.dest(STYLUS_DEST))
+      .on('end', done);
+  })();
 };
 
 
 /**
  * css sprite images
  */
-gulp.task('sprite', () => {
+gulp.task('sprite', (done) => {
+  return (() => {
 
-  if(!isSpritesChanged) return;
+    if(!isSpritesChanged) return;
 
-  isSpritesChanged = false;
+    isSpritesChanged = false;
 
-  gulp.src(join(SPRITE_SRC, '/**/*.png'))
-    .pipe(plumber(PLUMBER_OPTS))
-    .pipe(sort())
-    .pipe(changed(SPRITE_DEST))
-    .pipe(stylusSprites({
-      imgSrcBase     : SPRITE_SRC.replace('./', '/'),
-      stylusFileName : 'sprite',
-      spritesmithOpts: {
-        engine: 'pngsmith',
-        algorithmOpts: { sort: false },
-      },
-    }))
-    .pipe(gulpif('*.styl', cache('stylus')))
-    .pipe(gulpif('*.styl', gulp.dest(SPRITE_CSS_DEST)))
-    .pipe(gulpif('*.png', gulp.dest(SPRITE_DEST)));
+    const imageDest = isProduction ? IMAGEMIN_SRC : SPRITE_DEST;
 
+    gulp.src(join(SPRITE_SRC, '/**/*.png'))
+      .pipe(plumber(PLUMBER_OPTS))
+      .pipe(sort())
+      .pipe(changed(SPRITE_DEST))
+      .pipe(stylusSprites({
+        imgSrcBase     : SPRITE_SRC.replace('./', '/'),
+        stylusFileName : 'sprite',
+        spritesmithOpts: {
+          engine: 'pngsmith',
+          algorithmOpts: { sort: false },
+        },
+      }))
+      .pipe(gulpif('*.png', gulp.dest(imageDest)))
+      .on('end', done)
+      .pipe(gulpif('*.styl', cache('stylus')))
+      .pipe(gulpif('*.styl', gulp.dest(SPRITE_CSS_DEST)));
+
+  })();
 });
 
 
 /**
  * imagemin
  */
-gulp.task('imagemin', () => {
+gulp.task('imagemin', (done) => {
 
   if(!isImagesChanged) return;
 
-  gulp.start([
-    'imagemin-png',
-    'imagemin-jpg',
-    'imagemin-gif',
-    'imagemin-svg',
-  ])
-  isImagesChanged = false;
+  const rs = runSequence(
+    [ 'imagemin-png', 'imagemin-jpg', 'imagemin-gif', 'imagemin-svg' ],
+    done
+  );
+  isImagesChanged = false
+  return rs;
 
 });
 
@@ -589,12 +645,14 @@ const imageminConfig = {
 
 forEach(imageminConfig, (val, key) => {
   gulp.task(`imagemin-${ key }`, (done) => {
-    gulp.src(join(IMAGEMIN_SRC, `/**/*.${ val.extension }`))
-      .pipe(plumber(PLUMBER_OPTS))
-      .pipe(changed(IMAGEMIN_DEST))
-      .pipe(imagemin(val.opts))
-      .pipe(gulp.dest(IMAGEMIN_DEST))
-      .on('end', done);
+    return (() => {
+      gulp.src(join(IMAGEMIN_SRC, `/**/*.${ val.extension }`))
+        .pipe(plumber(PLUMBER_OPTS))
+        .pipe(changed(IMAGEMIN_DEST))
+        .pipe(imagemin(val.opts))
+        .pipe(gulp.dest(IMAGEMIN_DEST))
+        .on('end', done);
+    })();
   });
 });
 
@@ -603,123 +661,126 @@ forEach(imageminConfig, (val, key) => {
  * webpack (JavaScript)
  */
 gulp.task('webpack-first', (done) => {
-  bower()
-    .once('end', () => {
-      gulp.start('webpack');
-      done();
-    });
+  return (() => {
+    bower()
+      .once('end', () => {
+        runSequence('webpack', done);
+      });
+  })();
 });
 
 gulp.task('webpack', (done) => {
-  webpackTask(true, done);
+  return webpackTask(true, done);
 });
 
 gulp.task('webpack-all', (done) => {
-  webpackTask(false, done);
+  return webpackTask(false, done);
 });
 
 const webpackTask = (isSrcDir, done) => {
+  return (() => {
 
-  const webpackOpts = () => {
-    const opts = {
-      resolve: {
-        root      : [ join(__dirname, 'bower_components') ],
-        extensions: [ '', '.js', '.coffee' ],
-        alias: {
-          // 'es6-promise': 'es6-promise/es6-promise.min',
-          // 'lodash'     : 'lodash/dist/lodash.min',
-          // 'Velocity'   : 'velocity/velocity.min',
-          // 'Velocity.ui': 'velocity/velocity.ui.min',
+    const webpackOpts = () => {
+      const opts = {
+        resolve: {
+          root      : [ join(__dirname, 'bower_components') ],
+          extensions: [ '', '.js', '.coffee' ],
+          alias: {
+            // 'es6-promise': 'es6-promise/es6-promise.min',
+            // 'lodash'     : 'lodash/dist/lodash.min',
+            // 'Velocity'   : 'velocity/velocity.min',
+            // 'Velocity.ui': 'velocity/velocity.ui.min',
+          },
         },
-      },
-      module: {
-        loaders: [],
-      },
-      plugins: [
-        new webpack.ResolverPlugin(
-          new webpack.ResolverPlugin.DirectoryDescriptionFilePlugin('bower.json', [ 'main' ])
-        )
-      ],
-    };
-    switch(jsCompiler) {
-      case 'babel':
-        opts.module.loaders.push({
-          test   : /\.js$/,
-          loader : 'babel',
-          query  : { presets: [ 'es2015', 'stage-0' ] },
-          exclude: /(node_modules|bower_components)/,
-        });
-        break;
-      case 'coffee':
-        opts.module.loaders.push({
-          test  : /\.coffee$/,
-          loader: 'coffee',
-        });
-        break;
-    }
-    if(!isProduction) {
-      merge(opts, { devtool: 'source-map' });
-    }
-    // if(isProduction) {
-    //   merge(opts.plugins, [
-    //     new webpack.optimize.DedupePlugin(),
-    //     new webpack.optimize.UglifyJsPlugin(),
-    //     new webpack.optimize.OccurenceOrderPlugin(),
-    //     new webpack.optimize.AggressiveMergingPlugin(),
-    //   ]);
-    // }
-    return opts;
-  }
-
-  const build = (opts) => {
-    const { basedir, src, dest, webpackOpts } = opts;
-    const webpackBaseOpts = (entry, outputPath, outputFilename) => {
-      return {
-        entry: entry,
-        output: {
-          path: outputPath,
-          filename: `${ outputFilename }.js`,
+        module: {
+          loaders: [],
         },
+        plugins: [
+          new webpack.ResolverPlugin(
+            new webpack.ResolverPlugin.DirectoryDescriptionFilePlugin('bower.json', [ 'main' ])
+          )
+        ],
+      };
+      switch(jsCompiler) {
+        case 'babel':
+          opts.module.loaders.push({
+            test   : /\.js$/,
+            loader : 'babel',
+            query  : { presets: [ 'es2015', 'stage-0' ] },
+            exclude: /(node_modules|bower_components)/,
+          });
+          break;
+        case 'coffee':
+          opts.module.loaders.push({
+            test  : /\.coffee$/,
+            loader: 'coffee',
+          });
+          break;
       }
+      if(!isProduction) {
+        merge(opts, { devtool: 'source-map' });
+      }
+      // if(isProduction) {
+      //   merge(opts.plugins, [
+      //     new webpack.optimize.DedupePlugin(),
+      //     new webpack.optimize.UglifyJsPlugin(),
+      //     new webpack.optimize.OccurenceOrderPlugin(),
+      //     new webpack.optimize.AggressiveMergingPlugin(),
+      //   ]);
+      // }
+      return opts;
     };
-    const transform = (data, encode, callback) => {
-      const destDirname    = dirname(join(basedir, dest, relative(src, data.path)));
-      const destFilename   = basename(data.path, jsExtension);
-      const webpackAllOpts = merge(webpackBaseOpts(data.path, destDirname, destFilename), webpackOpts);
-      webpack(webpackAllOpts, (err, stats) => {
-        if(err) {
-          throw new PluginError('webpack', err);
-        }
-        log('[webpack]', stats.toString());
+
+    const build = (opts) => {
+      const { basedir, src, dest, webpackOpts } = opts;
+      const webpackBaseOpts = (entry, outputPath, outputFilename) => {
+        return {
+          entry: entry,
+          output: {
+            path: outputPath,
+            filename: `${ outputFilename }.js`,
+          },
+        };
+      };
+      const transform = (data, encode, callback) => {
+        const destDirname    = dirname(join(basedir, dest, relative(src, data.path)));
+        const destFilename   = basename(data.path, jsExtension);
+        const webpackAllOpts = merge(webpackBaseOpts(data.path, destDirname, destFilename), webpackOpts);
+        webpack(webpackAllOpts, (err, stats) => {
+          if(err) {
+            throw new PluginError('webpack', err);
+          }
+          log('[webpack]', stats.toString());
+          callback();
+        });
+      };
+      const flush = (callback) => {
         callback();
-      });
+      };
+      return through.obj(transform, flush);
     };
-    const flush = (callback) => {
-      callback();
-    };
-    return through.obj(transform, flush);
-  };
 
-  gulp.src(join(WEBPACK_SRC, `/**/*${ jsExtension }`))
-    .pipe(plumber(PLUMBER_OPTS))
-    .pipe(gulpif(isSrcDir, cache('webpack')))
-    .pipe(build({
-      basedir    : __dirname,
-      src        : WEBPACK_SRC,
-      dest       : WEBPACK_DEST,
-      webpackOpts: webpackOpts(),
-    }))
-    .on('end', done);
+    gulp.src(join(WEBPACK_SRC, `/**/*${ jsExtension }`))
+      .pipe(plumber(PLUMBER_OPTS))
+      .pipe(gulpif(isSrcDir, cache('webpack')))
+      .pipe(build({
+        basedir    : __dirname,
+        src        : WEBPACK_SRC,
+        dest       : WEBPACK_DEST,
+        webpackOpts: webpackOpts(),
+      }))
+      .on('end', done);
 
+  })();
 };
 
 
 /**
  * javascript test
  */
-gulp.task('test', () => {
+gulp.task('test', (done) => {
   watch([ join(TEST_SRC , '/**/*') ], () => gulp.start('test'));
-  karma.server.start({ configFile: TEST_CONFIG_SRC });
+  karma.server.start({ configFile: TEST_CONFIG_SRC }, done);
 });
 
 
@@ -727,9 +788,9 @@ gulp.task('test', () => {
  * url list
  */
 gulp.task('url-list', (done) => {
-  recursive(DEST_ROOT, ['!*.+(html|php)'], (err, files) => {
+  return recursive(DEST_ROOT, ['!*.+(html|php)'], (err, files) => {
     const pathData = reduce(files, (memo, path, i) => {
-      var pathName = path.replace('htdocs', '');
+      const pathName = path.replace('htdocs', '');
       if(i) {
         return `${ memo }, '${ pathName }'`;
       } else {
@@ -750,9 +811,9 @@ gulp.task('url-list', (done) => {
 /**
  * clean
  */
- gulp.task('clean', (done) => {
-   del([ './**/.DS_Store', './**/Thumb.db', './htdocs/url-list.html', './htdocs/**/*.map' ])
-   .then(() => {
-     done();
-   });
- });
+gulp.task('clean', (done) => {
+  return (() => {
+    del([ './**/.DS_Store', './**/Thumb.db', './htdocs/url-list.html', './htdocs/**/*.map' ])
+      .then(() => done());
+  })();
+});
