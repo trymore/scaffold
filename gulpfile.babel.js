@@ -271,11 +271,8 @@ gulp.task('coding-watch', (done) => {
     watchStart([ join(PUG_FACTORY, '/**/*.json') ], () => gulp.start('pug-factory'));
     watchStart([ join(PUG_FACTORY, '/**/*.pug') ], () => gulp.start('pug-factory-all'));
 
-    const styleTask = (stylusTask) => {
-      runSequence.apply(this, [ 'sprite', stylusTask ]);
-    };
-    watchStart([ join(STYLUS_SRC   , '/**/*.styl') ], () => styleTask('stylus'));
-    watchStart([ join(STYLUS_OTHER , '/**/*.styl') ], () => styleTask('stylus-all'));
+    watchStart([ join(STYLUS_SRC   , '/**/*.styl') ], () => runSequence([ 'sprite', 'stylus' ]));
+    watchStart([ join(STYLUS_OTHER , '/**/*.styl') ], () => runSequence([ 'sprite', 'stylus-all' ]));
 
     watchStart([ join(IMAGEMIN_SRC, '/**/*.+(png|jpg|gif|svg)') ], () => isImagesChanged  = true);
     watchStart([ join(SPRITE_SRC  , '/**/*.+(png|jpg|gif|svg)') ], () => isSpritesChanged = true);
@@ -573,7 +570,10 @@ const stylusTask = (isSrcDirUpdate, done) => {
 gulp.task('sprite', (done) => {
   return (() => {
 
-    if(!isSpritesChanged) return;
+    if(!isSpritesChanged) {
+      done();
+      return;
+    }
 
     isSpritesChanged = false;
 
