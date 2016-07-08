@@ -1,12 +1,6 @@
-$ = window.jQuery = require 'jquery'
-Anchor            = require 'pencil/views/ui/anchor'
-# Check             = require 'pencil/views/ui/check'
+Anchor = require '../../requires/view/ui/anchor'
 
-$ document
-  .one 'ready', ->
+window.addEventListener 'DOMContentLoaded', ->
 
-    # new Check
-
-    $ 'a[href^="#"]'
-      .each ({}, el) ->
-        new Anchor el
+  for el in document.querySelectorAll('a[href^="#"]')
+    new Anchor(el)
