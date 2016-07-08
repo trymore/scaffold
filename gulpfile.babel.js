@@ -706,7 +706,10 @@ const webpackTask = (isSrcDir, done) => {
           opts.module.loaders.push({
             test   : /\.js$/,
             loader : 'babel',
-            query  : { presets: [ 'es2015', 'stage-0' ] },
+            query  : {
+              presets: [ 'es2015', 'stage-0' ],
+              plugins: [ 'transform-object-assign' ],
+            },
             exclude: /(node_modules|bower_components)/,
           });
           break;
