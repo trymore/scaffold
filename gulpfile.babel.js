@@ -89,7 +89,8 @@ let isSpritesChanged = true;
 /**
  * viewing page
  */
-let viewingPage = '';
+let viewingPage   = '';
+let viewPageFiles = [];
 
 
 /**
@@ -271,13 +272,13 @@ gulp.task('coding-watch', (done) => {
     watchStart([ join(PUG_FACTORY, '/**/*.json') ], () => gulp.start('pug-factory'));
     watchStart([ join(PUG_FACTORY, '/**/*.pug') ], () => gulp.start('pug-factory-all'));
 
-    watchStart([ join(STYLUS_SRC   , '/**/*.styl') ], () => runSequence([ 'sprite', 'stylus' ]));
-    watchStart([ join(STYLUS_OTHER , '/**/*.styl') ], () => runSequence([ 'sprite', 'stylus-all' ]));
+    watchStart([ join(STYLUS_SRC  , '/**/*.styl') ], () => runSequence([ 'sprite', 'stylus' ]));
+    watchStart([ join(STYLUS_OTHER, '/**/*.styl') ], () => runSequence([ 'sprite', 'stylus-all' ]));
 
     watchStart([ join(IMAGEMIN_SRC, '/**/*.+(png|jpg|gif|svg)') ], () => isImagesChanged  = true);
     watchStart([ join(SPRITE_SRC  , '/**/*.+(png|jpg|gif|svg)') ], () => isSpritesChanged = true);
 
-    watchStart([ join(DEST_ROOT , '/**/*.+(html|php)') ], (file) => {
+    watchStart([ join(DEST_ROOT, '/**/*.+(html|php)') ], (file) => {
       const page = viewingPage ? join(__dirname, DEST_ROOT, viewingPage) : '*.+(html|php)';
 
       gulp.src(file.path)
@@ -285,9 +286,15 @@ gulp.task('coding-watch', (done) => {
         .pipe(gulpif('*.html', htmlhint()));
     });
 
-    watchStart([ join(DEST_ROOT , '/**/*.+(css|js|png|jpg|jpeg|gif|svg)') ], (file) => {
-      gulp.src(file.path)
-        .pipe(browserSync.reload({ stream: true }));
+    watchStart([ join(DEST_ROOT, '/**/*.+(css|js|png|jpg|jpeg|gif|svg)') ], (file) => {
+      for(let i = 0; viewPageFiles.length > i; i++) {
+        if(file.path === viewPageFiles[i]) {
+          gulp.src(file.path)
+            .pipe(browserSync.reload({ stream: true }));
+          viewPageFiles.splice(i, 1);
+          break;
+        }
+      }
     });
 
     done();
@@ -332,13 +339,21 @@ gulp.task('production-watch', (done) => {
  */
 const browserSyncMiddleware = (req, res, next) => {
   const exclusionFiles = [];
-  const url = req.url.match(/^.*\/(.+\.(html|php))?$/);
+  const pageUrl  = req.url.match(/^.*\/(.+\.(html|php))?$/);
+  const otherUrl = req.url.match(/^(.+\.(css|js|png|jpg|jpeg|gif|svg)).*?$/);
 
-  if(url && every(exclusionFiles, (file) => (file !== url[0]))) {
-    if(url[0].match(/\/$/)) {
-      viewingPage = `${ url[0] }index.html`;
+  if(otherUrl) {
+    const url = join(__dirname, DEST_ROOT, otherUrl[1]);
+    if((viewPageFiles.length === 0) || (every(viewPageFiles, (file) => url !== file))) {
+      viewPageFiles.push(url);
+    }
+  }
+
+  if(pageUrl && every(exclusionFiles, (file) => (file !== pageUrl[0]))) {
+    if(pageUrl[0].match(/\/$/)) {
+      viewingPage = `${ pageUrl[0] }index.html`;
     } else {
-      viewingPage = url[0];
+      viewingPage = pageUrl[0];
     }
   }
   next();
@@ -452,7 +467,7 @@ const pugOpts = {
           return block;
         }
       })();
-      return `\n${ block_ }`
+      return `\n${ block_ }`;
     },
   },
 };
