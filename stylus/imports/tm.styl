@@ -47,6 +47,10 @@ get-img-size(imgpath)
 get-percent-size(size, base-size)
   (size / base-size * 100)%
 
+//半分のサイズを割り出す
+get-half-size(size)
+  (size / 2)px
+
 //コンテンツをセンタリング1
 container-centering(width)
   position relative
@@ -276,7 +280,7 @@ bg-img-multiple(imagesHash, sizesHash = false)
 
 //スプライト画像のホバーアニメーション（フェード）
 //keyframes.styl の読み込みが必要
-sprite-hover(image, duration = .2, suffix = { before: '-off', after: '-on' })
+sprites-hover(image, duration = .2, suffix = { before: '-off', after: '-on' })
   position relative
   animation delayView (duration)s linear
   &, &:hover::before
@@ -291,9 +295,11 @@ sprite-hover(image, duration = .2, suffix = { before: '-off', after: '-on' })
     animation fadeOut (duration)s linear
   &:hover
     background none
-    &::before, &::after
-      opacity 1
+    &::before
+      opacity 0
+      animation fadeOut (duration)s linear
     &::after
+      opacity 1
       animation fadeIn (duration)s linear
 
 //ループアニメーションの生成
