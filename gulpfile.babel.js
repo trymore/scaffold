@@ -298,7 +298,7 @@ gulp.task('coding-watch', (done) => {
     }
   });
 
-  return done();
+  done();
 });
 
 
