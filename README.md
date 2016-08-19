@@ -225,22 +225,29 @@ Stylus で使用する為に /stylus/imports/sprite.styl が出力されます�
 
 # JavaScript
 [CoffeeScript](http://coffeescript.org/) をコンパイル、  
-または [Babel](https://babeljs.io/)（[es2015](https://babeljs.io/docs/plugins/preset-es2015/)、[stage-0](https://babeljs.io/docs/plugins/preset-stage-0/)）をトランスパイルして、  
+または [Babel](https://babeljs.io/)（[es2015](https://babeljs.io/docs/plugins/preset-es2015/)、[stage-0](https://babeljs.io/docs/plugins/preset-stage-0/)）をトランスパイルか  
+[TypeScript](https://www.typescriptlang.org/) をコンパイルして、  
 [webpack](https://webpack.github.io/) でバンドルします。
 
-/webpack/src/ 以下の coffee または js ファイルをコンパイル（トランスパイル）し /htdocs/ 以下に出力します。
+/webpack/src/ 以下の coffee または js か ts ファイルをコンパイル（トランスパイル）し /htdocs/ 以下に出力します。
 
 ## コンパイラ
 デフォルトは CoffeeScript を使用するようになっています。  
-Babel を使用する場合は、以下を変更します。
+Babel または TypeScript を使用する場合は、以下を変更します。
 
 ```js:gulpfile.babel.js
 const jsCompiler = 'coffee';
 ```
 ↓
 
+#### Babel の場合
 ```js:gulpfile.babel.js
 const jsCompiler = 'babel';
+```
+
+#### TypeScript の場合
+```js:gulpfile.babel.js
+const jsCompiler = 'typescript';
 ```
 
 ## webpack

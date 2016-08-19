@@ -67,7 +67,7 @@ const browserSyncUrlList = bsUrlList.create();
  */
 
 // javascript compiler
-const jsCompiler = 'coffee';
+const jsCompiler = 'coffee';  // 'coffee', 'babel', 'typescript'
 
 // output url list to htdocs
 const outputUrlListToHtdocs = false;
@@ -133,14 +133,11 @@ const URL_LIST = 'url-list';
  * javascript extension
  */
 const jsExtension = (() => {
- switch(jsCompiler) {
-   case 'babel':
-     return '.js';
-     break;
-   case 'coffee':
-     return '.coffee';
-     break;
- }
+  return ({
+    babel     : '.js',
+    typescript: '.ts',
+    coffee    : '.coffee',
+  })[jsCompiler];
 })();
 
 
@@ -660,7 +657,7 @@ const webpackTask = (isSrcDir) => {
     const opts = {
       resolve: {
         root      : [ join(__dirname, 'bower_components') ],
-        extensions: [ '', '.js', '.coffee' ],
+        extensions: [ '', '.js', '.ts', '.coffee' ],
         alias: {
           // 'es6-promise': 'es6-promise/es6-promise.min',
           // 'lodash'     : 'lodash/dist/lodash.min',
@@ -677,8 +674,8 @@ const webpackTask = (isSrcDir) => {
         )
       ],
     };
-    switch(jsCompiler) {
-      case 'babel':
+    ({
+      babel: () => {
         opts.module.loaders.push({
           test   : /\.js$/,
           loader : 'babel',
@@ -694,14 +691,21 @@ const webpackTask = (isSrcDir) => {
           },
           exclude: /(node_modules|bower_components)/,
         });
-        break;
-      case 'coffee':
+      },
+      typescript: () => {
+        opts.module.loaders.push({
+          test   : /\.ts$/,
+          loader : 'ts-loader',
+          exclude: /(node_modules|bower_components)/,
+        });
+      },
+      coffee: () => {
         opts.module.loaders.push({
           test  : /\.coffee$/,
           loader: 'coffee',
         });
-        break;
-    }
+      },
+    })[jsCompiler]();
     if(!isProduction) {
       merge(opts, { devtool: 'source-map' });
     }
