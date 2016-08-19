@@ -273,8 +273,8 @@ gulp.task('coding-watch', (done) => {
   watchStart([ join(PUG_FACTORY, '/**/*.json') ], () => gulp.start('pug-factory'));
   watchStart([ join(PUG_FACTORY, '/**/*.pug') ], () => gulp.start('pug-factory-all'));
 
-  watchStart([ join(STYLUS_SRC  , '/**/*.styl') ], () => runSequence([ 'sprite', 'stylus' ]));
-  watchStart([ join(STYLUS_OTHER, '/**/*.styl') ], () => runSequence([ 'sprite', 'stylus-all' ]));
+  watchStart([ join(STYLUS_SRC  , '/**/*.+(styl|css)') ], () => runSequence([ 'sprite', 'stylus' ]));
+  watchStart([ join(STYLUS_OTHER, '/**/*.+(styl|css)') ], () => runSequence([ 'sprite', 'stylus-all' ]));
 
   watchStart([ join(IMAGEMIN_SRC, '/**/*.+(png|jpg|gif|svg)') ], () => isImagesChanged  = true);
   watchStart([ join(SPRITE_SRC  , '/**/*.+(png|jpg|gif|svg)') ], () => isSpritesChanged = true);
