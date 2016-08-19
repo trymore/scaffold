@@ -44,7 +44,7 @@ pug、Stylus、sprite のコンパイル等をして、関連ファイルを監�
 pug、Stylus、sprite の関連ファイルを監視します。
 
 ### gulp scripting
-JavaScript をコンパイル等をして、関連ファイルを監視します。
+JavaScript のコンパイル等をして、関連ファイルを監視します。
 
 ### gulp scripting-watch
 JavaScript の関連ファイルを監視します。
