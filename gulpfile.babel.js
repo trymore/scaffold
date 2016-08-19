@@ -533,6 +533,7 @@ gulp.task('stylus-all', () => {
 
 const stylusTask = (isSrcDirUpdate, done) => {
   const stylusOpts = {
+    import  : [ 'nib' ],
     use     : [ nib() ],
     compress: false,
     // compress: isProduction,
