@@ -65,7 +65,9 @@ percent-container-centering(width, base-width)
   margin-right auto
 
 //アスペクト比を固定したままリサイズ（IE8以上）
-//サイズを設定するか、画像パスまたはスプライト画像へのパスを設定
+//サイズを設定するか、画像パスまたはスプライト画像パスを設定
+//画像パスは styl ファイルからの相対パス -> '../../htdocs/images/sample.png'
+//スプライト画像パスは sprites mixins 使う際のパス -> 'images/sample/a.png'
 aspect-ratio-kept-container(width-or-imgpath, height = null)
   if typeof(width-or-imgpath) is 'string'
     img-size = get-img-size(width-or-imgpath)
