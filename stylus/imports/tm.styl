@@ -189,7 +189,9 @@ iphone-device-aspect-ratio()
       display block
 
 //三角形を生成
-triangle(shape = 'left', size = 10px, color = #000, positions = { top: auto, right: auto, bottom: auto, left: auto })
+triangle(shape = 'left', size = 10px, color = #000, positions = {})
+  default-positions-hash = { top: auto, right: auto, bottom: auto, left: auto }
+  positions = merge(default-positions-hash, positions)
   content ""
   display block
   width 0
