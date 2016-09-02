@@ -1,5 +1,32 @@
 blank-png = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVQI12NgYAAAAAMAASDVlMcAAAAASUVORK5CYII='
 
+//画像のサイズを取得する
+// @example
+// ----------
+// get-img-size('../../htdocs/images/sample.png')  // image
+// get-img-size('images/sample/a.png')  // sprite
+// ----------
+get-img-size(imgpath)
+  if match('^.+(htdocs).+$', imgpath)
+    img-size = image-size(imgpath)
+    return {
+      width : img-size[0]
+      height: img-size[1]
+    }
+  else
+    return {
+      width : sprite-hash[imgpath].width
+      height: sprite-hash[imgpath].height
+    }
+
+//パーセントのサイズを割り出す
+get-percent-size(size, base-size)
+  (size / base-size * 100)%
+
+//半分のサイズを割り出す
+get-half-size(size)
+  (size / 2)px
+
 //サイズ指定1
 size(width, height = width)
   width width
@@ -29,28 +56,6 @@ img-width(width)
   img
     width width
 
-//画像のサイズを取得する
-get-img-size(imgpath)
-  if match('^.+(htdocs).+$', imgpath)
-    img-size = image-size(imgpath)
-    return {
-      width : img-size[0]
-      height: img-size[1]
-    }
-  else
-    return {
-      width : sprite-hash[imgpath].width
-      height: sprite-hash[imgpath].height
-    }
-
-//パーセントのサイズを割り出す
-get-percent-size(size, base-size)
-  (size / base-size * 100)%
-
-//半分のサイズを割り出す
-get-half-size(size)
-  (size / 2)px
-
 //コンテンツをセンタリング1
 container-centering(width)
   position relative
@@ -64,10 +69,27 @@ percent-container-centering(width, base-width)
   margin-left auto
   margin-right auto
 
+//コンテンツを上下左右センタリング
+// @example
+// ----------
+// centering()  // translate
+// centering(500px)  // margin
+// centering(500px, 200px)  // margin
+// ----------
+centering(width = null, height = width)
+  if width
+    margin (width / -2)px 0 0 (width / -2)px
+  else
+    transform translateX(-50%) translateY(-50%)
+  absolute top 50% left 50%
+
 //アスペクト比を固定したままリサイズ（IE8以上）
-//サイズを設定するか、画像パスまたはスプライト画像パスを設定
-//画像パスは styl ファイルからの相対パス -> '../../htdocs/images/sample.png'
-//スプライト画像パスは sprites mixins 使う際のパス -> 'images/sample/a.png'
+// @example
+// ----------
+// aspect-ratio('../../htdocs/images/sample.png')  // image
+// aspect-ratio('images/sample/a.png')  // sprite
+// aspect-ratio(500, 300)  // size
+// ----------
 aspect-ratio-kept-container(width-or-imgpath, height = null)
   if typeof(width-or-imgpath) is 'string'
     img-size = get-img-size(width-or-imgpath)
@@ -189,30 +211,39 @@ iphone-device-aspect-ratio()
       display block
 
 //三角形を生成
-triangle(shape = 'left', size = 10px, color = #000, positions = {})
+// @example
+// ----------
+// triangle()
+// triangle({ dirction: 'bottom', size: 15px, color: #ccc, { right: 0 }})
+// ----------
+triangle(opts = {})
+  default-opts = {
+    dirction : 'left'
+    size     : 10px
+    color    : #000
+    positions: {}
+  }
   default-positions = { top: auto, right: auto, bottom: auto, left: auto }
-  positions = merge(default-positions, positions)
+  opts      = merge(default-opts, opts)
+  positions = merge(default-positions, opts.positions)
+  color-set = {
+    'top'        : 0 0 1
+    'left'       : 0 1 0 0
+    'bottom'     : 1 0 0
+    'right'      : 0 0 0 1
+    'topLeft'    : 1 0 0 1
+    'topRight'   : 1 1 0 0
+    'bottomRight': 0 1 1 0
+    'bottomLeft' : 0 0 1 1
+  }
+  colors = null
+  for val in color-set[opts.dirction]
+    colors = colors (val ? opts.color : transparent)
   content ""
   display block
   width 0
   height 0
-  if shape is 'top'
-    colors = transparent transparent color
-  else if shape is 'left'
-    colors = transparent color transparent transparent
-  else if shape is 'bottom'
-    colors = color transparent transparent
-  else if shape is 'right'
-    colors = transparent transparent transparent color
-  else if shape is 'topLeft'
-    colors = color transparent transparent color
-  else if shape is 'topRight'
-    colors = color color transparent transparent
-  else if shape is 'bottomRight'
-    colors = transparent color color transparent
-  else if shape is 'bottomLeft'
-    colors = transparent transparent color color
-  border-width size
+  border-width: opts.size
   border-style solid
   border-color colors
   position absolute
@@ -220,13 +251,12 @@ triangle(shape = 'left', size = 10px, color = #000, positions = {})
     {prop} pos
 
 //スプライト
-//使い方
-//▼hover 無し
-//sprites('images/button/logo.png')
-//▼hover 有り
-//sprites('images/button/logo', '-hover', '.png')
-//▼hover & selector 有り
-//sprites('images/button/logo', '-hover', '.png', '&.is-located')
+// @example
+// ----------
+// sprites('images/button/logo.png')  // hover 無し
+// sprites('images/button/logo', '-hover', '.png')  // hover 有り
+// sprites('images/button/logo', '-hover', '.png', '&.is-located')  // hover & selector 有り
+// ----------
 sprites(path, suffix = false, extension = false, selector = false)
   if !suffix and !extension
     sprite path
@@ -240,25 +270,26 @@ sprites(path, suffix = false, extension = false, selector = false)
         sprite path + suffix + extension
 
 //景画像指定
-//使い方
-//bg-img("aaa.jpg", left, top, no-repeat, #fff)
+// @example
+// ----------
+// bg-img("aaa.jpg", left, top, no-repeat, #fff)
+// ----------
 bg-img(file-name, position-x = left, position-y = top, repeat-type = null, bg-color = null, bg-size = false)
   background url(image-path + file-name) position-x position-y repeat-type bg-color
   if bg-size
     background-size bg-size
 
 //背景画像指定（複数）
-//使い方
-//bg-img-multiple(
-//  {
-//    '1': "aaa.jpg" (left top) no-repeat
-//    '2': "bbb.jpg" (left top) no-repeat #fff
-//  },
-//  {
-//    '1': (50px 100px)
-//    '2': (50px 100px)
-//  }
-//)
+// @example
+// ----------
+// bg-img-multiple({
+//   '1': "aaa.jpg" (left top) no-repeat
+//   '2': "bbb.jpg" (left top) no-repeat #fff
+// }, {
+//   '1': (50px 100px)
+//   '2': (50px 100px)
+// })
+// ----------
 bg-img-multiple(imagesHash, sizesHash = false)
   images = null
   for i, props in imagesHash
@@ -283,10 +314,14 @@ bg-img-multiple(imagesHash, sizesHash = false)
     background-size sizes
 
 //スプライト画像のホバーアニメーション（フェード）
-//keyframes.styl の読み込みが必要
-//image はスプライト画像パスから接尾詞と拡張子を除いたもの
-//'images/sample/a-off.png' と 'images/sample/a-on.png' なら -> 'images/sample/a'
-sprites-hover(image, opts = {})
+// @example
+// ----------
+// sprite-fade-hover('images/sample/a.png')
+// sprite-fade-hover('images/sample/a.png', {
+//   duration: .5, crossFade: true, suffixBefore: '_off', suffixAfter: '_on'
+// })
+// ----------
+sprite-fade-hover(image, opts = {})
   default-opts = {
     duration    : .2
     crossFade   : false
@@ -321,12 +356,14 @@ sprites-hover(image, opts = {})
       animation: fadeIn (opts.duration)s linear
 
 //ループアニメーションの生成
-//使い方
-//create-keyframes(sampleAnime, 3, 10, {
-//    '0': { opacity: 1 },
-//   '50': { opacity: 0 },
-//  '100': { opacity: 1 }
-//})
+// @example
+// ----------
+// create-keyframes(sampleAnime, 3, 10, {
+//     '0': { opacity: 1 },
+//    '50': { opacity: 0 },
+//   '100': { opacity: 1 }
+// })
+// ----------
 create-keyframes(name, duration, interval, animationHash)
   @keyframes name
     durationRatio = duration / (duration + interval)
@@ -336,8 +373,10 @@ create-keyframes(name, duration, interval, animationHash)
           {key} val
 
 //cssアニメーション イージングのベースパターン
-//使い方
-//transition opacity .5s easeOutQuint
+// @example
+// ----------
+// transition opacity .5s easeOutQuint
+// ----------
 // Cubic
 easeInCubic    = cubic-bezier(0.550, 0.055, 0.675, 0.190);
 easeOutCubic   = cubic-bezier(0.215, 0.610, 0.355, 1.000);
@@ -373,5 +412,13 @@ easeInOutBack  = cubic-bezier(0.680, -0.550, 0.265, 1.550);
 
 
 //nib override
+
 opacity(val)
   opacity val
+
+clearfix()
+  +cache('clearfix')
+    &::after
+      content ""
+      display block
+      clear both
