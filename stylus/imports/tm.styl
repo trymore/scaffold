@@ -29,13 +29,13 @@ get-half-size(size)
 
 //サイズ指定1
 size(width, height = width)
-  width width
-  height height
+  width (width)px
+  height (height)px
 
 //サイズ指定2（最小）
 min-size(width, height = width)
-  min-width width
-  min-height height
+  min-width (width)px
+  min-height (height)px
 
 //サイズ指定3（100%）
 full-size()
@@ -54,12 +54,12 @@ img-container()
 //子の画像の大きさを指定する
 img-width(width)
   img
-    width width
+    width (width)px
 
 //コンテンツをセンタリング1
 container-centering(width)
   position relative
-  width width
+  width (width)px
   margin-right auto
   margin-left auto
 
@@ -168,14 +168,14 @@ radio-customize(width, height)
 
 //テーブルレイアウトのdlリスト
 dl-list(list-size, dt-width, dd-width)
-  width list-size
+  width (list-size)px
   dt
     float left
-    width dt-width
+    width (dt-width)px
     clear both
   dd
-    width dd-width
-    margin-left dt-width
+    width (dd-width)px
+    margin-left (dt-width)px
 
 //Android4 文章の折り返し位置のバグ対応
 fix-android-word-wrap()
