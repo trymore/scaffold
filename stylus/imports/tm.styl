@@ -1,3 +1,5 @@
+use('../plugins/has-own-property.js')
+
 blank-png = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVQI12NgYAAAAAMAASDVlMcAAAAASUVORK5CYII='
 
 _unit-base-px(value)
@@ -5,6 +7,16 @@ _unit-base-px(value)
     unit(value, 'px')
   else
     value
+
+//ディープマージしたオブジェクトを取得する
+get-deep-merge(a, b)
+  for key in b
+    if has-own-property(b, key)
+      if has-own-property(a, key) && (typeof(a[key]) == 'object' && typeof(b[key]) == 'object')
+        a[key] = get-deep-merge(a[key], b[key])
+      else
+        a[key] = b[key]
+  return a
 
 //画像のサイズを取得する
 // @example
@@ -225,13 +237,11 @@ iphone-device-aspect-ratio()
 triangle(opts = {})
   default-opts = {
     dirction : 'left'
-    size     : 10px
+    size     : 10
     color    : #000
-    positions: {}
+    positions: { top: auto, right: auto, bottom: auto, left: auto }
   }
-  default-positions = { top: auto, right: auto, bottom: auto, left: auto }
-  opts      = merge(default-opts, opts)
-  positions = merge(default-positions, opts.positions)
+  opts = get-deep-merge(default-opts, opts)
   color-set = {
     'top'        : 0 0 1
     'left'       : 0 1 0 0
@@ -249,12 +259,13 @@ triangle(opts = {})
   display block
   width 0
   height 0
-  border-width: opts.size
+  border-width: _unit-base-px(opts.size)
   border-style solid
   border-color colors
   position absolute
-  for prop, pos in positions
+  for prop, pos in opts.positions
     {prop} pos
+
 
 //スプライト
 // @example
