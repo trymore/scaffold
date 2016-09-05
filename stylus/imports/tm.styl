@@ -1,5 +1,11 @@
 blank-png = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVQI12NgYAAAAAMAASDVlMcAAAAASUVORK5CYII='
 
+_unit-base-px(value)
+  if unit(value) == ''
+    unit(value, 'px')
+  else
+    value
+
 //画像のサイズを取得する
 // @example
 // ----------
@@ -29,13 +35,13 @@ get-half-size(size)
 
 //サイズ指定1
 size(width, height = width)
-  width (width)px
-  height (height)px
+  width _unit-base-px(width)
+  height _unit-base-px(height)
 
 //サイズ指定2（最小）
 min-size(width, height = width)
-  min-width (width)px
-  min-height (height)px
+  min-width _unit-base-px(width)
+  min-height _unit-base-px(height)
 
 //サイズ指定3（100%）
 full-size()
@@ -54,12 +60,12 @@ img-container()
 //子の画像の大きさを指定する
 img-width(width)
   img
-    width (width)px
+    width _unit-base-px(width)
 
 //コンテンツをセンタリング1
 container-centering(width)
   position relative
-  width (width)px
+  width _unit-base-px(width)
   margin-right auto
   margin-left auto
 
@@ -167,15 +173,15 @@ radio-customize(width, height)
     content ""
 
 //テーブルレイアウトのdlリスト
-dl-list(list-size, dt-width, dd-width)
-  width (list-size)px
+dl-list(dl-width, dt-width, dd-width)
+  width _unit-base-px(dl-width)
   dt
     float left
-    width (dt-width)px
+    width _unit-base-px(dt-width)
     clear both
   dd
-    width (dd-width)px
-    margin-left (dt-width)px
+    width _unit-base-px(dd-width)
+    margin-left _unit-base-px(dt-width)
 
 //Android4 文章の折り返し位置のバグ対応
 fix-android-word-wrap()
