@@ -19,6 +19,7 @@
     ]
   },
   "devDependencies": {
+    "babel-eslint": "^6.1.2",
     "babel-loader": "^6.2.0",
     "babel-plugin-transform-object-assign": "^6.8.0",
     "babel-plugin-transform-runtime": "^6.12.0",
@@ -37,6 +38,7 @@
     "gulp-css-cache-bust": "0.0.7",
     "gulp-css-url": "0.0.10",
     "gulp-data": "^1.2.0",
+    "gulp-eslint": "^3.0.1",
     "gulp-filter": "^4.0.0",
     "gulp-htmlhint": "^0.3.0",
     "gulp-iconv": "0.0.1",

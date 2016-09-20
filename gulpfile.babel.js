@@ -44,6 +44,7 @@ import url from 'gulp-css-url';
 import bust from 'gulp-css-cache-bust';
 import stylusSprites from 'gulp-stylus-sprites';
 import webpack from 'webpack';
+import eslint from 'gulp-eslint';
 import bower from 'gulp-bower';
 import imagemin from 'gulp-imagemin';
 import pngquant from 'imagemin-pngquant';
@@ -87,10 +88,16 @@ let isSpritesChanged = true;
 
 
 /**
+ * eslint flag
+ */
+let isES = !!jsCompiler.match(/babel|typescript/);
+
+
+/**
  * viewing page
  */
 let viewingPage   = '';
-let viewPageFiles = [];
+const viewPageFiles = [];
 
 
 /**
@@ -198,7 +205,7 @@ gulp.task('coding', (done) => {
     }
   })();
 
-runSequence(...union(sequence, [done]));
+  runSequence(...union(sequence, [done]));
 });
 
 
@@ -402,7 +409,7 @@ const pugMember = (file, callback) => {
     dirname : dirname(file.relative),
     filename: replaceExtension(basename(file.relative), '.html'),
     relative: (path) => {
-      const isDirectory = path.match(/^.+\/$/) ? true : false;
+      const isDirectory = !!path.match(/^.+\/$/);
       const pathName    = relative(ret.dirname, path);
       return (() => {
         if(pathName) {
@@ -756,6 +763,9 @@ const webpackTask = (isSrcDir) => {
   return gulp.src(join(WEBPACK_SRC, `/**/*${ jsExtension }`))
     .pipe(plumber(PLUMBER_OPTS))
     .pipe(gulpif(isSrcDir, cache('webpack')))
+    .pipe(gulpif(isES, eslint({ useEslintrc: true })))
+    .pipe(gulpif(isES, eslint.format()))
+    .pipe(gulpif(isES, eslint.failAfterError()))
     .pipe(build({
       basedir    : __dirname,
       src        : WEBPACK_SRC,
@@ -768,13 +778,13 @@ const webpackTask = (isSrcDir) => {
 /**
  * javascript test
  */
- gulp.task('test', (done) => {
-   return watch([ join(TEST_SRC , '/**/*') ], () => gulp.start('test-run'));
- });
+gulp.task('test', (done) => {
+  return watch([ join(TEST_SRC , '/**/*') ], () => gulp.start('test-run'));
+});
 
- gulp.task('test-run', () => {
-   return karma.server.start({ configFile: TEST_CONFIG_SRC });
- });
+gulp.task('test-run', () => {
+  return karma.server.start({ configFile: TEST_CONFIG_SRC });
+});
 
 
 /**
