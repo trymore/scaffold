@@ -31,7 +31,6 @@ import del from 'del';
 import watch from 'gulp-watch';
 import connect from 'gulp-connect-php';
 import bs from 'browser-sync';
-import bsUrlList from 'browser-sync';
 import runSequence from 'run-sequence';
 import pug from 'pug';
 import gulpPug from 'gulp-pug';
@@ -58,7 +57,8 @@ import notify from 'gulp-notify';
 
 const argv = minimist(process.argv.slice(2));
 const browserSync = bs.create();
-const browserSyncUrlList = bsUrlList.create();
+const browserSyncUrlList = bs.create();
+const browserSyncEsdoc = bs.create();
 
 
 /**
@@ -129,6 +129,8 @@ const WEBPACK_OTHER = join(WEBPACK_BASE, '!(src)');
 const WEBPACK_DEST  = DEST_ROOT;
 
 const URL_LIST = 'url-list';
+
+const ESDOC = '_esdoc';
 
 
 /**
@@ -362,6 +364,16 @@ gulp.task('browser-sync', (done) => {
       },
     },
     port  : '3003',
+    ui    : false,
+    open  : false,
+    notify: false,
+    reloadOnRestart: true,
+  });
+  browserSyncEsdoc.init({
+    server: {
+      baseDir: ESDOC,
+    },
+    port  : '3004',
     ui    : false,
     open  : false,
     notify: false,
