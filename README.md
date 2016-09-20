@@ -263,7 +263,7 @@ alias: {
 ```
 
 ## ESDoc
-/_esdoc/ 以下に [ESDoc](https://esdoc.org/) でAPIドキュメントを出力します。
+/.esdoc/ 以下に [ESDoc](https://esdoc.org/) でAPIドキュメントを出力します。
 
 出力コマンド
 ```
@@ -271,7 +271,7 @@ npm run esdoc
 ```
 
 ## ユニットテスト
-/test/ 以下に [Jasmine](http://jasmine.github.io/) & [Karma](https://karma-runner.github.io/) でテストできる環境を用意しています。
+/.test/ 以下に [Jasmine](http://jasmine.github.io/) & [Karma](https://karma-runner.github.io/) でテストできる環境を用意しています。
 
 テストコマンド
 ```
