@@ -86,12 +86,6 @@ let isSpritesChanged = true;
 
 
 /**
- * eslint flag
- */
-let isES = !!jsCompiler.match(/babel|typescript/);
-
-
-/**
  * viewing page
  */
 let viewingPage   = '';
@@ -770,9 +764,9 @@ const webpackTask = (isSrcDir) => {
   return gulp.src(join(WEBPACK_SRC, `/**/*${ jsExtension }`))
     .pipe(plumber(PLUMBER_OPTS))
     .pipe(gulpif(isSrcDir, cache('webpack')))
-    .pipe(gulpif(isES, eslint({ useEslintrc: true })))
-    .pipe(gulpif(isES, eslint.format()))
-    .pipe(gulpif(isES, eslint.failAfterError()))
+    .pipe(gulpif(jsCompiler === 'babel', eslint({ useEslintrc: true })))
+    .pipe(gulpif(jsCompiler === 'babel', eslint.format()))
+    .pipe(gulpif(jsCompiler === 'babel', eslint.failAfterError()))
     .pipe(build({
       basedir    : __dirname,
       src        : WEBPACK_SRC,
