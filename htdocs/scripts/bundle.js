@@ -173,4 +173,4 @@ window.addEventListener('DOMContentLoaded', function() {
 
 /***/ }
 /******/ ]);
-//# sourceMappingURL=index.js.map
+//# sourceMappingURL=bundle.js.map
