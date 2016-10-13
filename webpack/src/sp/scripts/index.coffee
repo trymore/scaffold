@@ -1,4 +1,4 @@
-Anchor = require '../../../requires/view/ui/anchor'
+import Anchor from 'view/ui/anchor'
 
 window.addEventListener 'DOMContentLoaded', ->
 

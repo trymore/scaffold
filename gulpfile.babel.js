@@ -55,10 +55,10 @@ import changed from 'gulp-changed';
 import plumber from 'gulp-plumber';
 import notify from 'gulp-notify';
 
-const argv = minimist(process.argv.slice(2));
-const browserSync = bs.create();
+const argv               = minimist(process.argv.slice(2));
+const browserSync        = bs.create();
 const browserSyncUrlList = bs.create();
-const browserSyncEsdoc = bs.create();
+const browserSyncEsdoc   = bs.create();
 
 
 /**
@@ -357,20 +357,20 @@ gulp.task('browser-sync', (done) => {
         next();
       },
     },
-    port  : '3003',
-    ui    : false,
-    open  : false,
-    notify: false,
+    port           : '3003',
+    ui             : false,
+    open           : false,
+    notify         : false,
     reloadOnRestart: true,
   });
   browserSyncEsdoc.init({
     server: {
       baseDir: ESDOC,
     },
-    port  : '3004',
-    ui    : false,
-    open  : false,
-    notify: false,
+    port           : '3004',
+    ui             : false,
+    open           : false,
+    notify         : false,
     reloadOnRestart: true,
   });
   if(!argv.php) {
@@ -379,23 +379,23 @@ gulp.task('browser-sync', (done) => {
         baseDir   : DEST_ROOT,
         middleware: browserSyncMiddleware,
       },
-      open  : false,
-      notify: false,
+      open           : false,
+      notify         : false,
       reloadOnRestart: true,
-      // directory: true,
+      // directory      : true,
     }, done);
   }
   else {
     connect.server({
-      port: 3002,
-      base: DEST_ROOT,
+      port     : 3002,
+      base     : DEST_ROOT,
       keepalive: false,
     });
     browserSync.init({
-      proxy     : 'localhost:3002',
-      middleware: browserSyncMiddleware,
-      open      : false,
-      notify    : false,
+      proxy          : 'localhost:3002',
+      middleware     : browserSyncMiddleware,
+      open           : false,
+      notify         : false,
       reloadOnRestart: true,
     }, done);
   }
@@ -449,7 +449,7 @@ gulp.task('pug-factory-all', () => {
 });
 
 const pugOpts = {
-  pug   : pug,
+  pug    : pug,
   pretty : true,
   // pretty : !isProduction,
   basedir: join(__dirname, PUG_BASE),
@@ -588,7 +588,7 @@ gulp.task('sprite', () => {
       imgSrcBase     : SPRITE_SRC.replace('./', '/'),
       stylusFileName : 'sprite',
       spritesmithOpts: {
-        engine: 'pngsmith',
+        engine       : 'pngsmith',
         algorithmOpts: { sort: false },
       },
     }))
@@ -612,27 +612,22 @@ gulp.task('imagemin', (done) => {
 const imageminConfig = {
   png: {
     extension: 'png',
-    opts: {
+    opts     : {
       optimizationLevel: 0,
-      use: [
-        pngquant({
-          quality: 80,
-          speed: 1,
-        }),
-      ],
+      use              : [ pngquant({ quality: 80, speed: 1 }) ],
     },
   },
   jpg: {
     extension: 'jpg',
-    opts: { progressive: true },
+    opts     : { progressive: true },
   },
   gif: {
     extension: 'gif',
-    opts: { interlaced: false },
+    opts     : { interlaced: false },
   },
   svg: {
     extension: 'svg',
-    opts: { multipass: false },
+    opts     : { multipass: false },
   },
 };
 
@@ -668,8 +663,13 @@ const webpackTask = (isSrcDir) => {
   const webpackOpts = () => {
     const opts = {
       resolve: {
-        root      : [ join(__dirname, 'bower_components') ],
-        extensions: [ '', '.js', '.ts', '.coffee' ],
+        descriptionFiles: [ 'package.json', 'bower.json' ],
+        extensions      : [ '.js', '.ts', '.coffee' ],
+        modules: [
+          join(__dirname, 'webpack/imports'),
+          join(__dirname, 'bower_components'),
+          'node_modules'
+        ],
         alias: {
           // 'es6-promise': 'es6-promise/es6-promise.min',
           // 'lodash'     : 'lodash/dist/lodash.min',
@@ -677,56 +677,57 @@ const webpackTask = (isSrcDir) => {
           // 'Velocity.ui': 'velocity/velocity.ui.min',
         },
       },
-      module: {
-        loaders: [],
-      },
-      plugins: [
-        new webpack.ResolverPlugin(
-          new webpack.ResolverPlugin.DirectoryDescriptionFilePlugin('bower.json', [ 'main' ])
-        )
-      ],
+      module : { rules: [] },
+      devtool: 'source-map',
+      plugins: [],
     };
     ({
       babel: () => {
-        opts.module.loaders.push({
+        opts.module.rules.push({
           test   : /\.js$/,
-          loader : 'babel',
-          query  : {
+          use    : 'babel',
+          options: {
             presets: [ 'es2015', 'stage-0' ],
             plugins: [
-              'transform-object-assign',
+              // 'transform-object-assign',
               // [ 'transform-runtime', {
               //   'polyfill'   : false,
               //   'regenerator': true,
               // }],
             ],
           },
-          exclude: /(node_modules|bower_components)/,
         });
       },
       typescript: () => {
-        opts.module.loaders.push({
-          test   : /\.ts$/,
-          loader : 'ts-loader',
-          exclude: /(node_modules|bower_components)/,
+        opts.module.rules.push({
+          test: /\.ts$/,
+          use : 'ts',
         });
       },
       coffee: () => {
-        opts.module.loaders.push({
-          test  : /\.coffee$/,
-          loader: 'coffee',
+        opts.module.rules.push({
+          test: /\.coffee$/,
+          use : 'coffee',
         });
       },
     })[jsCompiler]();
+    opts.module.rules[0].exclude = /(node_modules|bower_components)/;
     if(!isProduction) {
       merge(opts, { devtool: 'source-map' });
     }
     // if(isProduction) {
     //   merge(opts.plugins, [
-    //     new webpack.optimize.DedupePlugin(),
-    //     new webpack.optimize.UglifyJsPlugin(),
-    //     new webpack.optimize.OccurenceOrderPlugin(),
-    //     new webpack.optimize.AggressiveMergingPlugin(),
+    //     new webpack.LoaderOptionsPlugin({
+    //       minimize: true,
+    //       debug   : false,
+    //     }),
+    //     new webpack.optimize.UglifyJsPlugin({
+    //       compress : true,
+    //       mangle   : true,
+    //       beautify : false,
+    //       output   : { comments: false },
+    //       sourceMap: false,
+    //     })
     //   ]);
     // }
     return opts;
@@ -738,7 +739,7 @@ const webpackTask = (isSrcDir) => {
       return {
         entry: entry,
         output: {
-          path: outputPath,
+          path    : outputPath,
           filename: `${ outputFilename }.js`,
         },
       };
@@ -783,14 +784,10 @@ gulp.task('url-list', () => {
   return recursive(DEST_ROOT, ['!*.+(html|php)'], (err, files) => {
     const pathData = reduce(files, (memo, path, i) => {
       const pathName = path.replace('htdocs', '');
-      if(i) {
-        return `${ memo }, '${ pathName }'`;
-      } else {
-        return `'${ pathName }'`;
-      }
+      return i ? `${ memo }, '${ pathName }'` : `'${ pathName }'`;
     }, '');
     const tmpContent = fs.readFileSync(join(URL_LIST, 'tmp.html')).toString().split('{{data}}');
-    const data = tmpContent[0] + pathData + tmpContent[1];
+    const data       = tmpContent[0] + pathData + tmpContent[1];
     fs.writeFile(join(URL_LIST, 'index.html'), data);
     if(outputUrlListToHtdocs && !isProduction) {
       fs.writeFile(join(DEST_ROOT, 'url-list.html'), data);
