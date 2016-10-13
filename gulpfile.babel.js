@@ -712,9 +712,6 @@ const webpackTask = (isSrcDir) => {
       },
     })[jsCompiler]();
     opts.module.rules[0].exclude = /(node_modules|bower_components)/;
-    if(!isProduction) {
-      merge(opts, { devtool: 'source-map' });
-    }
     // if(isProduction) {
     //   merge(opts.plugins, [
     //     new webpack.LoaderOptionsPlugin({
