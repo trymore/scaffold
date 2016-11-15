@@ -74,7 +74,7 @@
     "lodash": "^4.11.0",
     "minimist": "^1.2.0",
     "nib": "^1.0.4",
-    "path": "^0.4.9",
+    "path": "^0.12.7",
     "phantomjs": "^1.9.18",
     "power-assert": "^1.4.1",
     "pug": "^2.0.0-alpha8",
