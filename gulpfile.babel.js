@@ -353,7 +353,7 @@ gulp.task('browser-sync', (done) => {
         next();
       },
     },
-    port           : '3003',
+    port           : 3003,
     ui             : false,
     open           : false,
     notify         : false,
@@ -363,7 +363,7 @@ gulp.task('browser-sync', (done) => {
     server: {
       baseDir: ESDOC,
     },
-    port           : '3004',
+    port           : 3004,
     ui             : false,
     open           : false,
     notify         : false,
