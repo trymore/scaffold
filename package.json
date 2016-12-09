@@ -47,7 +47,7 @@
     "gulp-filter": "^4.0.0",
     "gulp-htmlhint": "^0.3.0",
     "gulp-iconv": "0.0.1",
-    "gulp-if": "^1.2.5",
+    "gulp-if": "^2.0.2",
     "gulp-imagemin": "^2.3.0",
     "gulp-notify": "^2.2.0",
     "gulp-plumber": "^0.6.6",
