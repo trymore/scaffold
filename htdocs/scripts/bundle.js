@@ -84,7 +84,7 @@ Anchor = (function() {
       return function() {
         var elName, href;
         href = _this.el.getAttribute('href');
-        elName = href === '#' ? 'html, body' : href;
+        elName = href === '#' ? 'body' : href;
         return document.querySelector(elName);
       };
     })(this)();

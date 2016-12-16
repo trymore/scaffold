@@ -6,7 +6,7 @@ class Anchor
   constructor: (@el) ->
     @targetEl = do =>
       href   = @el.getAttribute('href')
-      elName = if (href is '#') then 'html, body' else href
+      elName = if (href is '#') then 'body' else href
       document.querySelector(elName)
 
     return if @targetEl.length
