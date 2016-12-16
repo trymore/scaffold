@@ -570,7 +570,7 @@ gulp.task('sprite', () => {
   const _imageDest  = isProduction ? IMAGEMIN_SRC : SPRITE_DEST;
   const _pingFilter = filter(['*.png'], { restore: true });
   const _stylFilter = filter(['*.styl'], { restore: true });
-
+
   return gulp.src(join(SPRITE_SRC, '/**/*.png'))
     .pipe(plumber(PLUMBER_OPTS))
     .pipe(sort())
