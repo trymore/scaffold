@@ -44,8 +44,11 @@ Thumb.db
 # sourcemap
 *.map
 
+# ESdoc
+.esdoc
+
 # url-list
-url-list/index.html
+.url-list/index.html
 
 # amxmlc(Flex Compiler)
 .settings
