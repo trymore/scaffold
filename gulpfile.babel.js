@@ -682,25 +682,23 @@ const webpackTask = (isSrcDir) => {
     ({
       babel: () => {
         _opts.module.rules.push({
-          test: /\.js$/,
-          use : {
-            loader: 'babel-loader',
-            options: {
-              presets: [ 'es2017', 'stage-0' ],
-            },
+          test   : /\.js$/,
+          loader : 'babel-loader',
+          options: {
+            presets: [ 'es2017', 'stage-0' ],
           },
         });
       },
       typescript: () => {
         _opts.module.rules.push({
-          test: /\.ts$/,
-          use : 'ts-loader',
+          test  : /\.ts$/,
+          loader: 'ts-loader',
         });
       },
       coffee: () => {
         _opts.module.rules.push({
-          test: /\.coffee$/,
-          use : 'coffee-loader',
+          test  : /\.coffee$/,
+          loader: 'coffee-loader',
         });
       },
     })[jsCompiler]();
