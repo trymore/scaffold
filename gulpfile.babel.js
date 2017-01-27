@@ -668,12 +668,7 @@ const webpackTask = (isSrcDir) => {
           join(__dirname, 'bower_components'),
           'node_modules'
         ],
-        alias: {
-          // 'es6-promise': 'es6-promise/es6-promise.min',
-          // 'lodash'     : 'lodash/dist/lodash.min',
-          // 'Velocity'   : 'velocity/velocity.min',
-          // 'Velocity.ui': 'velocity/velocity.ui.min',
-        },
+        alias: {},
       },
       module : { rules: [] },
       devtool: 'source-map',
@@ -703,23 +698,22 @@ const webpackTask = (isSrcDir) => {
       },
     })[jsCompiler]();
     _opts.module.rules[0].exclude = /(node_modules|bower_components)/;
-    // if(isProduction) {
-    //   merge(_opts.plugins, [
-    //     new webpack.LoaderOptionsPlugin({
-    //       minimize: true,
-    //       debug   : false,
-    //     }),
-    //     new webpack.optimize.UglifyJsPlugin({
-    //       compress : true,
-    //       mangle   : true,
-    //       beautify : false,
-    //       output   : { comments: false },
-    //       sourceMap: false,
-    //     })
-    //   ]);
-    // }
     return _opts;
-  };
+  })();
+
+  const _productionPlugins = [
+    new webpack.LoaderOptionsPlugin({
+      minimize: true,
+      debug   : false,
+    }),
+    new webpack.optimize.UglifyJsPlugin({
+      compress : true,
+      mangle   : true,
+      beautify : false,
+      output   : { comments: false },
+      sourceMap: false,
+    })
+  ];
 
   const _build = (opts) => {
     const { basedir, src, dest, webpackOpts } = opts;
@@ -735,7 +729,12 @@ const webpackTask = (isSrcDir) => {
     const _transform = (data, encode, callback) => {
       const _destDirname    = dirname(join(basedir, dest, relative(src, data.path)));
       const _destFilename   = basename(data.path, jsExtension);
-      const _webpackAllOpts = merge(_webpackBaseOpts(data.path, _destDirname, _destFilename), webpackOpts);
+      const _webpackAllOpts = merge(
+        _webpackBaseOpts(data.path, _destDirname, _destFilename), webpackOpts
+      );
+      // if(isProduction) {
+      //   merge(_webpackAllOpts.plugins, _productionPlugins);
+      // }
       webpack(_webpackAllOpts, (err, stats) => {
         if(err) {
           throw new PluginError('webpack', err);
