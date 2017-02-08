@@ -582,7 +582,7 @@ gulp.task('sprite', () => {
       imgSrcBase     : SPRITE_SRC.replace('./', '/'),
       stylusFileName : 'sprite',
       spritesmithOpts: {
-        engine       : 'pngsmith',
+        algorithm    : 'top-down',
         algorithmOpts: { sort: false },
       },
     }))
@@ -658,7 +658,7 @@ gulp.task('webpack-all', () => {
 });
 
 const webpackTask = (isSrcDir) => {
-  const _webpackOpts = () => {
+  const _webpackOpts = (() => {
     const _opts = {
       resolve: {
         descriptionFiles: [ 'package.json', 'bower.json' ],
@@ -759,7 +759,7 @@ const webpackTask = (isSrcDir) => {
       basedir    : __dirname,
       src        : WEBPACK_SRC,
       dest       : WEBPACK_DEST,
-      webpackOpts: _webpackOpts(),
+      webpackOpts: _webpackOpts,
     }));
 };
 
