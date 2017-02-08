@@ -68,7 +68,7 @@
 /************************************************************************/
 /******/ ([
 /* 0 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 var Anchor,
@@ -150,15 +150,15 @@ Anchor = (function() {
 
 })();
 
-/* harmony default export */ exports["a"] = Anchor;
+/* harmony default export */ __webpack_exports__["a"] = Anchor;
 
 
-/***/ },
+/***/ }),
 /* 1 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_view_ui_anchor__ = __webpack_require__(0);
 
 
@@ -174,6 +174,6 @@ window.addEventListener('DOMContentLoaded', function() {
 });
 
 
-/***/ }
+/***/ })
 /******/ ]);
 //# sourceMappingURL=bundle.js.map
