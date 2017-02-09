@@ -16,10 +16,10 @@
  */
 
 
+import 'babel-polyfill';
 import gulp from 'gulp';
 import gulpif from 'gulp-if';
 import minimist from 'minimist';
-import { forEach, map, merge, union, reduce, every } from 'lodash';
 import { File, PluginError, log, replaceExtension } from 'gulp-util';
 import { join, relative, dirname, basename } from 'path';
 import fs from 'fs';
@@ -196,7 +196,7 @@ gulp.task('coding', (done) => {
     }
   })();
 
-  runSequence(...union(_sequence, [done]));
+  runSequence(..._sequence, done);
 });
 
 
@@ -239,7 +239,7 @@ gulp.task('all', (done) => {
     }
   })();
 
-  runSequence(...union(_sequence, [done]));
+  runSequence(..._sequence, done);
 });
 
 
@@ -263,10 +263,10 @@ const watchStart = (files, cb = null) => {
  * coding watch
  */
 gulp.task('coding-watch', (done) => {
-  watchStart([ join(PUG_SRC    , '/**/*.pug') ], () => gulp.start('pug'));
-  watchStart([ join(PUG_OTHER  , '/**/*.pug') ], () => gulp.start('pug-all'));
+  watchStart([ join(PUG_SRC    , '/**/*.pug')  ], () => gulp.start('pug'));
+  watchStart([ join(PUG_OTHER  , '/**/*.pug')  ], () => gulp.start('pug-all'));
   watchStart([ join(PUG_FACTORY, '/**/*.json') ], () => gulp.start('pug-factory'));
-  watchStart([ join(PUG_FACTORY, '/**/*.pug') ], () => gulp.start('pug-factory-all'));
+  watchStart([ join(PUG_FACTORY, '/**/*.pug')  ], () => gulp.start('pug-factory-all'));
 
   watchStart([ join(STYLUS_SRC  , '/**/*.+(styl|css)') ], () => runSequence([ 'sprite', 'stylus' ]));
   watchStart([ join(STYLUS_OTHER, '/**/*.+(styl|css)') ], () => runSequence([ 'sprite', 'stylus-all' ]));
@@ -341,7 +341,7 @@ const browserSyncMiddleware = (req, res, next) => {
     }
   }
 
-  if(_pageUrl && every(_exclusionFiles, (file) => (file !== _pageUrl[0]))) {
+  if(_pageUrl && _exclusionFiles.every((file) => (file !== _pageUrl[0]))) {
     viewingPage = _pageUrl[0].match(/\/$/) ? `${ _pageUrl[0] }index.html` : _pageUrl[0];
   }
   next();
@@ -490,9 +490,9 @@ const pugFactoryTask = (isJsonFileUpdate) => {
   const _factory = () => {
     const _transform = function(data, encode, callback) {
       const _tmps = JSON.parse(data.contents);
-      forEach(_tmps, (pages, tmpPath) => {
-        forEach(pages, (page, destPath) => {
-          const _vals = reduce(page, (memo, val, key) => {
+      for(const [tmpPath, pages] of Object.entries(_tmps)) {
+        for(const [destPath, page] of Object.entries(pages)) {
+          const _vals = Object.entries(page).reduce((memo, [key, val]) => {
             return `${ memo }  - var ${ key } = ${ JSON.stringify(val) }\n`;
           }, '');
           const _tmpContent = fs.readFileSync(join(PUG_BASE, tmpPath)).toString().split('{{vars}}');
@@ -501,8 +501,8 @@ const pugFactoryTask = (isJsonFileUpdate) => {
             path    : destPath,
             contents: new Buffer(_contents),
           }));
-        });
-      });
+        }
+      }
       callback();
     };
     const _flush = (callback) => {
@@ -541,7 +541,7 @@ const stylusTask = (isSrcDirUpdate, done) => {
     // compress     : isProduction,
   };
   if(!isProduction) {
-    merge(_stylusOpts, {
+    Object.assign({}, _stylusOpts, {
       sourcemap: { inline: true },
     });
   }
@@ -629,7 +629,7 @@ const imageminConfig = {
   },
 };
 
-forEach(imageminConfig, (val, key) => {
+for(const [key, val] of Object.entries(imageminConfig)) {
   gulp.task(`imagemin-${ key }`, (done) => {
     return gulp.src(join(IMAGEMIN_SRC, `/**/*.${ val.extension }`))
       .pipe(plumber(PLUMBER_OPTS))
@@ -637,7 +637,7 @@ forEach(imageminConfig, (val, key) => {
       .pipe(imagemin(val.opts))
       .pipe(gulp.dest(IMAGEMIN_DEST));
   });
-});
+}
 
 
 /**
@@ -729,11 +729,11 @@ const webpackTask = (isSrcDir) => {
     const _transform = (data, encode, callback) => {
       const _destDirname    = dirname(join(basedir, dest, relative(src, data.path)));
       const _destFilename   = basename(data.path, jsExtension);
-      const _webpackAllOpts = merge(
-        _webpackBaseOpts(data.path, _destDirname, _destFilename), webpackOpts
+      const _webpackAllOpts = Object.assign(
+        {}, _webpackBaseOpts(data.path, _destDirname, _destFilename), webpackOpts
       );
       // if(isProduction) {
-      //   merge(_webpackAllOpts.plugins, _productionPlugins);
+      //   Object.assign({}, _webpackAllOpts.plugins, _productionPlugins);
       // }
       webpack(_webpackAllOpts, (err, stats) => {
         if(err) {
@@ -769,7 +769,7 @@ const webpackTask = (isSrcDir) => {
  */
 gulp.task('url-list', () => {
   return recursive(DEST_ROOT, ['!*.+(html|php)'], (err, files) => {
-    const _pathData = reduce(files, (memo, path, i) => {
+    const _pathData = files.reduce((memo, path, i) => {
       const _pathName = path.replace('htdocs', '');
       return i ? `${ memo }, '${ _pathName }'` : `'${ _pathName }'`;
     }, '');
