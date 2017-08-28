@@ -1,147 +1,102 @@
 # 開発環境の構築
 
-このプロジェクトは [Gulp](http://gulpjs.com/) で管理されています。
+このプロジェクトは [node.js](https://nodejs.org/en/) で構築されている
 
-## グローバルにインストールが必要なモジュール
-- [node.js](https://nodejs.org/en/)
-- [gulp-cli](https://github.com/gulpjs/gulp-cli)
+## 事前準備
 
-## [npm](https://www.npmjs.com/) から必要なモジュールをインストール
+### [node.js](https://nodejs.org/en/)（v6~）をグローバルインストール
+インストール済みの場合はスキップ  
+node.js は直接インストールやバージョン管理ツールを使う方法など複数あるのでインストール方法は省略
 
+### [npm](https://www.npmjs.com/) を v5~ にアップデート
+アップデート済みの場合はスキップ  
+v5 以降では `package-lock.json` が使えるので依存関係を共通化できる為
+```
+$ npm update -g npm
+```
+
+## 環境構築
 ```bash
 $ npm install
 ```
 
+### オフラインモード
+```bash
+$ npm install --prefer-offline
+```
+直接速度に影響するものではないが、あればローカルキャッシュを使う為、ネットワーク利用率が下り高速化される可能性もある。  
+通信が状況が悪い時などに使用するとよいかと。
 
-# Gulp コマンド
+
+
+# npm scripts コマンド
 
 ## タスク
 
-| タスク                      | コマンド             |
-|:----------------------------|:---------------------|
-| development                 | gulp                 |
-| development watch           | gulp watch           |
-| development coding          | gulp coding          |
-| development coding watch    | gulp coding-watch    |
-| development scripting       | gulp scripting       |
-| development scripting watch | gulp scripting-watch |
-| production                  | gulp production      |
-| image minimizing            | gulp imagemin        |
-| create url list             | gulp url-list        |
-| unnecessary files delete    | gulp clean           |
-
-### gulp
-pug、Stylus、JavaScript、sprite のコンパイル等をして、関連ファイルを監視します。
-
-### gulp watch
-pug、Stylus、JavaScript、sprite の関連ファイルを監視します。
-
-### gulp coding
-pug、Stylus、sprite のコンパイル等をして、関連ファイルを監視します。
-
-### gulp coding-watch
-pug、Stylus、sprite の関連ファイルを監視します。
-
-### gulp scripting
-JavaScript のコンパイル等をして、関連ファイルを監視します。
-
-### gulp scripting-watch
-JavaScript の関連ファイルを監視します。
-
-### gulp production
-本番・納品用のタスクを実行します。
-
-現状は以下を設定しています。
-
-- pug、Stylus、JavaScript、sprite のコンパイル等（map ファイルの出力はしない）
-- imagemin タスクの実行
-- clean タスクの実行
-
-必要なタスクを案件ごとに設定してください。
-以下は例です。
-
-- HTML、CSS、JavaScript の圧縮
-- 文字コードを shift-jis に変更
-
-
-### gulp imagemin
-画像を圧縮します。
-
-
-### gulp url-list
-URL一覧を表示するHTMLファイルを生成します。
-
-### gulp clean
-不要なファイルを削除します。  
-通常は gulp production で合わせて実行されますが、  
-ファイルの削除だけする場合に使用。  
-※ CSS、JavaScript 内にはソースマップへの参照が残ります。
-
-
+| コマンド                 | 説明                                   |
+|:-------------------------|:---------------------------------------|
+| npm run watch            |`pug` `stylus` `webpack` `sprite` を監視|
+| npm run build            |`pug` `stylus` `webpack` をトランスパイル <br> `sprite` を生成 <br> `pug` `stylus` `webpack` `sprite` を監視|
+| npm run build:production |`pug` `stylus` `webpack` をトランスパイル（圧縮） <br> `stylus` `webpack` の sourcemap 無し <br> `sprite` を生成 <br> `images/minify/` フォルダ内画像を圧縮・出力 <br> 不要ファイルを削除 |
+| npu run imagemin         |`images/minify/` フォルダ内画像を圧縮・出力|
+| npu run php-server       |PHP のビルトインサーバを起動|
 
 ## オプション
 
-| オプション | コマンド |
-|:-----------|:---------|
-| php server | --php    |
+| コマンド                     | 説明                                             |
+|:-----------------------------|:-------------------------------------------------|
+| --coding                     |`webpack` を実行しない                            |
+| --scripting                  |`pug` `stylus` `sprite` を実行しない              |
+| --viewing-update             |表示中のファイルのみトランスパイル                |
+| --viewing-update-pug         |`pug` は表示中ファイルのみトランスパイル          |
+| --viewing-update-pug-factory |`pug-factory` は表示中のファイルのみトランスパイル|
+| --viewing-update-stylus      |`stylus` は表示中のファイルのみトランスパイル     |
+| --viewing-update-webpack     |`webpack` は表示中のファイルのみトランスパイル    |
+| --php                        |サーバに PHP のビルトインサーバを使用 <br> ※ `php-server` で PHP のビルトインサーバ起動が必要|
 
-タスクコマンドの後に追加して使用します。
-
+タスクコマンドの後に追加して使用
 ```bash
 # 例
-$ gulp coding --php
+$ npm run build -- --coding
 ```
 
-### --php
-ローカルサーバーをPHPで起動します。
 
 
-
-# local server
-ローカルサーバーは [BrowserSync](https://www.browsersync.io/) を使用しています。
+# Local Server
+ローカルサーバは [BrowserSync](https://www.browsersync.io/) を使用  
+※PHP 使用時は PHP ビルトインサーバと連携
 
 ### ポート
-- 3000 -> /htdocs/ をルートとして起動
-- 3001 -> BrowserSync のコントロールパネルを起動
-- 3002 -> PHP 起動時のプロキシで使用
-- 3003 -> /.url-list/ をルートとして起動（URL一覧表示用）
-- 3004 -> /.esdoc/ をルートとして起動（ESDoc覧表示用）
+- 3000 -> `htdocs/` をルートとしてサイトを表示
+- 3001 -> BrowserSync のコントロールパネルを表示
+- 3002 -> `.url-list/` をルートとして URL 一覧を表示
 
 
 
 # HTML
-[pug](https://github.com/pugjs/pug) をコンパイルしています。
+[pug](https://pugjs.org/) を使用
+`pug/src/` 以下の pug ファイルをトランスパイルし `htdocs/` に出力
 
-/pug/src/ 以下の pug ファイルをコンパイルし /htdocs/ 以下に出力します。
+## Members
 
-## コメントアウトで用意しているプラグイン
+| メンバ・メソッド | 説明              |
+|:-----------------|:------------------|
+| isProduction     | production フラグ |
+| basedir          | pug のルートパス  |
+| join([...paths]) | パス結合          |
+| relative(path)   | 相対パス          |
 
-| 関数名         | 使用している内容 |
-|:---------------|:-----------------|
-| rename         | 拡張子変換       |
-| crLfReplace    | 改行コード変換   |
-| iconv          | 文字コード変換   |
+## [Filters](https://pugjs.org/language/filters.html)
 
-## 用意されている変数
-
-| 変数名       | 内容                       |
-|:-------------|:---------------------------|
-| dirname      | ディレクトリ名             |
-| filename     | ファイル名                 |
-| relative     | 相対パス                   |
-| isProduction | productionタスク時のフラグ |
-
-## 用意されている [filters](http://jade-lang.com/reference/filters/)
-
-| filters名  | 内容                                                    |
-|:-----------|:--------------------------------------------------------|
-| do-nothing | そのまま出力（先頭は改行。インデントオプションあり。 ） |
+| filters名  | 説明                                                 |
+|:-----------|:-----------------------------------------------------|
+| do-nothing | そのまま出力（先頭は改行、インデントオプションあり） |
 
 ### do-nothing のインデントオプション
-1行目に `{{indent=[数値]}}` を追加することで数値の数だけスペースを追加します。
+`{{indent=[数値]}}` を追加することで数値の数だけスペースを追加される
 
-```jade
-// 例
+```pug
+//- 例
 :do-nothing
   {{indent=2}}
   <div>
@@ -150,183 +105,95 @@ $ gulp coding --php
 ```
 
 ## Factory
-テンプレートファイル（pug）と json から html 自動生成します。  
-一部だけ違うページを大量生成する際におすすめ。
+テンプレート（pug）とデータ（json）からファイルを生成し `htdocs/` に出力
 
 ### テンプレートファイル
-/json/factorys/ 以下の pug ファイル。  
-`{{vars}}` に json から取得したデータが変数として挿入されます。
+`pug/factory/` 以下の pug ファイル  
+※ファイル内の `{{vars}}` が json のデータに置き換えられる
 
 ### データファイル
-/json/factorys/ 以下の json ファイル。
+`pug/factory/` 以下の json ファイル
 
 ```javascript
-{ "factorys/index.pug": {  // 使用するテンプレートを指定
+// 例
+{ "factory/index": {  // 使用するテンプレートを指定
 
-  "factory/index.pug": {  // 出力先のパスを指定（拡張は.pug）
-    "factoryTitle": "タイトル1",  // key が変数名、value が 値として出力される。
+  "fac/index": {  // 出力先のパスを指定
+    "factoryTitle": "タイトル1",  // key が変数名、value が 値として出力
     "factoryContents": "コンテンツ1"
   },
-  "factory/hoge/index.pug": {
+  "fac/hoge/index": {
     "factoryTitle": "タイトル2",
     "factoryContents": "コンテンツ2<br>コンテンツ2"
   }
 
 }}
-// json ですので、カンマの位置に気をつける。
 ```
 
 
 
 # CSS
-[Stylus](http://stylus-lang.com/) をコンパイルしています。
-
-/stylus/src/ 以下の stylus ファイルをコンパイルし /htdocs/ 以下に出力します。
+[Stylus](http://stylus-lang.com/) でトランスパイル  
+`stylus/src/` 以下の stylus ファイルをトランスパイルし `htdocs/` に出力
 
 
 
 # Image
 
 ## Sprite
-/images/sprites/ 以下の画像をスプライト化して /htdocs/ 以下に出力します。  
-最終ディレクトリ名がファイル名になります。
+`images/sprite/` 以下の画像をスプライト化して `htdocs/` に出力  
+最終ディレクトリ名がファイル名になる
 
 > 例  
-/images/sprites/images/sample/a.png  
-/images/sprites/images/sample/b.png  
+`images/sprite/images/sample/a.png`  
+`images/sprite/images/sample/b.png`  
 ↓  
-/htdocs/images/sample.png
+`htdocs/images/sample.png`
 
-Stylus で使用する為に /stylus/imports/sprite.styl が出力されます。  
-[mixins](http://stylus-lang.com/docs/mixins.html) が用意されているので import して使用します。
+Stylus で使用する為に `stylus/imports/sprite.styl` を出力  
+[mixins](http://stylus-lang.com/docs/mixins.html) を import して使用
 
 ```stylus
 // 例
-
-@import "../../imports/sprite"
-
+@import "stylus/imports/sprite"
 #a
   sprite("images/sample/a.png")  // スプライト化する前のフィアルパスを指定
 #b
   sprite("images/sample/b.png")
 ```
 
-`gulp production` 実行時には /images/src/ 以下に出力されて、image minimizing タスクが実行されます。
-
-
-## image minimizing
-/images/src/ 以下の画像を圧縮して /htdocs/ 以下に出力します。  
-`gulp production` 実行時に一度だけ実行されます。  
-`gulp imagemin` でも個別に実行できます。
+## Image Minify
+`images/minify/` 以下の画像を圧縮して `htdocs/` に出力  
 
 
 
 # JavaScript
-[CoffeeScript](http://coffeescript.org/) をコンパイル、  
-または [Babel](https://babeljs.io/)（[es2015](https://babeljs.io/docs/plugins/preset-es2015/)、[stage-0](https://babeljs.io/docs/plugins/preset-stage-0/)）をトランスパイルか  
-[TypeScript](https://www.typescriptlang.org/) をコンパイルして、  
-[webpack](https://webpack.github.io/) でバンドルします。
-
-/webpack/src/ 以下の coffee または js か ts ファイルをコンパイル（トランスパイル）し /htdocs/ 以下に出力します。
-
-## コンパイラ
-デフォルトは CoffeeScript を使用するようになっています。  
-Babel または TypeScript を使用する場合は、以下を変更します。
-
-```js:gulpfile.babel.js
-const jsCompiler = 'coffee';
-```
-↓
-
-#### Babel の場合
-```js:gulpfile.babel.js
-const jsCompiler = 'babel';
-```
-
-#### TypeScript の場合
-```js:gulpfile.babel.js
-const jsCompiler = 'typescript';
-```
+[Babel](https://babeljs.io/)（[es2015](https://babeljs.io/docs/plugins/preset-es2015/), [stage-0](https://babeljs.io/docs/plugins/preset-stage-0/)）でトランスパイルし[webpack](https://webpack.js.org/) でバンドル  
+`webpack/src/` 以下の js ファイルをトランスパイルし `htdocs/` に出力
 
 ## webpack
-パッケージマネージャーには [npm](https://www.npmjs.com/)、[Bower](http://bower.io/) が使えます。
+パッケージマネージャーに [npm](https://www.npmjs.com/) を使用
 
-minファイルなど package.json で指定されている main 以外のファイルを使用したい場合は、  
-オプションの alias に指定すると便利。
 
-```js:gulpfile.babel.js
-// 例
-alias: {
-  'lodash'     : 'lodash/dist/lodash.min',
-  'Velocity'   : 'velocity/velocity.min',
-  'Velocity.ui': 'velocity/velocity.ui.min',
-},
+
+# URL List
+3002 ポートにURL一覧を表示
+
+`.url-list/index.tmp` にファイル一覧データを追加して `.url-list/index.html` を出力
+
+テストサーバー等へリンクさせる場合は以下を更新
+```js:.url-list/index.tmp
+const root = 'http://domain.com/';
 ```
 
-## ESDoc
-/.esdoc/ 以下に [ESDoc](https://esdoc.org/) でAPIドキュメントを出力します。
-
-出力コマンド
-```
-npm run esdoc
-```
-
-## ユニットテスト
-/.test/ 以下に [Jasmine](http://jasmine.github.io/) & [Karma](https://karma-runner.github.io/) でテストできる環境を用意しています。
-
-テストコマンド
-```
-npm run test
-```
-
-
-
-# URL list
-3003ポートにURL一覧を表示します。
-
-/.url-list/tmp.html がテンプレートファイルになっていて  
-/.url-list/index.html にファイル一覧のデータを追加して出力されます。
-
-## テストサーバーへのリンク
-テストサーバーへリンクさせたい場合は2パターンあります。
-
-### ローカル（サーバーなし）で表示
-以下のドメインを変更して url-list タスクを実行し /.url-list/index.html を更新して、ブラウザで直接表示。
-
-```js:/.url-list/tmp.html
-var domain = 'domain.com';
-```
-
-### テストサーバーにアップして表示
-以下を変更すると /.url-list/index.html と同じファイルが  
-/htdocs/url-list.html として出力されます。  
-（変更後に url-list タスクの実行が必要）  
-このファイルをテストサーバーにアップして表示。
-
-```js:gulpfile.babel.js
-const outputUrlListToHtdocs = false;
-```
-↓
-
-```js:gulpfile.babel.js
-const outputUrlListToHtdocs = true;
-```
-※ 不要ファイルですので納品ファイルに含めないように注意。  
-　直接消すか、納品時に gulp production か gulp clean するなどで対応。
 
 
 # Clean
-不要ファイル削除をします。
+不要ファイル削除  
+変更する場合は以下を更新
 
-現状は以下のファイルを削除するようにしています。
-
-- .DS_Store
-- Thumb.db
-- /htdocs/url-list.html
-- /htdocs/ 以下の map ファイル
-
-変更する場合は以下を変更します。
-
-```js:gulpfile.babel.js
-del([ './**/.DS_Store', './**/Thumb.db', './htdocs/url-list.html', './htdocs/**/*.map' ]);
+```js:task-config.js
+  deletes: [
+    'htdocs/**/.DS_Store', 'htdocs/**/Thumb.db', 'htdocs/**/*.map',
+  ],
 ```
