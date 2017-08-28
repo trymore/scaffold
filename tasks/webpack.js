@@ -21,11 +21,27 @@ export default class Webpack extends Base {
   }
 
   get _webpackOpts() {
-    const { root } = config.path;
+    const { path: { root }, webpack: { transcompiler } } = config;
+    const { _ext } = this;
+
+    const _rules = ({
+      'babel': {
+        test: /\.js$/,
+        loader : 'babel-loader',
+        options: {
+          presets: ['latest', 'stage-0'],
+        },
+      },
+      'coffee': {
+        test: /\.coffee$/,
+        loader : 'coffee-loader',
+      },
+    })[transcompiler];
+
     return {
       resolve: {
         descriptionFiles: ['package.json'],
-        extensions      : ['.js'],
+        extensions      : [_ext],
         modules: [
           join(root, 'webpack/imports'),
           'node_modules',
@@ -33,16 +49,7 @@ export default class Webpack extends Base {
         alias: {},
       },
       module : {
-        rules: [
-          {
-            test: /\.js$/,
-            loader : 'babel-loader',
-            options: {
-              presets: ['latest', 'stage-0'],
-            },
-            exclude: /node_modules/,
-          }
-        ],
+        rules: [Object.assign(_rules, { exclude: /node_modules/ })],
       },
       devtool: 'source-map',
       plugins: [],
@@ -67,19 +74,26 @@ export default class Webpack extends Base {
 
   constructor() {
     super('webpack');
+
+    const { transcompiler } = config.webpack;
+    this._ext = ({
+      'babel' : '.js',
+      'coffee': '.coffee',
+    })[transcompiler];
   }
 
   _watch() {
     const { root, src, imports } = config.webpack;
+    const { _ext } = this;
 
     // init
-    this._watchInit(join(root, '**/*.js'));
+    this._watchInit(join(root, `**/*${ _ext }`));
 
     // src
-    this._watchSrc(join(src, '**/*.js'));
+    this._watchSrc(join(src, `**/*${ _ext }`));
 
     // extend or include
-    this._watchOther(join(imports, '**/*.js'));
+    this._watchOther(join(imports, `**/*${ _ext }`));
   }
 
   /**
@@ -87,7 +101,8 @@ export default class Webpack extends Base {
    */
   _buildAll() {
     const { src } = config.webpack;
-    return super._buildAll('webpack', join(src, '**/*.js'));
+    const { _ext } = this;
+    return super._buildAll('webpack', join(src, `**/*${ _ext }`));
   }
 
   /**
@@ -100,13 +115,13 @@ export default class Webpack extends Base {
       webpack: { charset, lineFeedCode, src, dest },
     } = config;
     const { argv } = NS;
+    const { _notMinifyFileNameSet, _webpackOpts, _productionPlugins, _ext } = this;
 
     return (async () => {
-      const _root     = relative(src, file);
+      const _root     = relative(src, file.replace(_ext, '.js'));
       const _dest     = join(dest, _root);
       const _destDir  = dirname(_dest);
       const _destFile = basename(_dest);
-      const { _notMinifyFileNameSet, _webpackOpts, _productionPlugins } = this;
       const _opts = Object.assign({
         entry: join(root, file),
         output: {
@@ -115,7 +130,7 @@ export default class Webpack extends Base {
         },
       }, _webpackOpts);
 
-      if(argv['production'] && !_notMinifyFileNameSet.has(basename(_destFile, '.js'))) {
+      if(argv['production'] && !_notMinifyFileNameSet.has(basename(_destFile, _ext))) {
         Object.assign(_opts.plugins, _productionPlugins);
       }
 

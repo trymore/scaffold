@@ -6,9 +6,9 @@
 /******/ 	function __webpack_require__(moduleId) {
 /******/
 /******/ 		// Check if module is in cache
-/******/ 		if(installedModules[moduleId])
+/******/ 		if(installedModules[moduleId]) {
 /******/ 			return installedModules[moduleId].exports;
-/******/
+/******/ 		}
 /******/ 		// Create a new module (and put it into the cache)
 /******/ 		var module = installedModules[moduleId] = {
 /******/ 			i: moduleId,
@@ -32,9 +32,6 @@
 /******/
 /******/ 	// expose the module cache
 /******/ 	__webpack_require__.c = installedModules;
-/******/
-/******/ 	// identity function for calling harmony imports with the correct context
-/******/ 	__webpack_require__.i = function(value) { return value; };
 /******/
 /******/ 	// define getter function for harmony exports
 /******/ 	__webpack_require__.d = function(exports, name, getter) {
@@ -63,11 +60,32 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 1);
+/******/ 	return __webpack_require__(__webpack_require__.s = 0);
 /******/ })
 /************************************************************************/
 /******/ ([
 /* 0 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_view_ui_anchor__ = __webpack_require__(1);
+
+
+window.addEventListener('DOMContentLoaded', function() {
+  var el, i, len, ref, results;
+  ref = document.querySelectorAll('a[href^="#"]');
+  results = [];
+  for (i = 0, len = ref.length; i < len; i++) {
+    el = ref[i];
+    results.push(new __WEBPACK_IMPORTED_MODULE_0_view_ui_anchor__["a" /* default */](el));
+  }
+  return results;
+});
+
+
+/***/ }),
+/* 1 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -150,28 +168,7 @@ Anchor = (function() {
 
 })();
 
-/* harmony default export */ __webpack_exports__["a"] = Anchor;
-
-
-/***/ }),
-/* 1 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_view_ui_anchor__ = __webpack_require__(0);
-
-
-window.addEventListener('DOMContentLoaded', function() {
-  var el, i, len, ref, results;
-  ref = document.querySelectorAll('a[href^="#"]');
-  results = [];
-  for (i = 0, len = ref.length; i < len; i++) {
-    el = ref[i];
-    results.push(new __WEBPACK_IMPORTED_MODULE_0_view_ui_anchor__["a" /* default */](el));
-  }
-  return results;
-});
+/* harmony default export */ __webpack_exports__["a"] = (Anchor);
 
 
 /***/ })

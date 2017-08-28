@@ -38,8 +38,8 @@ export default class BrowserSync {
       scrollProportionally: false,
       server: {
         middleware: [
-          this._convert.bind(this),
           this._setViewingFile.bind(this),
+          this._convert.bind(this),
         ],
       },
     };
@@ -114,22 +114,23 @@ export default class BrowserSync {
   _convert(req, res, next) {
     const { dest } = config.path;
 
+    const { url } = req;
+    let _path = join(dest, url);
+
+    if(!_path) return next();
+
+    if(!extname(_path)) {
+      _path = this._getFilePath(_path);
+    }
+
     (async () => {
-      let _path = join(dest, req.url);
-
-      if(!_path) return next();
-
-      if(!extname(_path)) {
-        _path = this._getIndexPath(_path);
-      }
-
       switch(extname(_path)) {
         case '.html':
         case '.shtml':
         case '.php':
           const _buf = await this._pageConvert(_path);
           res.writeHead(200, { 'Content-Type': 'text/html' });
-          res.end(_buf.toString());
+           res.end(_buf.toString());
           break;
         default:
           next();
@@ -200,30 +201,32 @@ export default class BrowserSync {
    * @param {function} next
    */
   _setViewingFile(req, res, next) {
-    const { url } = req;
-    const _path = this._getIndexPath(url);
-    const _ext  = extname(_path);
-
     const { destSet, pugSet } = NS.curtFiles;
     const { path: { dest }, pug } = config;
 
-    destSet.add(join(dest, _path));
-    switch(_ext) {
-      case '.html':
-      case '.shtml':
-      case '.php':
-        pugSet.add(join(pug.src, _path.replace(_ext, '.pug')));
-        break;
-      case '.css':
-        const { stylusSet } = NS.curtFiles;
-        const { stylus } = config;
-        stylusSet.add(join(stylus.src, _path.replace(_ext, '.styl')));
-        break;
-      case '.js':
-        const { webpackSet } = NS.curtFiles;
-        const { webpack } = config;
-        webpackSet.add(join(webpack.src, _path));
-        break;
+    const { url } = req;
+    const _path = this._getFilePath(join(dest, url));
+    const _ext  = extname(_path);
+
+    if(_ext) {
+      destSet.add(_path);
+      switch(_ext) {
+        case '.html':
+        case '.shtml':
+        case '.php':
+          pugSet.add(join(pug.src, _path.replace(_ext, '.pug')));
+          break;
+        case '.css':
+          const { stylusSet } = NS.curtFiles;
+          const { stylus } = config;
+          stylusSet.add(join(stylus.src, _path.replace(_ext, '.styl')));
+          break;
+        case '.js':
+          const { webpackSet } = NS.curtFiles;
+          const { webpack } = config;
+          webpackSet.add(join(webpack.src, _path));
+          break;
+      }
     }
     next();
   }
@@ -232,13 +235,17 @@ export default class BrowserSync {
    * @param {string} path
    * @return {string}
    */
-  _getIndexPath(path) {
+  _getFilePath(path) {
+    let _path = path;
     for(const ext of ['.html', '.shtml', '.php']) {
-      const _path = join(path, `index${ ext }`);
+      if(extname(path)) break;
+      const __path = join(path, `index${ ext }`);
       if(hasFile(_path)) {
-        return path;
+        _path = __path;
+        break;
       }
     }
+    return _path;
   }
 
   _watch() {

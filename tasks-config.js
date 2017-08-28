@@ -31,12 +31,13 @@ export default {
     dest        : dest,
   },
   webpack: {
-    charset     : charset,
-    lineFeedCode: lineFeedCode,
-    root        : webpack,
-    src         : `${ webpack }/src`,
-    imports     : `${ webpack }/imports`,
-    dest        : dest,
+    transcompiler: 'coffee',  // ['babel', 'coffee']
+    charset      : charset,
+    lineFeedCode : lineFeedCode,
+    root         : webpack,
+    src          : `${ webpack }/src`,
+    imports      : `${ webpack }/imports`,
+    dest         : dest,
   },
   images: {
     root     : images,

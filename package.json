@@ -24,6 +24,8 @@
     "babel-preset-stage-0": "^6.24.1",
     "browser-sync": "^2.18.8",
     "chokidar": "^1.7.0",
+    "coffee-loader": "^0.8.0",
+    "coffeescript": "^1.12.7",
     "deep-assign": "^2.0.0",
     "iconv-lite": "^0.4.15",
     "imagemin": "^5.3.1",

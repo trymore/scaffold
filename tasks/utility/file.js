@@ -8,15 +8,13 @@ import { getType } from './type';
  * @return {boolean}
  */
 export const hasFile = (path) => {
-  return new Promise((resolve) => {
-    try {
-      accessSync(path);
-      resolve(true);
-    }
-    catch(err) {
-      resolve(false);
-    }
-  });
+  try {
+    accessSync(path);
+    return true;
+  }
+  catch(err) {
+    return false;
+  }
 };
 
 /**
