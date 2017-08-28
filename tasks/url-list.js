@@ -30,8 +30,8 @@ export default class UrlList {
   }
 
   _watch() {
-    const { dest } = config.path;
-    chokidar.watch(join(dest, '**/*.+(html|php)'), { ignoreInitial: true })
+    const { htdocs } = config.project;
+    chokidar.watch(join(htdocs, '**/*.+(html|php)'), { ignoreInitial: true })
       .on('all', (evt, path) => {
         if(!evt.match(/^(add|unlink)$/)) return;
         fileLog(evt, path);
@@ -43,13 +43,13 @@ export default class UrlList {
    * @return {Promise}
    */
   _build() {
-    const { path, urlList: { tmp, dest } } = config;
+    const { project: { htdocs }, urlList: { tmp, dest } } = config;
     const { _taskLog } = this;
 
     return (async () => {
       _taskLog.start();
 
-      const _paths = await glob(join(path.dest, '**/*.+(html|php)'));
+      const _paths = await glob(join(htdocs, '**/*.+(html|shtml|php)'));
       const _urlHash = {};
       for(const path of _paths) {
         const _url = path.replace('htdocs/', '');

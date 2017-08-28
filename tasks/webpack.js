@@ -21,7 +21,7 @@ export default class Webpack extends Base {
   }
 
   get _webpackOpts() {
-    const { path: { root }, webpack: { transcompiler } } = config;
+    const { project: { root }, webpack: { transcompiler } } = config;
     const { _ext } = this;
 
     const _rules = ({
@@ -111,7 +111,7 @@ export default class Webpack extends Base {
    */
   _build(file) {
     const {
-      path   : { root },
+      project: { root },
       webpack: { charset, lineFeedCode, src, dest },
     } = config;
     const { argv } = NS;

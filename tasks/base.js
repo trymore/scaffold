@@ -59,7 +59,7 @@ export default class Base {
         (async () => {
           if(!evt.match(/^(add|change)$/) || await !_fileCache.mightUpdate(path)) return;
           fileLog(evt, path);
-          const { root } = config.path;
+          const { root } = config.project;
           const { _taskLog } = this;
           _taskLog.start();
           await fn(relative(root, path));

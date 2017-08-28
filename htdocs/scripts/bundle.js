@@ -65,111 +65,111 @@
 /************************************************************************/
 /******/ ([
 /* 0 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_view_ui_anchor__ = __webpack_require__(1);
 
 
-window.addEventListener('DOMContentLoaded', function() {
-  var el, i, len, ref, results;
-  ref = document.querySelectorAll('a[href^="#"]');
-  results = [];
-  for (i = 0, len = ref.length; i < len; i++) {
-    el = ref[i];
-    results.push(new __WEBPACK_IMPORTED_MODULE_0_view_ui_anchor__["a" /* default */](el));
-  }
-  return results;
+var _anchor = __webpack_require__(1);
+
+var _anchor2 = _interopRequireDefault(_anchor);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+window.addEventListener('DOMContentLoaded', function () {
+
+  Array.from(document.querySelectorAll('a[href^="#"]'), function (el) {
+    new _anchor2.default(el);
+  });
 });
-
 
 /***/ }),
 /* 1 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-var Anchor,
-  bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
-Anchor = (function() {
 
-  /*
-  @param el [HTMLElement]
-   */
-  function Anchor(el) {
-    this.el = el;
-    this.scroll = bind(this.scroll, this);
-    this.targetEl = (function(_this) {
-      return function() {
-        var elName, href;
-        href = _this.el.getAttribute('href');
-        elName = href === '#' ? 'body' : href;
-        return document.querySelector(elName);
-      };
-    })(this)();
-    if (this.targetEl.length) {
-      return;
-    }
-    this.duration = 500;
-    this.timer = null;
-    this.el.addEventListener('click', this.scroll.bind(this));
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Anchor = function () {
+  function Anchor($el) {
+    _classCallCheck(this, Anchor);
+
+    var _$target = this._$target = function () {
+      var _href = $el.getAttribute('href');
+      var _elName = _href === '#' ? 'body' : _href;
+      return document.querySelector(_elName);
+    }();
+
+    if (_$target.length) return;
+
+    this._duration = 500;
+    this._timer = null;
+
+    $el.addEventListener('click', this._scroll.bind(this));
   }
 
-
-  /*
-  @private
-   */
-
-  Anchor.prototype.scroll = function(e) {
-    this.beforeTop = window.pageYOffset;
-    this.changeTop = this.targetEl.getBoundingClientRect().top;
-    e.preventDefault();
-    this.startTime = new Date().getTime();
-    return this.animate();
-  };
+  _createClass(Anchor, [{
+    key: '_scroll',
+    value: function _scroll(e) {
+      var _$target = this._$target;
 
 
-  /*
-  @private
-   */
+      this._beforeTop = window.pageYOffset;
+      this._changeTop = _$target.getBoundingClientRect().top;
 
-  Anchor.prototype.animate = function() {
-    var currentTime, newTime;
-    if (this.timer) {
-      clearTimeout(this.timer);
+      e.preventDefault();
+      this._startTime = new Date().getTime();
+      this._animate();
     }
-    newTime = new Date().getTime();
-    currentTime = (function(_this) {
-      return function() {
-        if (_this.duration > (newTime - _this.startTime)) {
-          return newTime - _this.startTime;
+  }, {
+    key: '_animate',
+    value: function _animate() {
+      var _timer = this._timer,
+          _startTime = this._startTime,
+          _duration = this._duration,
+          _beforeTop = this._beforeTop,
+          _changeTop = this._changeTop;
+
+
+      if (_timer) {
+        clearTimeout(_timer);
+      }
+
+      var _newTime = new Date().getTime();
+
+      var _currentTime = function () {
+        if (_duration > _newTime - _startTime) {
+          return _newTime - _startTime;
         } else {
-          return _this.duration;
+          return _duration;
         }
-      };
-    })(this)();
-    window.scrollTo(0, this.easing(currentTime, this.beforeTop, this.changeTop, this.duration));
-    if (this.duration > currentTime) {
-      return this.timer = setTimeout(this.animate.bind(this), 15);
+      }();
+
+      window.scrollTo(0, this._easing(_currentTime, _beforeTop, _changeTop, _duration));
+
+      if (_duration > _currentTime) {
+        this._timer = setTimeout(this._animate.bind(this), 15);
+      }
     }
-  };
-
-
-  /*
-  @private
-   */
-
-  Anchor.prototype.easing = function(t, b, c, d) {
-    return -c * (t /= d) * (t - 2) + b;
-  };
+  }, {
+    key: '_easing',
+    value: function _easing(t, b, c, d) {
+      return -c * (t /= d) * (t - 2) + b;
+    }
+  }]);
 
   return Anchor;
+}();
 
-})();
-
-/* harmony default export */ __webpack_exports__["a"] = (Anchor);
-
+exports.default = Anchor;
 
 /***/ })
 /******/ ]);

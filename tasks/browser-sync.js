@@ -46,11 +46,11 @@ export default class BrowserSync {
   }
 
   get _bsOpts() {
-    const { dest } = config.path;
+    const { htdocs } = config.project;
     const { _bsBaseOpts } = this;
     return deepAssign(_bsBaseOpts, {
       server: {
-        baseDir: dest,
+        baseDir: htdocs,
       },
     });
   }
@@ -112,10 +112,10 @@ export default class BrowserSync {
    * @param {function} next
    */
   _convert(req, res, next) {
-    const { dest } = config.path;
+    const { htdocs } = config.project;
 
     const { url } = req;
-    let _path = join(dest, url);
+    let _path = join(htdocs, url);
 
     if(!_path) return next();
 
@@ -202,10 +202,10 @@ export default class BrowserSync {
    */
   _setViewingFile(req, res, next) {
     const { destSet, pugSet } = NS.curtFiles;
-    const { path: { dest }, pug } = config;
+    const { project: { htdocs }, pug } = config;
 
     const { url } = req;
-    const _path = this._getFilePath(join(dest, url));
+    const _path = this._getFilePath(join(htdocs, url));
     const _ext  = extname(_path);
 
     if(_ext) {
@@ -249,12 +249,12 @@ export default class BrowserSync {
   }
 
   _watch() {
-    const { dest } = config.path;
+    const { htdocs } = config.project;
     const { destSet } = NS.curtFiles;
 
     const _opts = { ignoreInitial: true };
 
-    chokidar.watch(join(dest, '**/*.(html|shtml|php|css|js|png|jpg|jpeg|gif|svg)'), _opts)
+    chokidar.watch(join(htdocs, '**/*.(html|shtml|php|css|js|png|jpg|jpeg|gif|svg)'), _opts)
       .on('all', (event, path) => {
         if(![...destSet].includes(path)) return;
         browserSync.reload(path);

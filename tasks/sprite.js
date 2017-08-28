@@ -69,7 +69,7 @@ sprite-retina(filepath)
         fileLog(evt, path);
         const { _debounce } = this;
         _debounce(() => {
-          const { root } = config.path;
+          const { root } = config.project;
           this._build();
         });
       });
@@ -79,7 +79,7 @@ sprite-retina(filepath)
    * @return {Promsie}
    */
   _build() {
-    const { sprite, styleDest } = config.images;
+    const { sprite, stylusDest } = config.images;
     const { _taskLog } = this;
     return (async () => {
       _taskLog.start();
@@ -96,9 +96,9 @@ sprite-retina(filepath)
       })());
 
       const _css = this._getCss(this._flatten(_spritehashs));
-      if(_css && !sameFile(styleDest, _css)) {
-        await mkfile(styleDest, _css);
-        fileLog('create', styleDest);
+      if(_css && !sameFile(stylusDest, _css)) {
+        await mkfile(stylusDest, _css);
+        fileLog('create', stylusDest);
       }
 
       _taskLog.finish();

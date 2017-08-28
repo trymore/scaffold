@@ -42,7 +42,7 @@ export default class Stylus extends Base {
    * @param {Promise}
    */
   _build(path) {
-    const { path: { root }, stylus: { charset, lineFeedCode, src, dest } } = config;
+    const { project: { root }, stylus: { charset, lineFeedCode, src, dest } } = config;
     const { argv } = NS;
 
     return (async () => {

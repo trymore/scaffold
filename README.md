@@ -29,6 +29,46 @@ $ npm install --prefer-offline
 
 
 
+# 設定
+`task-config.js` に記述
+
+| プロパティ名          | 説明                                     |
+|:----------------------|:-----------------------------------------|
+| project.root          |プロジェクトのルート                      |
+| project.htdocs        |プロジェクトのドキュメントルート          |
+| pug.charset           |pug の出力ファイル文字コード              |
+| pug.lineFeedCode      |pug の出力ファイル改行コード              |
+| pug.root              |pug のルート                              |
+| pug.src               |pug の元ファイルディレクトリ              |
+| pug.tmp               |pug のテンプレート等ファイルディレクトリ  |
+| pug.factory           |pug の fuctory 関連ディレクトリ           |
+| pug.dest              |pug の出力ディレクトリ                    |
+| pug.php               |pug を PHP で出力するファイル             |
+| stylus.charset        |stylus の出力ファイル文字コード           |
+| stylus.lineFeedCode   |stylus の出力ファイル改行コード           |
+| stylus.root           |stylus のルート                           |
+| stylus.src            |stylus 元ファイルディレクトリ             |
+| stylus.imports        |stylus インポートファイルディレクトリ     |
+| stylus.dest           |stylus 出力ディレクトリ                   |
+| webpack.transcompiler |webpack のトランスパイラ                  |
+| webpack.charset       |webpack の出力ファイル文字コード          |
+| webpack.lineFeedCode  |webpack の出力ファイル改行コード          |
+| webpack.root          |webpack のルート                          |
+| webpack.src           |webpack の元ファイルディレクトリ          |
+| webpack.imports       |webpack のインポートファイルディレクトリ  |
+| webpack.dest          |webpack の出力ディレクトリ                |
+| images.root           |画像圧縮・スプライト関連のルート          |
+| images.minify         |圧縮画像の元ファイルディレクトリ          |
+| images.sprite         |スプライト画像の元ファイルディレクトリ    |
+| images.dest           |圧縮画像・スプライト画像の出力ディレクトリ|
+| images.stylusDest     |スプライトの stylus ファイル出力先        |
+| urlList.root          |URL一覧関連のルート                       |
+| urlList.tmp           |URL一覧のテンプレートファイル             |
+| urlList.dest          |URL一覧の出力先                           |
+| deletes               |clear タスク時削除ファイル                |
+
+
+
 # npm scripts コマンド
 
 ## タスク
@@ -168,8 +208,14 @@ Stylus で使用する為に `stylus/imports/sprite.styl` を出力
 
 
 # JavaScript
-[Babel](https://babeljs.io/)（[es2015](https://babeljs.io/docs/plugins/preset-es2015/), [stage-0](https://babeljs.io/docs/plugins/preset-stage-0/)）でトランスパイルし[webpack](https://webpack.js.org/) でバンドル  
+[Babel](https://babeljs.io/)（[es2015](https://babeljs.io/docs/plugins/preset-es2015/), [stage-0](https://babeljs.io/docs/plugins/preset-stage-0/)）または [CoffeeScript](http://coffeescript.org/) でトランスパイルし [webpack](https://webpack.js.org/) でバンドル  
 `webpack/src/` 以下の js ファイルをトランスパイルし `htdocs/` に出力
+
+デフォルトは Babel  
+変更する場合は `task-config.js` の以下を更新
+```js
+    transcompiler: 'babel',  // ['babel', 'coffee']
+```
 
 ## webpack
 パッケージマネージャーに [npm](https://www.npmjs.com/) を使用
@@ -181,8 +227,8 @@ Stylus で使用する為に `stylus/imports/sprite.styl` を出力
 
 `.url-list/index.tmp` にファイル一覧データを追加して `.url-list/index.html` を出力
 
-テストサーバー等へリンクさせる場合は以下を更新
-```js:.url-list/index.tmp
+テストサーバー等へリンクさせる場合は `.url-list/index.tmp` の以下を更新
+```js
 const root = 'http://domain.com/';
 ```
 
@@ -190,9 +236,8 @@ const root = 'http://domain.com/';
 
 # Clean
 不要ファイル削除  
-変更する場合は以下を更新
-
-```js:task-config.js
+変更する場合は `task-config.js` の以下を更新
+```js
   deletes: [
     'htdocs/**/.DS_Store', 'htdocs/**/Thumb.db', 'htdocs/**/*.map',
   ],
