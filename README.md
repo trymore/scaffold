@@ -62,10 +62,14 @@ $ npm install --prefer-offline
 | images.sprite         |スプライト画像の元ファイルディレクトリ    |
 | images.dest           |圧縮画像・スプライト画像の出力ディレクトリ|
 | images.stylusDest     |スプライトの stylus ファイル出力先        |
+| images.minifyOpts.png |png の圧縮オプション（ [imagemin-pngquant](https://github.com/imagemin/imagemin-pngquant#options) ）|
+| images.minifyOpts.jpg |jpg の圧縮オプション（ [imagemin-jpegtran](https://github.com/imagemin/imagemin-jpegtran#options) ）|
+| images.minifyOpts.gif |gif の圧縮オプション（ [imagemin-gifsicle](https://github.com/imagemin/imagemin-gifsicle#options) ）|
+| images.minifyOpts.svg |svg の圧縮オプション（ [imagemin-svgo](https://github.com/imagemin/imagemin-svgo#options) ）|
 | urlList.root          |URL一覧関連のルート                       |
 | urlList.tmp           |URL一覧のテンプレートファイル             |
 | urlList.dest          |URL一覧の出力先                           |
-| deletes               |clear タスク時削除ファイル                |
+| deletes               |clear タスク時の削除ファイル              |
 
 
 
