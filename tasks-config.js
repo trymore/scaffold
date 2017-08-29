@@ -7,9 +7,9 @@ export default {
     charset     : 'utf8',
     lineFeedCode: 'LF',  // 'CR+LF', 'LF', 'CR'
     root        : 'pug',
-    src         : 'stylus/src',
-    tmp         : 'stylus/(extends|includes)',
-    factory     : 'stylus/factory',
+    src         : 'pug/src',
+    tmp         : 'pug/(extends|includes)',
+    factory     : 'pug/factory',
     dest        : 'htdocs',
     php         : [],  // 'all', ['index.pug', 'sp/index.pug']
   },
