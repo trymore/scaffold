@@ -78,8 +78,8 @@ $ npm install --prefer-offline
 | npm run watch            |`pug` `stylus` `webpack` `sprite` を監視|
 | npm run build            |`pug` `stylus` `webpack` をトランスパイル <br> `sprite` を生成 <br> `pug` `stylus` `webpack` `sprite` を監視|
 | npm run build:production |`pug` `stylus` `webpack` をトランスパイル（圧縮） <br> `stylus` `webpack` の sourcemap 無し <br> `sprite` を生成 <br> `images/minify/` フォルダ内画像を圧縮・出力 <br> 不要ファイルを削除 |
-| npu run imagemin         |`images/minify/` フォルダ内画像を圧縮・出力|
-| npu run php-server       |PHP のビルトインサーバを起動|
+| npm run imagemin         |`images/minify/` フォルダ内画像を圧縮・出力|
+| npm run php-server       |PHP のビルトインサーバを起動|
 
 ## オプション
 
