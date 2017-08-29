@@ -52,6 +52,7 @@ export default class Stylus extends Base {
 
       const _stylus = stylus(_buf.toString())
         .use(nib())
+        .import('nib')
         .set('filename', basename(path))
         .set('include css', true)
         .set('resolve url', true)
