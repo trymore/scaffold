@@ -12,13 +12,6 @@ import pngquant from 'imagemin-pngquant';
 
 export default class Sprite {
 
-  get _pngquantOpts() {
-    return {
-      quality: 100,
-      speed  : 1,
-    };
-  }
-
   get _spriteOpts() {
     return {
       algorithm    : 'top-down',
@@ -184,8 +177,9 @@ ${ _mixin }`;
       return Promise.resolve(buf);
     }
     const { _pngquantOpts } = this;
+    const { png } = config.images.minifyOpts;
     return imagemin.buffer(buf, {
-      plugins: [pngquant(_pngquantOpts)],
+      plugins: [pngquant(png)],
     });
   }
 

@@ -16,11 +16,13 @@ export default class Imagemin {
 
   constructor() {
     this._taskLog = new TaskLog('imagemin');
+
+    const { png, jpg, gif, svg } = config.images.minifyOpts;
     this._plugins = {
-      png: pngquant({ quality: 100, speed: 1 }),
-      jpg: jpegtran({ progressive: true }),
-      gif: gifsicle(),
-      svg: svgo(),
+      png: pngquant(png),
+      jpg: jpegtran(jpg),
+      gif: gifsicle(gif),
+      svg: svgo(svg),
     };
   }
 
@@ -60,12 +62,12 @@ export default class Imagemin {
       const _img  = await readFile(path, 'base64', (err) => errorLog('imagemin', err));
       if(!_img) return;
 
-      const _buf = await imagemin.buffer(new Buffer(_img), { plugins: [_plugins[_ext]] })
+      const _buf = await imagemin.buffer(new Buffer(_img, 'base64'), { plugins: [_plugins[_ext]] })
         .catch((err) => {
           errorLog('imagemin', err);
         });
       if(!sameFile(_dest, _buf, true)) {
-        await mkfile(_dest, _buf.toString(), 'base64');
+        await mkfile(_dest, _buf.toString('base64'), 'base64');
         fileLog('create', _dest);
       }
     })();

@@ -24,7 +24,8 @@ export const hasFile = (path) => {
  */
 export const sameFile = (path, buf, isBinary = false) => {
   try {
-    const _buf = isBinary ? new Buffer(readFileSync(path, 'base64')) : readFileSync(path);
+    const _buf = isBinary ?
+      new Buffer(readFileSync(path, 'base64'), 'base64') : readFileSync(path);
     return Buffer.compare(buf, _buf) === 0;
   }
   catch(err) {

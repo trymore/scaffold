@@ -36,6 +36,12 @@ export default {
     sprite    : 'images/sprite',
     dest      : 'htdocs',
     stylusDest: 'stylus/imports/sprite.styl',
+    minifyOpts: {
+      png: { quality: 100, speed: 1 },
+      jpg: { progressive: true },
+      gif: {},
+      svg: {},
+    },
   },
   urlList: {
     root: '.url-list',
