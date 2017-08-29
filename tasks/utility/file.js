@@ -19,14 +19,13 @@ export const hasFile = (path) => {
 
 /**
  * @param {string} path
- * @param {Buffer|string} data
+ * @param {Buffer} buf
  * @return {boolean}
  */
-export const sameFile = (path, data) => {
+export const sameFile = (path, buf, isBinary = false) => {
   try {
-    const _buf1 = readFileSync(path);
-    const _buf2 = getType(data) === 'String' ? new Buffer(data) : data;
-    return Buffer.compare(_buf1, _buf2) === 0;
+    const _buf = isBinary ? new Buffer(readFileSync(path, 'base64')) : readFileSync(path);
+    return Buffer.compare(buf, _buf) === 0;
   }
   catch(err) {
     return false;

@@ -57,12 +57,15 @@ export default class Imagemin {
     return (async () => {
       const _dest = join(dest, relative(minify, path));
       const _ext  = extname(path).replace('.', '');
-      const _buf  = await readFile(path, (err) => errorLog('imagemin', err));
-      if(!_buf) return;
+      const _img  = await readFile(path, 'base64', (err) => errorLog('imagemin', err));
+      if(!_img) return;
 
-      const _minBuf = await imagemin.buffer(_buf, { plugins: [_plugins[_ext]] });
-      if(!sameFile(_dest, _minBuf)) {
-        await mkfile(_dest, _minBuf.toString('base64'), 'base64');
+      const _buf = await imagemin.buffer(new Buffer(_img), { plugins: [_plugins[_ext]] })
+        .catch((err) => {
+          errorLog('imagemin', err);
+        });
+      if(!sameFile(_dest, _buf, true)) {
+        await mkfile(_dest, _buf.toString(), 'base64');
         fileLog('create', _dest);
       }
     })();
