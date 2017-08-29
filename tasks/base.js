@@ -72,7 +72,6 @@ export default class Base {
    * @param {string} target
    */
   _watchSrc(target) {
-    const { root } = config.pug;
     this._watchObserve(target, (path) => this._build(path));
   }
 

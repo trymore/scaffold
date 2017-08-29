@@ -69,7 +69,6 @@ sprite-retina(filepath)
         fileLog(evt, path);
         const { _debounce } = this;
         _debounce(() => {
-          const { root } = config.project;
           this._build();
         });
       });
