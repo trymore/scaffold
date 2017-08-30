@@ -140,12 +140,14 @@ export default class Webpack extends Base {
         _compiler.run((err, stats) => {
           if(err) {
             errorLog('webpack', err);
-            return resolve();
+            return resolve({ jsBuf: null, sourcemapBuf: null });
           }
-          const _err = stats.compilation.errors;
-          if(_err.length) {
-            errorLog('webpack', _err[0].message);
-            return resolve();
+          const { errors } = stats.compilation;
+          if(errors.length) {
+            const { root } = config.project;
+            const { message, module: { resource } } = errors[0];
+            errorLog('webpack', `${ relative(root, resource) }\n${ message }`);
+            return resolve({ jsBuf: null, sourcemapBuf: null });
           }
           const _path = join(root, _destDir, _destFile);
 

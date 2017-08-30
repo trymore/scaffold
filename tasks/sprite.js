@@ -45,10 +45,12 @@ sprite-retina(filepath)
    */
   start() {
     return (async () => {
-      await this._build();
-      new TaskLog('watch sprite').start();
       const { argv } = NS;
+      if(argv['build']) {
+        await this._build();
+      }
       if(!argv['production']) {
+        new TaskLog('watch sprite').start();
         this._watch();
       }
     })();

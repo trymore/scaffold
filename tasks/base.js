@@ -30,8 +30,8 @@ export default class Base {
         _taskLog.finish();
       }
       const { _type } = this;
-      new TaskLog(`watch ${ _type }`).start();
       if(!argv['production']) {
+        new TaskLog(`watch ${ _type }`).start();
         this._watch();
       }
     })();

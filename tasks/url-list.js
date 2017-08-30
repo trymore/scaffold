@@ -20,10 +20,12 @@ export default class UrlList {
    */
   start() {
     return (async () => {
-      await this._build();
-      new TaskLog(`watch url-list`).start();
       const { argv } = NS;
+      if(argv['build']) {
+        await this._build();
+      }
       if(!argv['production']) {
+        new TaskLog(`watch url-list`).start();
         this._watch();
       }
     })();

@@ -22,24 +22,37 @@ const needsAllTask = !argv['coding'] && !argv['scripting'];
 
 const tasks = [[]];
 if(needsAllTask || argv['coding']) {
-  tasks[0].concat([new Pug().start(), new PugFactory().start(), new Sprite().start()]);
-  tasks[1] = [new Stylus().start()];
+  const pug        = new Pug();
+  const pugFactory = new PugFactory();
+  const sprite     = new Sprite();
+  const stylus     = new Stylus();
+  tasks[0] = [
+    pug.start.bind(pug),
+    pugFactory.start.bind(pugFactory),
+    sprite.start.bind(sprite),
+  ];
+  tasks[1] = [stylus.start.bind(stylus)];
 }
 if(needsAllTask || argv['scripting']) {
-  tasks[0].push(new Webpack().start());
+  const webpack = new Webpack();
+  tasks[0].push(webpack.start.bind(webpack));
 }
 if(argv['production']) {
-  tasks[0].push(new Imagemin().start());
+  const imagemin = new Imagemin();
+  tasks[0].push(imagemin.start.bind(imagemin));
 }
 
 (async () => {
-  for(const t of tasks) {
-    await Promise.all(t);
+  for(const task of tasks) {
+    await Promise.all(task.map((p) => p()));
   }
   if(argv['production']) {
-    await new Clean().start();
+    const clean = new Clean();
+    await clean.start();
   }
-  await new UrlList().start()
+  const urlList = new UrlList();
+  await urlList.start()
   NS.isFirstBuild = false;
-  await new BrowserSync().start();
+  const browserSync = new BrowserSync();
+  await browserSync.start();
 })();
