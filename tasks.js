@@ -20,39 +20,43 @@ NS.curtFiles    = {
 const { argv } = NS;
 const needsAllTask = !argv['coding'] && !argv['scripting'];
 
-const tasks = [[]];
+const tasks = [];
+
 if(needsAllTask || argv['coding']) {
-  const pug        = new Pug();
-  const pugFactory = new PugFactory();
-  const sprite     = new Sprite();
-  const stylus     = new Stylus();
-  tasks[0] = [
-    pug.start.bind(pug),
-    pugFactory.start.bind(pugFactory),
-    sprite.start.bind(sprite),
-  ];
-  tasks[1] = [stylus.start.bind(stylus)];
+  const _pug        = new Pug();
+  const _pugFactory = new PugFactory();
+  const _sprite     = new Sprite();
+  const _stylus     = new Stylus();
+
+  const _spriteStylus = (async () => {
+    await _sprite.start();
+    await _stylus.start();
+  });
+
+  tasks.push(_pug.start.bind(_pug));
+  tasks.push(_pugFactory.start.bind(_pugFactory));
+  tasks.push(_spriteStylus);
 }
+
 if(needsAllTask || argv['scripting']) {
-  const webpack = new Webpack();
-  tasks[0].push(webpack.start.bind(webpack));
+  const _webpack = new Webpack();
+  tasks.push(_webpack.start.bind(_webpack));
 }
+
 if(argv['production']) {
-  const imagemin = new Imagemin();
-  tasks[0].push(imagemin.start.bind(imagemin));
+  const _imagemin = new Imagemin();
+  tasks.push(_imagemin.start.bind(_imagemin));
 }
 
 (async () => {
-  for(const task of tasks) {
-    await Promise.all(task.map((p) => p()));
-  }
+  await Promise.all(tasks.map((task) => task()));
   if(argv['production']) {
-    const clean = new Clean();
-    await clean.start();
+    const _clean = new Clean();
+    await _clean.start();
   }
-  const urlList = new UrlList();
-  await urlList.start()
+  const _urlList = new UrlList();
+  await _urlList.start()
   NS.isFirstBuild = false;
-  const browserSync = new BrowserSync();
-  await browserSync.start();
+  const _browserSync = new BrowserSync();
+  await _browserSync.start();
 })();
