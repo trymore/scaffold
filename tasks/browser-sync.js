@@ -4,7 +4,7 @@ import { join, dirname, extname } from 'path';
 import bs from 'browser-sync';
 import TaskLog from './utility/task-log';
 import { errorLog } from './utility/error-log';
-import { hasFile } from './utility/file';
+import { isFile } from './utility/file';
 import { readFile } from './utility/fs';
 import chokidar from 'chokidar';
 import iconv from 'iconv-lite';
@@ -240,7 +240,7 @@ export default class BrowserSync {
     for(const ext of ['.html', '.shtml', '.php']) {
       if(extname(path)) break;
       const __path = join(path, `index${ ext }`);
-      if(hasFile(_path)) {
+      if(isFile(_path)) {
         _path = __path;
         break;
       }
