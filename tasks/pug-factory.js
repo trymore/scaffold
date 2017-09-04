@@ -1,11 +1,12 @@
 import PugBase from './pug-base';
 import config from '../tasks-config';
-import { join, relative } from 'path';
+import { join, relative, dirname } from 'path';
 import { errorLog } from './utility/error-log';
 import { readFile } from './utility/fs';
 import { mkfile, sameFile } from './utility/file';
 import { fileLog } from './utility/file-log';
 import { encodeLineFeedCode } from './utility/line-feed-code';
+import { toRelativePath, cacheBuster } from './utility/convert-path';
 import { getType } from './utility/type';
 import pug from 'pug';
 import iconv from 'iconv-lite';
@@ -43,7 +44,10 @@ export default class PugFactory extends PugBase {
    */
   _build(path) {
     const { argv, isFirstBuild } = NS;
-    const { charset, lineFeedCode, root, dest } = config.pug;
+    const {
+      project: { htdocs },
+      pug    : { charset, lineFeedCode, root, dest, relativePath, cacheBusterExts },
+    } = config;
     const { pugSet } = NS.curtFiles;
     const { _pugOpts } = this;
 
@@ -96,8 +100,17 @@ export default class PugFactory extends PugBase {
                 });
               if(!_html) return;
 
-              let _buf = new Buffer(_html);
+              const _ext  = this._getExt(_srcPath);
+              const _dest = join(dest, _srcPath).replace('.pug', _ext);
+              let _buf    = new Buffer(_html);
 
+              if(relativePath) {
+                const _rootDirname = `/${ dirname(relative(htdocs, _dest)) }`;
+                _buf = toRelativePath(_buf, _rootDirname);
+              }
+              if(cacheBusterExts.length) {
+                _buf = cacheBuster(_buf, cacheBusterExts);
+              }
               if(lineFeedCode !== 'LF') {
                 _buf = encodeLineFeedCode(_buf, lineFeedCode);
               }
@@ -105,8 +118,6 @@ export default class PugFactory extends PugBase {
                 _buf = iconv.encode(_buf, charset);
               }
 
-              const _ext  = this._getExt(_srcPath);
-              const _dest = join(dest, _srcPath).replace('.pug', _ext);
               if(!sameFile(_dest, _buf)) {
                 await mkfile(_dest, _buf);
                 fileLog('create', _dest);

@@ -1,11 +1,12 @@
 import Base from './base';
 import config from '../tasks-config';
-import { join, relative, basename } from 'path';
+import { join, relative, dirname, basename } from 'path';
 import { errorLog } from './utility/error-log';
 import { mkfile, sameFile } from './utility/file';
 import { fileLog } from './utility/file-log';
 import { readFile } from './utility/fs';
 import { encodeLineFeedCode } from './utility/line-feed-code';
+import { toRelativePath, cacheBuster } from './utility/convert-path';
 import stylus from 'stylus';
 import nib from 'nib';
 import iconv from 'iconv-lite';
@@ -42,7 +43,10 @@ export default class Stylus extends Base {
    * @param {Promise}
    */
   _build(path) {
-    const { project: { root }, stylus: { charset, lineFeedCode, src, dest } } = config;
+    const {
+      project: { root, htdocs },
+      stylus : { charset, lineFeedCode, src, dest, relativePath, cacheBusterExts },
+    } = config;
     const { argv } = NS;
 
     return (async () => {
@@ -71,8 +75,16 @@ export default class Stylus extends Base {
         });
       if(!_css) return;
 
+      const _dest = join(dest, relative(src, path)).replace('.styl', '.css');
       let _cssBuf = new Buffer(_css);
 
+      if(relativePath) {
+        const _rootDirname = `/${ dirname(relative(htdocs, _dest)) }`;
+        _cssBuf = toRelativePath(_cssBuf, _rootDirname);
+      }
+      if(cacheBusterExts.length) {
+        _cssBuf = cacheBuster(_cssBuf, cacheBusterExts);
+      }
       if(lineFeedCode !== 'LF') {
         _cssBuf = encodeLineFeedCode(_cssBuf, lineFeedCode);
       }
@@ -80,7 +92,6 @@ export default class Stylus extends Base {
         _cssBuf = iconv.encode(_cssBuf, charset);
       }
 
-      const _dest = join(dest, relative(src, path)).replace('.styl', '.css');
       if(!sameFile(_dest, _cssBuf)) {
         await mkfile(_dest, _cssBuf);
         fileLog('create', _dest);

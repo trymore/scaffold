@@ -4,22 +4,26 @@ export default {
     htdocs: 'htdocs',
   },
   pug: {
-    charset     : 'utf8',
-    lineFeedCode: 'LF',  // 'CR+LF', 'LF', 'CR'
-    root        : 'pug',
-    src         : 'pug/src',
-    tmp         : 'pug/(extends|includes)',
-    factory     : 'pug/factory',
-    dest        : 'htdocs',
-    php         : [],  // 'all', ['index.pug', 'sp/index.pug']
+    charset        : 'utf8',
+    lineFeedCode   : 'LF',  // 'CR+LF', 'LF', 'CR'
+    root           : 'pug',
+    src            : 'pug/src',
+    tmp            : 'pug/(extends|includes)',
+    factory        : 'pug/factory',
+    dest           : 'htdocs',
+    php            : [],  // 'all', ['index.pug', 'sp/index.pug']
+    relativePath   : false,
+    cacheBusterExts: [],
   },
   stylus: {
-    charset     : 'utf8',
-    lineFeedCode: 'LF',  // 'CR+LF', 'LF', 'CR'
-    root        : 'stylus',
-    src         : 'stylus/src',
-    imports     : 'stylus/imports',
-    dest        : 'htdocs',
+    charset        : 'utf8',
+    lineFeedCode   : 'LF',  // 'CR+LF', 'LF', 'CR'
+    root           : 'stylus',
+    src            : 'stylus/src',
+    imports        : 'stylus/imports',
+    dest           : 'htdocs',
+    relativePath   : true,
+    cacheBusterExts: ['jpg', 'png', 'gif', 'svg'],
   },
   webpack: {
     transcompiler: 'babel',  // ['babel', 'coffee']

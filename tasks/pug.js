@@ -1,10 +1,11 @@
 import PugBase from './pug-base';
 import config from '../tasks-config';
-import { join, relative } from 'path';
+import { join, relative, dirname } from 'path';
 import { errorLog } from './utility/error-log';
 import { mkfile, sameFile } from './utility/file';
 import { fileLog } from './utility/file-log';
 import { encodeLineFeedCode } from './utility/line-feed-code';
+import { toRelativePath, cacheBuster } from './utility/convert-path';
 import pug from 'pug';
 import iconv from 'iconv-lite';
 
@@ -41,7 +42,10 @@ export default class Pug extends PugBase {
    * @param {Promise}
    */
   _build(path) {
-    const { charset, lineFeedCode, src, dest } = config.pug;
+    const {
+      project: { htdocs },
+      pug    : { charset, lineFeedCode, src, dest, relativePath, cacheBusterExts },
+    } = config;
     const { _pugOpts } = this;
 
     return (async () => {
@@ -63,6 +67,13 @@ export default class Pug extends PugBase {
 
       let _buf = new Buffer(_html);
 
+      if(relativePath) {
+        const _rootDirname = `/${ dirname(relative(htdocs, _dest)) }`;
+        _buf = toRelativePath(_buf, _rootDirname);
+      }
+      if(cacheBusterExts.length) {
+        _buf = cacheBuster(_buf, cacheBusterExts);
+      }
       if(lineFeedCode !== 'LF') {
         _buf = encodeLineFeedCode(_buf, lineFeedCode);
       }

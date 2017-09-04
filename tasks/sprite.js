@@ -136,7 +136,7 @@ sprite-retina(filepath)
             fileLog('create', _dest);
           }
           resolve(Object.entries(coordinates).reduce((memo, [path, style]) => {
-            memo[relative(sprite, path)] = Object.assign(style, { url: _key });
+            memo[relative(sprite, path)] = Object.assign(style, { url: `/${ _key }` });
             return memo;
           }, {}));
         })();
