@@ -240,7 +240,7 @@ export default class BrowserSync {
     for(const ext of ['.html', '.shtml', '.php']) {
       if(extname(path)) break;
       const __path = join(path, `index${ ext }`);
-      if(isFile(_path)) {
+      if(isFile(__path)) {
         _path = __path;
         break;
       }
