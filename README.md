@@ -32,44 +32,48 @@ $ npm install --prefer-offline
 # 設定
 `task-config.js` に記述
 
-| プロパティ名          | 説明                                     |
-|:----------------------|:-----------------------------------------|
-| project.root          |プロジェクトのルート                      |
-| project.htdocs        |プロジェクトのドキュメントルート          |
-| pug.charset           |pug の出力ファイル文字コード              |
-| pug.lineFeedCode      |pug の出力ファイル改行コード              |
-| pug.root              |pug のルート                              |
-| pug.src               |pug の元ファイルディレクトリ              |
-| pug.tmp               |pug のテンプレート等ファイルディレクトリ  |
-| pug.factory           |pug の fuctory 関連ディレクトリ           |
-| pug.dest              |pug の出力ディレクトリ                    |
-| pug.php               |pug を PHP で出力するファイル             |
-| stylus.charset        |stylus の出力ファイル文字コード           |
-| stylus.lineFeedCode   |stylus の出力ファイル改行コード           |
-| stylus.root           |stylus のルート                           |
-| stylus.src            |stylus 元ファイルディレクトリ             |
-| stylus.imports        |stylus インポートファイルディレクトリ     |
-| stylus.dest           |stylus 出力ディレクトリ                   |
-| webpack.transcompiler |webpack のトランスパイラ                  |
-| webpack.charset       |webpack の出力ファイル文字コード          |
-| webpack.lineFeedCode  |webpack の出力ファイル改行コード          |
-| webpack.root          |webpack のルート                          |
-| webpack.src           |webpack の元ファイルディレクトリ          |
-| webpack.imports       |webpack のインポートファイルディレクトリ  |
-| webpack.dest          |webpack の出力ディレクトリ                |
-| images.root           |画像圧縮・スプライト関連のルート          |
-| images.minify         |圧縮画像の元ファイルディレクトリ          |
-| images.sprite         |スプライト画像の元ファイルディレクトリ    |
-| images.dest           |圧縮画像・スプライト画像の出力ディレクトリ|
-| images.stylusDest     |スプライトの stylus ファイル出力先        |
-| images.minifyOpts.png |png の圧縮オプション（ [imagemin-pngquant](https://github.com/imagemin/imagemin-pngquant#options) ）|
-| images.minifyOpts.jpg |jpg の圧縮オプション（ [imagemin-jpegtran](https://github.com/imagemin/imagemin-jpegtran#options) ）|
-| images.minifyOpts.gif |gif の圧縮オプション（ [imagemin-gifsicle](https://github.com/imagemin/imagemin-gifsicle#options) ）|
-| images.minifyOpts.svg |svg の圧縮オプション（ [imagemin-svgo](https://github.com/imagemin/imagemin-svgo#options) ）|
-| urlList.root          |URL一覧関連のルート                       |
-| urlList.tmp           |URL一覧のテンプレートファイル             |
-| urlList.dest          |URL一覧の出力先                           |
-| deletes               |clear タスク時の削除ファイル              |
+| プロパティ名           | 説明                                     |
+|:-----------------------|:-----------------------------------------|
+| project.root           |プロジェクトのルート                      |
+| project.htdocs         |プロジェクトのドキュメントルート          |
+| pug.charset            |pug の出力ファイル文字コード              |
+| pug.lineFeedCode       |pug の出力ファイル改行コード              |
+| pug.root               |pug のルート                              |
+| pug.src                |pug の元ファイルディレクトリ              |
+| pug.tmp                |pug のテンプレート等ファイルディレクトリ  |
+| pug.factory            |pug の fuctory 関連ディレクトリ           |
+| pug.dest               |pug の出力ディレクトリ                    |
+| pug.php                |pug を PHP で出力するファイル             |
+| pug.relativePath       |pug のルートパスを相対パスへ変更          |
+| pug.cacheBusterExts    |pug のキャシュバスター対応ファイル形式    |
+| stylus.charset         |stylus の出力ファイル文字コード           |
+| stylus.lineFeedCode    |stylus の出力ファイル改行コード           |
+| stylus.root            |stylus のルート                           |
+| stylus.src             |stylus 元ファイルディレクトリ             |
+| stylus.imports         |stylus インポートファイルディレクトリ     |
+| stylus.dest            |stylus 出力ディレクトリ                   |
+| stylus.relativePath    |stylus のルートパスを相対パスへ変更       |
+| stylus.cacheBusterExts |stylus のキャシュバスター対応ファイル形式 |
+| webpack.transcompiler  |webpack のトランスパイラ                  |
+| webpack.charset        |webpack の出力ファイル文字コード          |
+| webpack.lineFeedCode   |webpack の出力ファイル改行コード          |
+| webpack.root           |webpack のルート                          |
+| webpack.src            |webpack の元ファイルディレクトリ          |
+| webpack.imports        |webpack のインポートファイルディレクトリ  |
+| webpack.dest           |webpack の出力ディレクトリ                |
+| images.root            |画像圧縮・スプライト関連のルート          |
+| images.minify          |圧縮画像の元ファイルディレクトリ          |
+| images.sprite          |スプライト画像の元ファイルディレクトリ    |
+| images.dest            |圧縮画像・スプライト画像の出力ディレクトリ|
+| images.stylusDest      |スプライトの stylus ファイル出力先        |
+| images.minifyOpts.png  |png の圧縮オプション（ [imagemin-pngquant](https://github.com/imagemin/imagemin-pngquant#options) ）|
+| images.minifyOpts.jpg  |jpg の圧縮オプション（ [imagemin-jpegtran](https://github.com/imagemin/imagemin-jpegtran#options) ）|
+| images.minifyOpts.gif  |gif の圧縮オプション（ [imagemin-gifsicle](https://github.com/imagemin/imagemin-gifsicle#options) ）|
+| images.minifyOpts.svg  |svg の圧縮オプション（ [imagemin-svgo](https://github.com/imagemin/imagemin-svgo#options) ）|
+| urlList.root           |URL一覧関連のルート                       |
+| urlList.tmp            |URL一覧のテンプレートファイル             |
+| urlList.dest           |URL一覧の出力先                           |
+| deletes                |clear タスク時の削除ファイル              |
 
 
 
