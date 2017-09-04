@@ -30,16 +30,18 @@ export default class PugBase extends Base {
   }
 
   /**
-   * @param {string} file
+   * @param {string} filePath
    */
-  _getMembers(file) {
+  _getMembers(filePath) {
     const { root, src } = config.pug;
     const { production } = NS.argv;
+    const _dirname = dirname(filePath);
     return {
       isProduction: production,
       basedir     : root,
+      dirname     : _dirname,
       join        : (...paths) => join(...paths),
-      relative    : (path) => relative(relative(src, dirname(file)), path),
+      relative    : (path) => relative(relative(src, _dirname), path),
     };
   }
 

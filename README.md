@@ -126,7 +126,8 @@ $ npm run build -- --coding
 | メンバ・メソッド | 説明              |
 |:-----------------|:------------------|
 | isProduction     | production フラグ |
-| basedir          | pug のルートパス  |
+| basedir          | ルート            |
+| dirname          | ディレクトリ      |
 | join([...paths]) | パス結合          |
 | relative(path)   | 相対パス          |
 
