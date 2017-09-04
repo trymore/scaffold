@@ -1,10 +1,11 @@
 import fs from 'fs';
 import { getType } from './type';
+import { isFile } from './file';
 
 /**
  * @param {string} path
  * @param {string|function} [...args]
- * @return {Promise}
+ * @return {Promise<?buffer>}
  */
 export const readFile = (path, ...args) => {
   let _encoding = 'utf8';
@@ -22,6 +23,9 @@ export const readFile = (path, ...args) => {
   }
 
   return new Promise((resolve, reject) => {
+    if(!isFile(path)) {
+      return resolve(null);
+    }
     fs.readFile(path, _encoding, (err, data) => {
       if(err) return reject(err, path);
       resolve(data);

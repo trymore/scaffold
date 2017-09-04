@@ -4,7 +4,7 @@ import MemoryFS from 'memory-fs';
 import { join, relative, dirname, basename } from 'path';
 import FileCache from './utility/file-cache';
 import { errorLog } from './utility/error-log';
-import { mkfile, sameFile } from './utility/file';
+import { isFile, mkfile, sameFile } from './utility/file';
 import { fileLog } from './utility/file-log';
 import { glob } from './utility/glob';
 import { encodeLineFeedCode } from './utility/line-feed-code';
@@ -153,7 +153,8 @@ export default class Webpack extends Base {
 
           (async () => {
             const _jsBuf        = await this._readFile(_path);
-            const _sourcemapBuf = await this._readFile(`${ _path }.map`);
+            const _sourcemapBuf = argv['production'] ?
+              null : await this._readFile(`${ _path }.map`);
             resolve({ jsBuf: _jsBuf, sourcemapBuf: _sourcemapBuf });
           })();
         });
@@ -188,6 +189,9 @@ export default class Webpack extends Base {
    */
   _readFile(path) {
     return new Promise((resolve, reject) => {
+      if(!isFile(path)) {
+        return resolve(null);
+      }
       memoryFs.readFile(path, (err, data) => {
         if(err) return reject(err);
         resolve(data);
