@@ -205,28 +205,29 @@ export default class BrowserSync {
     const { project: { htdocs }, pug } = config;
 
     const { url } = req;
-    const _path = relative(htdocs ,this._getFilePath(join(htdocs, url)));
+    const _path = this._getFilePath(join(htdocs, url));
     const _ext  = extname(_path);
 
     if(_ext) {
       destSet.add(_path);
+      const _taskRoot = relative(htdocs, _path);
       switch(_ext) {
         case '.html':
         case '.shtml':
         case '.php':
-          pugSet.add(join(pug.src, _path.replace(_ext, '.pug')));
+          pugSet.add(join(pug.src, _taskRoot.replace(_ext, '.pug')));
           break;
         case '.css':
           const { stylusSet } = NS.curtFiles;
           const { stylus } = config;
-          stylusSet.add(join(stylus.src, _path.replace(_ext, '.styl')));
+          stylusSet.add(join(stylus.src, _taskRoot.replace(_ext, '.styl')));
           break;
         case '.js':
           const { webpackSet } = NS.curtFiles;
           const { transcompiler, webpack } = config;
           webpackSet.add(join(
             webpack.src,
-            transcompiler === 'coffee' ? _path.replace(_ext, '.coffee') : _path
+            transcompiler === 'coffee' ? _taskRoot.replace(_ext, '.coffee') : _taskRoot
           ));
           break;
       }
