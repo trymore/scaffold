@@ -25,17 +25,18 @@ const tasks = [];
 if(needsAllTask || argv['coding']) {
   const _pug        = new Pug();
   const _pugFactory = new PugFactory();
-  const _sprite     = new Sprite();
-  const _stylus     = new Stylus();
+  const _urlList    = new UrlList();
+  tasks.push((async () => {
+    await Promise.all([_pug.start(), _pugFactory.start()]);
+    await _urlList.start();
+  }));
 
-  const _spriteStylus = (async () => {
+  const _sprite = new Sprite();
+  const _stylus = new Stylus();
+  tasks.push((async () => {
     await _sprite.start();
     await _stylus.start();
-  });
-
-  tasks.push(_pug.start.bind(_pug));
-  tasks.push(_pugFactory.start.bind(_pugFactory));
-  tasks.push(_spriteStylus);
+  }));
 }
 
 if(needsAllTask || argv['scripting']) {
@@ -54,8 +55,6 @@ if(argv['production']) {
     const _clean = new Clean();
     await _clean.start();
   }
-  const _urlList = new UrlList();
-  await _urlList.start()
   NS.isFirstBuild = false;
   const _browserSync = new BrowserSync();
   await _browserSync.start();

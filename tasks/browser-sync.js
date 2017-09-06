@@ -1,6 +1,6 @@
 import config from '../tasks-config';
 import fs from 'fs';
-import { join, dirname, extname } from 'path';
+import { join, dirname, extname, relative } from 'path';
 import bs from 'browser-sync';
 import TaskLog from './utility/task-log';
 import { errorLog } from './utility/error-log';
@@ -214,17 +214,23 @@ export default class BrowserSync {
         case '.html':
         case '.shtml':
         case '.php':
-          pugSet.add(join(pug.src, _path.replace(_ext, '.pug')));
+          const _pugRootPath = relative(htdocs, _path.replace(_ext, '.pug'));
+          pugSet.add(join(pug.src, _pugRootPath));
           break;
         case '.css':
           const { stylusSet } = NS.curtFiles;
           const { stylus } = config;
-          stylusSet.add(join(stylus.src, _path.replace(_ext, '.styl')));
+          const _stylusRootPath = relative(htdocs, _path.replace(_ext, '.styl'));
+          stylusSet.add(join(stylus.src, _stylusRootPath));
           break;
         case '.js':
           const { webpackSet } = NS.curtFiles;
-          const { webpack } = config;
-          webpackSet.add(join(webpack.src, _path));
+          const { transcompiler, webpack } = config;
+          let _webpackRootPath = relative(htdocs, _path);
+          if(transcompiler === 'coffee') {
+            _webpackRootPath.replace(_ext, '.coffee');
+          }
+          webpackSet.add(join(webpack.src, _webpackRootPath));
           break;
       }
     }
