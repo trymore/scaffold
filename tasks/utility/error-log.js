@@ -12,5 +12,5 @@ export const errorLog = (task, str) => {
 ${ reset + str }
 ${ red }**************************************${ reset }`;
 
-  console.log(_msg);
+  console.error(_msg);
 };

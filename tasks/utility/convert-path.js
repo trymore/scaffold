@@ -1,4 +1,6 @@
-import { relative } from 'path';
+import { dirname, relative, resolve } from 'path';
+import { readFileSync } from './fs';
+import { toHash } from './hash';
 import { parse, serialize } from './query-string';
 
 /**
@@ -15,17 +17,21 @@ export const toRelativePath = (buf, path) => {
 
 /**
  * @param {Buffer} buf
+ * @param {string} dest
  * @param {Array<string>} exts
- * @return {string}
+ * @return {Buffer}
  */
-export const cacheBuster = (buf, exts) => {
+export const cacheBuster = (buf, dest, exts) => {
   const _str = buf.toString();
   return new Buffer(
     _str.replace(
       /(['"])(([^\s'"]+\.([^.?#]+))(\?.+)?)['"]/g,
       (all, q, path, filePath, ext, query) => {
         if(!exts.includes(ext)) return all;
-        const _param = { timestamp: new Date().getTime() };
+        const _path = resolve(dirname(dest), filePath);
+        const _file = readFileSync(_path);
+        if(!_file) return all;
+        const _param = { hash: toHash(new Buffer(_file)) };
         if(query) {
           Object.assign(_param, parse(query.replace('?', '')));
         }

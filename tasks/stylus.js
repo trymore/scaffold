@@ -4,7 +4,7 @@ import { join, relative, dirname, basename } from 'path';
 import { errorLog } from './utility/error-log';
 import { mkfile, sameFile } from './utility/file';
 import { fileLog } from './utility/file-log';
-import { readFile } from './utility/fs';
+import { readFileSync } from './utility/fs';
 import { encodeLineFeedCode } from './utility/line-feed-code';
 import { toRelativePath, cacheBuster } from './utility/convert-path';
 import stylus from 'stylus';
@@ -49,21 +49,21 @@ export default class Stylus extends Base {
     } = config;
     const { argv } = NS;
 
+    const _path = join(root, path);
+    const _buf  = readFileSync(_path, (err) => errorLog('stylus', err));
+    if(!_buf) return;
+
+    const _stylus = stylus(_buf.toString())
+      .use(nib())
+      .import('nib')
+      .set('filename', basename(path))
+      .set('include css', true)
+      .set('resolve url', true)
+      .define('url', stylus.resolver())
+      .set('compress', argv['production'])
+      .set('sourcemap', !argv['production']);
+
     return (async () => {
-      const _path = join(root, path);
-      const _buf  = await readFile(_path, (err) => errorLog('stylus', err));
-      if(!_buf) return;
-
-      const _stylus = stylus(_buf.toString())
-        .use(nib())
-        .import('nib')
-        .set('filename', basename(path))
-        .set('include css', true)
-        .set('resolve url', true)
-        .define('url', stylus.resolver())
-        .set('compress', argv['production'])
-        .set('sourcemap', !argv['production']);
-
       const _css = await new Promise((resolve, reject) => {
         _stylus.render((err, css) => {
           if(err) return reject(err);
@@ -83,7 +83,7 @@ export default class Stylus extends Base {
         _cssBuf = toRelativePath(_cssBuf, _rootDirname);
       }
       if(cacheBusterExts.length) {
-        _cssBuf = cacheBuster(_cssBuf, cacheBusterExts);
+        _cssBuf = cacheBuster(_cssBuf, _dest, cacheBusterExts);
       }
       if(lineFeedCode !== 'LF') {
         _cssBuf = encodeLineFeedCode(_cssBuf, lineFeedCode);

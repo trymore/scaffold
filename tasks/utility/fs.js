@@ -5,9 +5,9 @@ import { isFile } from './file';
 /**
  * @param {string} path
  * @param {string|function} [...args]
- * @return {Promise<?buffer>}
+ * @return {<?(buffer|string)>}
  */
-export const readFile = (path, ...args) => {
+export const readFileSync = (path, ...args) => {
   let _encoding = 'utf8';
   let _errFn    = null;
 
@@ -22,16 +22,14 @@ export const readFile = (path, ...args) => {
     }
   }
 
-  return new Promise((resolve, reject) => {
-    if(!isFile(path)) {
-      return resolve(null);
-    }
-    fs.readFile(path, _encoding, (err, data) => {
-      if(err) return reject(err, path);
-      resolve(data);
-    });
-  })
-    .catch((err, path) => {
-      if(_errFn) _errFn(err, path);
-    });
+  if(!isFile(path)) {
+    if(_errFn) _errFn(path);
+    return null;
+  }
+  try {
+    return fs.readFileSync(path, _encoding);
+  }
+  catch(err) {
+    throw new Error(err);
+  }
 };

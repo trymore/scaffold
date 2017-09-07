@@ -4,7 +4,7 @@ import TaskLog from './utility/task-log';
 import { errorLog } from './utility/error-log';
 import { mkfile, sameFile } from './utility/file';
 import { fileLog } from './utility/file-log';
-import { readFile } from './utility/fs';
+import { readFileSync } from './utility/fs';
 import { glob } from './utility/glob';
 import imagemin from 'imagemin';
 import pngquant from 'imagemin-pngquant';
@@ -59,7 +59,7 @@ export default class Imagemin {
     return (async () => {
       const _dest = join(dest, relative(minify, path));
       const _ext  = extname(path).replace('.', '');
-      const _img  = await readFile(path, 'base64', (err) => errorLog('imagemin', err));
+      const _img  = readFileSync(path, 'base64', (err) => errorLog('imagemin', err));
       if(!_img) return;
 
       const _buf = await imagemin.buffer(new Buffer(_img, 'base64'), { plugins: [_plugins[_ext]] })

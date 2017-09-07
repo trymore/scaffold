@@ -2,7 +2,7 @@ import PugBase from './pug-base';
 import config from '../tasks-config';
 import { join, relative, dirname } from 'path';
 import { errorLog } from './utility/error-log';
-import { readFile } from './utility/fs';
+import { readFileSync } from './utility/fs';
 import { mkfile, sameFile } from './utility/file';
 import { fileLog } from './utility/file-log';
 import { encodeLineFeedCode } from './utility/line-feed-code';
@@ -51,30 +51,30 @@ export default class PugFactory extends PugBase {
     const { pugSet } = NS.curtFiles;
     const { _pugOpts } = this;
 
+    const _buf = readFileSync(path, (err) => errorLog('pug-factory', err));
+    if(!_buf) return;
+
+    const _tmps = (() => {
+      try {
+        return JSON.parse(_buf.toString());
+      }
+      catch(e) {
+        console.log(e);
+        return null;
+      }
+    })();
+    if(!_tmps) return;
+
     return (async () => {
-      const _buf = await readFile(path, (err) => errorLog('pug-factory', err));
-      if(!_buf) return;
-
-      const _tmps = (() => {
-        try {
-          return JSON.parse(_buf.toString());
-        }
-        catch(e) {
-          console.log(e);
-          return null;
-        }
-      })();
-      if(!_tmps) return;
-
       await Promise.all(Object.entries(_tmps).map(([tmpPath, pages]) => {
+        const _path   = join(root, `${ tmpPath }.pug`);
+        const _tmpBuf = readFileSync(_path, (err) => errorLog('pug-factory', err));
+        if(!_tmpBuf) return;
+
+        const _tmp      = _tmpBuf.toString();
+        const _splitTmp = _tmp.split('{{vars}}');
+
         return (async () => {
-          const _path   = join(root, `${ tmpPath }.pug`);
-          const _tmpBuf = await readFile(_path, (err) => errorLog('pug-factory', err));
-          if(!_tmpBuf) return;
-
-          const _tmp      = _tmpBuf.toString();
-          const _splitTmp = _tmp.split('{{vars}}');
-
           await Promise.all(Object.entries(pages).map(([srcPath, vals]) => {
             const _srcPath = `${ srcPath }.pug`;
 

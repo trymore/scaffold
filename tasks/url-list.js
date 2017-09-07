@@ -4,7 +4,7 @@ import TaskLog from './utility/task-log';
 import { errorLog } from './utility/error-log';
 import { mkfile, sameFile } from './utility/file';
 import { fileLog } from './utility/file-log';
-import { readFile } from './utility/fs';
+import { readFileSync } from './utility/fs';
 import { glob } from './utility/glob';
 import chokidar from 'chokidar';
 import deepAssign from 'deep-assign';
@@ -59,7 +59,7 @@ export default class UrlList {
         deepAssign(_urlHash, _obj);
       }
 
-      const _buf = await readFile(tmp, (err) => errorLog('url-list', err));
+      const _buf = readFileSync(tmp, (err) => errorLog('url-list', err));
       if(!_buf) return;
 
       const _html = _buf.toString().replace('{{data}}', JSON.stringify(_urlHash));

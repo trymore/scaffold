@@ -5,7 +5,7 @@ import bs from 'browser-sync';
 import TaskLog from './utility/task-log';
 import { errorLog } from './utility/error-log';
 import { isFile } from './utility/file';
-import { readFile } from './utility/fs';
+import { readFileSync } from './utility/fs';
 import chokidar from 'chokidar';
 import iconv from 'iconv-lite';
 import deepAssign from 'deep-assign';
@@ -179,20 +179,16 @@ export default class BrowserSync {
     const _rInc     = /<!--#include file=".+" -->/g;
     const _includes = _str.match(_rInc);
 
-    return (async () => {
-      if(_includes) {
-        await Promise.all(_includes.map((inc) => {
-          const _path = join(dir, inc.match(/file="(.+)"/)[1]);
-          return (async () => {
-            const _buf = await readFile(_path, (err, path) => {
-              errorLog('browser-sync ssi', `No such file, open '${ path }'.`);
-            });
-            _str = _str.replace(inc, _buf.toString());
-          })();
-        }));
+    if(_includes) {
+      for(const inc of _includes) {
+        const _path = join(dir, inc.match(/file="(.+)"/)[1]);
+        const _buf = readFileSync(_path, (err, path) => {
+          errorLog('browser-sync ssi', `No such file, open '${ path }'.`);
+        });
+        _str = _str.replace(inc, _buf.toString());
       }
-      return new Buffer(_str);
-    })();
+    }
+    return new Buffer(_str);
   }
 
   /**

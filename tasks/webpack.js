@@ -189,9 +189,6 @@ export default class Webpack extends Base {
    */
   _readFile(path) {
     return new Promise((resolve, reject) => {
-      if(!isFile(path)) {
-        return resolve(null);
-      }
       memoryFs.readFile(path, (err, data) => {
         if(err) return reject(err);
         resolve(data);
