@@ -6,7 +6,7 @@ import { readFileSync } from './utility/fs';
 import { mkfile, sameFile } from './utility/file';
 import { fileLog } from './utility/file-log';
 import { encodeLineFeedCode } from './utility/line-feed-code';
-import { toRelativePath, cacheBuster } from './utility/convert-path';
+import { toRelativePath, cacheBuster } from './utility/path-convert';
 import { getType } from './utility/type';
 import pug from 'pug';
 import iconv from 'iconv-lite';
@@ -46,7 +46,7 @@ export default class PugFactory extends PugBase {
     const { argv, isFirstBuild } = NS;
     const {
       project: { htdocs },
-      pug    : { charset, lineFeedCode, root, dest, relativePath, cacheBusterExts },
+      pug    : { charset, lineFeedCode, root, src, dest, relativePath, cacheBusterExts },
     } = config;
     const { pugSet } = NS.curtFiles;
     const { _pugOpts } = this;
@@ -87,7 +87,7 @@ export default class PugFactory extends PugBase {
                 return `${ memo }  - var ${ key } = ${ JSON.stringify(val) }\n`;
               }, '');
               const _contents = _splitTmp[0] + _valsStr + _splitTmp[1];
-              const _members  = this._getMembers(join(root, _srcPath));
+              const _members  = this._getMembers(join(src, _srcPath));
               const _opts     = Object.assign(_pugOpts, _members);
               const _html = await new Promise((resolve, reject) => {
                 pug.render(_contents, _opts, (err, html) => {

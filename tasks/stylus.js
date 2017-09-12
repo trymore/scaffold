@@ -6,7 +6,7 @@ import { mkfile, sameFile } from './utility/file';
 import { fileLog } from './utility/file-log';
 import { readFileSync } from './utility/fs';
 import { encodeLineFeedCode } from './utility/line-feed-code';
-import { toRelativePath, cacheBuster } from './utility/convert-path';
+import { toRelativePath, cacheBuster } from './utility/path-convert';
 import stylus from 'stylus';
 import nib from 'nib';
 import iconv from 'iconv-lite';
