@@ -44,6 +44,7 @@ $ npm install --prefer-offline
 | pug.factory            |pug の fuctory 関連ディレクトリ           |
 | pug.dest               |pug の出力ディレクトリ                    |
 | pug.php                |pug を PHP で出力するファイル             |
+| pug.minify             |pug の production 時の圧縮設定            |
 | pug.relativePath       |pug のルートパスを相対パスへ変更          |
 | pug.cacheBusterExts    |pug のキャシュバスター対応ファイル形式    |
 | stylus.charset         |stylus の出力ファイル文字コード           |
@@ -52,6 +53,7 @@ $ npm install --prefer-offline
 | stylus.src             |stylus 元ファイルディレクトリ             |
 | stylus.imports         |stylus インポートファイルディレクトリ     |
 | stylus.dest            |stylus 出力ディレクトリ                   |
+| stylus.minify          |stylus の production 時の圧縮設定         |
 | stylus.relativePath    |stylus のルートパスを相対パスへ変更       |
 | stylus.cacheBusterExts |stylus のキャシュバスター対応ファイル形式 |
 | webpack.transcompiler  |webpack のトランスパイラ                  |
@@ -61,6 +63,7 @@ $ npm install --prefer-offline
 | webpack.src            |webpack の元ファイルディレクトリ          |
 | webpack.imports        |webpack のインポートファイルディレクトリ  |
 | webpack.dest           |webpack の出力ディレクトリ                |
+| webpack.minify         |webpack の production 時の圧縮設定        |
 | images.root            |画像圧縮・スプライト関連のルート          |
 | images.minify          |圧縮画像の元ファイルディレクトリ          |
 | images.sprite          |スプライト画像の元ファイルディレクトリ    |
