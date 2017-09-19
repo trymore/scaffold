@@ -68,15 +68,6 @@ export default class Webpack extends Base {
     ];
   }
 
-  /**
-   * @return {Promise}
-   */
-  init() {
-    return (async () => {
-      this._notMinifyFiles = await glob(notMinifyFiles);
-    })();
-  }
-
   constructor() {
     super('webpack');
 
@@ -85,6 +76,16 @@ export default class Webpack extends Base {
       'babel' : '.js',
       'coffee': '.coffee',
     })[transcompiler];
+  }
+
+  /**
+   * @return {Promise}
+   */
+  init() {
+    return (async () => {
+      const { notMinifyFiles } = config.webpack;
+      this._notMinifyFiles = await glob(notMinifyFiles);
+    })();
   }
 
   _watch() {
@@ -117,7 +118,7 @@ export default class Webpack extends Base {
   _build(file) {
     const {
       project: { root },
-      webpack: { charset, lineFeedCode, src, dest, minify, notMinifyFiles },
+      webpack: { charset, lineFeedCode, src, dest, minify },
     } = config;
     const { argv } = NS;
     const { _webpackOpts, _productionPlugins, _ext, _notMinifyFiles } = this;
