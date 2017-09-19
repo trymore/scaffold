@@ -5,12 +5,6 @@ export default class TaskLog {
   constructor(taskName) {
     this._taskName  = taskName;
     this._startTime = 0;
-    this._colors = {
-      black  : '\u001b[1;30m',
-      magenta: '\u001b[1;35m',
-      cyan   : '\u001b[1;36m',
-      reset  : '\u001b[1;0m',
-    };
   }
 
   start() {
