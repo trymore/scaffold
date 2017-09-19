@@ -45,7 +45,7 @@ export default class Stylus extends Base {
   _build(path) {
     const {
       project: { root, htdocs },
-      stylus : { charset, lineFeedCode, src, dest, relativePath, cacheBusterExts },
+      stylus : { charset, lineFeedCode, src, dest, minify, relativePath, cacheBusterExts },
     } = config;
     const { argv } = NS;
 
@@ -60,7 +60,7 @@ export default class Stylus extends Base {
       .set('include css', true)
       .set('resolve url', true)
       .define('url', stylus.resolver())
-      .set('compress', argv['production'])
+      .set('compress', argv['production'] && minify)
       .set('sourcemap', !argv['production']);
 
     return (async () => {

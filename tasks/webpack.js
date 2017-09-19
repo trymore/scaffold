@@ -112,7 +112,7 @@ export default class Webpack extends Base {
   _build(file) {
     const {
       project: { root },
-      webpack: { charset, lineFeedCode, src, dest },
+      webpack: { charset, lineFeedCode, src, dest, minify },
     } = config;
     const { argv } = NS;
     const { _notMinifyFileNameSet, _webpackOpts, _productionPlugins, _ext } = this;
@@ -130,7 +130,8 @@ export default class Webpack extends Base {
         },
       }, _webpackOpts);
 
-      if(argv['production'] && !_notMinifyFileNameSet.has(basename(_destFile, _ext))) {
+      const _isMinifyFile = !_notMinifyFileNameSet.has(basename(_destFile, _ext));
+      if(argv['production'] && minify && _isMinifyFile) {
         Object.assign(_opts.plugins, _productionPlugins);
       }
 
