@@ -16,10 +16,6 @@ const memoryFs = new MemoryFS();
 
 export default class Webpack extends Base {
 
-  get _notMinifyFileNameSet() {
-    return new Set(['vendor']);
-  }
-
   get _webpackOpts() {
     const { project: { root }, webpack: { transcompiler } } = config;
     const { _ext } = this;
@@ -112,10 +108,10 @@ export default class Webpack extends Base {
   _build(file) {
     const {
       project: { root },
-      webpack: { charset, lineFeedCode, src, dest, minify },
+      webpack: { charset, lineFeedCode, src, dest, minify, notMinifyFiles },
     } = config;
     const { argv } = NS;
-    const { _notMinifyFileNameSet, _webpackOpts, _productionPlugins, _ext } = this;
+    const { _webpackOpts, _productionPlugins, _ext } = this;
 
     return (async () => {
       const _root     = relative(src, file.replace(_ext, '.js'));
@@ -130,8 +126,9 @@ export default class Webpack extends Base {
         },
       }, _webpackOpts);
 
-      const _isMinifyFile = !_notMinifyFileNameSet.has(basename(_destFile, _ext));
-      if(argv['production'] && minify && _isMinifyFile) {
+      const _notMinifyFiles = await glob(notMinifyFiles);
+      const _needsMinify    = !_notMinifyFiles.includes(file);
+      if(argv['production'] && minify && _needsMinify) {
         Object.assign(_opts.plugins, _productionPlugins);
       }
 
