@@ -68,6 +68,15 @@ export default class Webpack extends Base {
     ];
   }
 
+  /**
+   * @return {Promise}
+   */
+  init() {
+    return (async () => {
+      this._notMinifyFiles = await glob(notMinifyFiles);
+    })();
+  }
+
   constructor() {
     super('webpack');
 
@@ -111,7 +120,7 @@ export default class Webpack extends Base {
       webpack: { charset, lineFeedCode, src, dest, minify, notMinifyFiles },
     } = config;
     const { argv } = NS;
-    const { _webpackOpts, _productionPlugins, _ext } = this;
+    const { _webpackOpts, _productionPlugins, _ext, _notMinifyFiles } = this;
 
     return (async () => {
       const _root     = relative(src, file.replace(_ext, '.js'));
@@ -126,8 +135,7 @@ export default class Webpack extends Base {
         },
       }, _webpackOpts);
 
-      const _notMinifyFiles = await glob(notMinifyFiles);
-      const _needsMinify    = !_notMinifyFiles.includes(file);
+      const _needsMinify = !_notMinifyFiles.includes(file);
       if(argv['production'] && minify && _needsMinify) {
         Object.assign(_opts.plugins, _productionPlugins);
       }

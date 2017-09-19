@@ -41,7 +41,10 @@ if(needsAllTask || argv['coding']) {
 
 if(needsAllTask || argv['scripting']) {
   const _webpack = new Webpack();
-  tasks.push(_webpack.start.bind(_webpack));
+  tasks.push((async () => {
+    await _webpack.init();
+    await _webpack.start();
+  }));
 }
 
 if(argv['production']) {
