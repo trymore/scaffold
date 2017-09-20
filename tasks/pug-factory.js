@@ -18,7 +18,7 @@ export default class PugFactory extends PugBase {
   }
 
   _watch() {
-    const { factory } = config.pug;
+    const { tmp, factory } = config.pug;
 
     // init
     this._watchInit(join(factory, '**/*.+(pug|json)'));
@@ -28,6 +28,9 @@ export default class PugFactory extends PugBase {
 
     // factory template
     this._watchOther(join(factory, '**/*.pug'));
+
+    // extend or include
+    this._watchOther(join(tmp, '**/*.pug'));
   }
 
   /**
