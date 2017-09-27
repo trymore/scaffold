@@ -43,7 +43,9 @@ export default class Imagemin {
     return (async () => {
       _taskLog.start();
       const _paths = await glob(join(minify, '**/*.+(png|jpg|gif|svg)'));
-      await Promise.all(_paths.map((p) => this._minify(p)));
+      for(const p of _paths) {
+        await this._minify(p);
+      }
       _taskLog.finish();
     })();
   }
