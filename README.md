@@ -216,7 +216,8 @@ Stylus で使用する為に `stylus/imports/sprite.styl` を出力
 ```
 
 ## Image Minify
-`images/minify/` 以下の画像を圧縮して `htdocs/` に出力  
+production 時に `images/minify/` 以下の画像を圧縮して `htdocs/` に出力  
+※ production 時以外は圧縮なしで出力
 
 
 
