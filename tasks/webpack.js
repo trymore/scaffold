@@ -60,7 +60,7 @@ export default class Webpack extends Base {
       }),
       new webpack.optimize.UglifyJsPlugin({
         compress : true,
-        mangle   : true,
+        mangle   : false,
         beautify : false,
         output   : { comments: false },
         sourceMap: false,
