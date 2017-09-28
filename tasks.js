@@ -47,10 +47,8 @@ if(needsAllTask || argv['scripting']) {
   }));
 }
 
-if(argv['production']) {
-  const _imagemin = new Imagemin();
-  tasks.push(_imagemin.start.bind(_imagemin));
-}
+const _imagemin = new Imagemin();
+tasks.push(_imagemin.start.bind(_imagemin));
 
 (async () => {
   await Promise.all(tasks.map((task) => task()));
