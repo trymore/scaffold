@@ -25,7 +25,7 @@ export const cacheBuster = (buf, dest, exts) => {
   const _str = buf.toString();
   return new Buffer(
     _str.replace(
-      /(['"])(([^\s'"]+\.([^.?#]+))(\?.+)?)['"]/g,
+      /(['"])(([^\s'"]+\.([a-zA-Z]+))(\?.+)?)['"]/g,
       (all, q, path, filePath, ext, query) => {
         if(!exts.includes(ext)) return all;
         const _path = resolve(dirname(dest), filePath);
