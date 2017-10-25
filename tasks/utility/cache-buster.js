@@ -64,8 +64,10 @@ export default class CacheBuster {
         (all, q, path, filePath, ext, query) => {
           if(!_exts.includes(ext)) return all;
 
-          const { htdocs } = config.project;
-          const _path           = resolve(dirname(dest), filePath);
+          const { root, htdocs } = config.project;
+          const _path = filePath.match(/^\/.*$/)
+            ? join(root, htdocs, filePath)
+            : resolve(dirname(dest), filePath);
           const _fromHtdocsPath = relative(htdocs, _path);
 
           let _hash = '';
