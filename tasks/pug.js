@@ -1,6 +1,7 @@
 import PugBase from './pug-base';
 import config from '../tasks-config';
 import { join, relative, dirname } from 'path';
+import CacheBuster from './utility/cache-buster';
 import { errorLog } from './utility/error-log';
 import { mkfile, sameFile } from './utility/file';
 import { fileLog } from './utility/file-log';
@@ -13,6 +14,8 @@ export default class Pug extends PugBase {
 
   constructor() {
     super('pug');
+    const { cacheBusterExts } = config.pug;
+    this._cacheBuster = cacheBusterExts.length ? new CacheBuster(cacheBusterExts) : null;
   }
 
   _watch() {
@@ -27,6 +30,23 @@ export default class Pug extends PugBase {
 
     // extend or include
     this._watchOther(join(tmp, '**/*.pug'));
+
+    // cache buster
+    const { _cacheBuster } = this;
+    if(_cacheBuster) {
+      const _target = (() => {
+        const { htdocs } = config.project;
+        const { cacheBusterExts } = config.pug;
+        const _extsStr = cacheBusterExts.reduce((memo, ext, i) => {
+          if(i) memo += '|';
+          memo += ext;
+          return memo;
+        }, '');
+        return `${ htdocs }/**/*.+(${ _extsStr })`;
+      })();
+      this._watchInit(_target);
+      this._watchOther(_target);
+    }
   }
 
   /**
@@ -44,7 +64,7 @@ export default class Pug extends PugBase {
   _build(path) {
     const {
       project: { htdocs },
-      pug    : { charset, lineFeedCode, src, dest, relativePath, cacheBusterExts },
+      pug    : { charset, lineFeedCode, src, dest, relativePath },
     } = config;
     const { _pugOpts } = this;
 
@@ -71,8 +91,9 @@ export default class Pug extends PugBase {
         const _rootDirname = `/${ dirname(relative(htdocs, _dest)) }`;
         _buf = toRelativePath(_buf, _rootDirname);
       }
-      if(cacheBusterExts.length) {
-        _buf = cacheBuster(_buf, cacheBusterExts);
+      const { _cacheBuster } = this;
+      if(_cacheBuster) {
+        _buf = _cacheBuster.start(_buf, _dest);
       }
       if(lineFeedCode !== 'LF') {
         _buf = encodeLineFeedCode(_buf, lineFeedCode);

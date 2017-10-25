@@ -1,6 +1,7 @@
 import Base from './base';
 import config from '../tasks-config';
 import { join, relative, dirname, basename } from 'path';
+import CacheBuster from './utility/cache-buster';
 import { errorLog } from './utility/error-log';
 import { mkfile, sameFile } from './utility/file';
 import { fileLog } from './utility/file-log';
@@ -15,6 +16,8 @@ export default class Stylus extends Base {
 
   constructor() {
     super('stylus');
+    const { cacheBusterExts } = config.stylus;
+    this._cacheBuster = cacheBusterExts.length ? new CacheBuster(cacheBusterExts) : null;
   }
 
   _watch() {
@@ -28,6 +31,23 @@ export default class Stylus extends Base {
 
     // extend or include
     this._watchOther(join(imports, '**/*.styl'));
+
+    // cache buster
+    const { _cacheBuster } = this;
+    if(_cacheBuster) {
+      const _target = (() => {
+        const { htdocs } = config.project;
+        const { cacheBusterExts } = config.stylus;
+        const _extsStr = cacheBusterExts.reduce((memo, ext, i) => {
+          if(i) memo += '|';
+          memo += ext;
+          return memo;
+        }, '');
+        return `${ htdocs }/**/*.+(${ _extsStr })`;
+      })();
+      this._watchInit(_target);
+      this._watchOther(_target);
+    }
   }
 
   /**
@@ -45,7 +65,7 @@ export default class Stylus extends Base {
   _build(path) {
     const {
       project: { root, htdocs },
-      stylus : { charset, lineFeedCode, src, dest, minify, relativePath, cacheBusterExts },
+      stylus : { charset, lineFeedCode, src, dest, minify, relativePath },
     } = config;
     const { argv } = NS;
 
@@ -82,8 +102,9 @@ export default class Stylus extends Base {
         const _rootDirname = `/${ dirname(relative(htdocs, _dest)) }`;
         _cssBuf = toRelativePath(_cssBuf, _rootDirname);
       }
-      if(cacheBusterExts.length) {
-        _cssBuf = cacheBuster(_cssBuf, _dest, cacheBusterExts);
+      const { _cacheBuster } = this;
+      if(_cacheBuster) {
+        _cssBuf = _cacheBuster.start(_cssBuf, _dest);
       }
       if(lineFeedCode !== 'LF') {
         _cssBuf = encodeLineFeedCode(_cssBuf, lineFeedCode);
