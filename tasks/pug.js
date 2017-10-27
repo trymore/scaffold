@@ -91,13 +91,14 @@ export default class Pug extends PugBase {
         const _rootDirname = `/${ dirname(relative(htdocs, _dest)) }`;
         _buf = toRelativePath(_buf, _rootDirname);
       }
+
       const { _cacheBuster } = this;
       if(_cacheBuster) {
         _buf = _cacheBuster.start(_buf, _dest);
       }
-      if(lineFeedCode !== 'LF') {
-        _buf = encodeLineFeedCode(_buf, lineFeedCode);
-      }
+
+      _buf = encodeLineFeedCode(_buf, lineFeedCode);
+
       if(charset !== 'utf8') {
         _buf = iconv.encode(_buf, charset);
       }

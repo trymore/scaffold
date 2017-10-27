@@ -102,13 +102,14 @@ export default class Stylus extends Base {
         const _rootDirname = `/${ dirname(relative(htdocs, _dest)) }`;
         _cssBuf = toRelativePath(_cssBuf, _rootDirname);
       }
+
       const { _cacheBuster } = this;
       if(_cacheBuster) {
         _cssBuf = _cacheBuster.start(_cssBuf, _dest);
       }
-      if(lineFeedCode !== 'LF') {
-        _cssBuf = encodeLineFeedCode(_cssBuf, lineFeedCode);
-      }
+
+      _cssBuf = encodeLineFeedCode(_cssBuf, lineFeedCode);
+
       if(charset !== 'utf8') {
         _cssBuf = iconv.encode(_cssBuf, charset);
       }

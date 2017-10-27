@@ -170,9 +170,8 @@ export default class Webpack extends Base {
 
       let _jsBuf = jsBuf;
 
-      if(lineFeedCode !== 'LF') {
-        _jsBuf = encodeLineFeedCode(_jsBuf, lineFeedCode);
-      }
+      _jsBuf = encodeLineFeedCode(_jsBuf, lineFeedCode);
+
       if(charset !== 'utf8') {
         _jsBuf = iconv.encode(_jsBuf, charset);
       }
