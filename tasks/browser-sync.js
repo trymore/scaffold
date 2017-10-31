@@ -176,12 +176,15 @@ export default class BrowserSync {
    */
   _ssi(dir, buf) {
     let _str        = buf.toString();
-    const _rInc     = /<!--#include file=".+" -->/g;
+    const _rInc     = /<!--#include(\s+)(file|virtual)=".+"(\s*)-->/g;
     const _includes = _str.match(_rInc);
 
     if(_includes) {
       for(const inc of _includes) {
-        const _path = join(dir, inc.match(/file="(.+)"/)[1]);
+        const { htdocs } = config.project;
+        const _incPath = inc.match(/(file|virtual)="(.+)"/)[2];
+        const _path = _incPath.match(/^\/.*$/g)
+          ? join(htdocs, _incPath) : join(dir, _incPath);
         const _buf = readFileSync(_path, (err, path) => {
           errorLog('browser-sync ssi', `No such file, open '${ path }'.`);
         });
