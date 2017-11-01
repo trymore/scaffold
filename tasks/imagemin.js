@@ -1,21 +1,20 @@
+import Base from './base';
 import config from '../tasks-config';
-import { join, relative, dirname, extname } from 'path';
-import TaskLog from './utility/task-log';
+import { join, relative, extname } from 'path';
 import { errorLog } from './utility/error-log';
 import { mkfile, sameFile } from './utility/file';
 import { fileLog } from './utility/file-log';
 import { readFileSync } from './utility/fs';
-import { glob } from './utility/glob';
 import imagemin from 'imagemin';
 import pngquant from 'imagemin-pngquant';
 import jpegtran from 'imagemin-jpegtran';
 import gifsicle from 'imagemin-gifsicle';
 import svgo from 'imagemin-svgo';
 
-export default class Imagemin {
+export default class Imagemin extends Base {
 
   constructor() {
-    this._taskLog = new TaskLog('imagemin');
+    super('imagemin');
 
     const { png, jpg, gif, svg } = config.images.minifyOpts;
     this._plugins = {
@@ -26,35 +25,29 @@ export default class Imagemin {
     };
   }
 
-  /**
-   * @return {Promsie}
-   */
-  start() {
-    return this._minifyMultiple();
+  _watch() {
+    const { minify } = config.images;
+
+    // init
+    this._watchInit(join(minify, '**/*.+(png|jpg|gif|svg)'));
+
+    // src
+    this._watchSrc(join(minify, '**/*.+(png|jpg|gif|svg)'));
   }
 
   /**
    * @return {Promsie}
    */
-  _minifyMultiple() {
+  _buildAll() {
     const { minify } = config.images;
-    const { _taskLog } = this;
-
-    return (async () => {
-      _taskLog.start();
-      const _paths = await glob(join(minify, '**/*.+(png|jpg|gif|svg)'));
-      for(const p of _paths) {
-        await this._minify(p);
-      }
-      _taskLog.finish();
-    })();
+    return super._buildAll('imagemin', join(minify, '**/*.+(png|jpg|gif|svg)'));
   }
 
   /**
    * @param {string} path
    * @return {Promsie}
    */
-  _minify(path) {
+  _build(path) {
     const { minify, dest } = config.images;
     const { _plugins } = this;
 

@@ -97,7 +97,11 @@ export default class Base {
       const _curtPaths   = [];
       const _otherPaths  = [];
       for(const p of _paths) {
-        _curtPathSet.has(p) ? _curtPaths.push(p) : _otherPaths.push(p);
+        if(_curtPathSet) {
+          _curtPathSet.has(p) ? _curtPaths.push(p) : _otherPaths.push(p);
+        } else {
+          _otherPaths.push(p);
+        }
       }
       if(_curtPaths.length) await this._buildMultiple(_curtPaths);
       if(!isFirstBuild && (argv['viewing-update'] || argv[`viewing-update-${ name }`])) {

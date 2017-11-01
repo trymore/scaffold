@@ -32,9 +32,10 @@ if(needsAllTask || argv['coding']) {
   }));
 
   const _sprite = new Sprite();
+  const _imagemin = new Imagemin();
   const _stylus = new Stylus();
   tasks.push((async () => {
-    await _sprite.start();
+    await Promise.all([_sprite.start(), _imagemin.start()]);
     await _stylus.start();
   }));
 }
@@ -46,9 +47,6 @@ if(needsAllTask || argv['scripting']) {
     await _webpack.start();
   }));
 }
-
-const _imagemin = new Imagemin();
-tasks.push(_imagemin.start.bind(_imagemin));
 
 (async () => {
   await Promise.all(tasks.map((task) => task()));

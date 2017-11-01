@@ -257,8 +257,8 @@ export default class BrowserSync {
 
     const _opts = { ignoreInitial: true };
 
-    chokidar.watch(join(htdocs, '**/*.(html|shtml|php|css|js|png|jpg|jpeg|gif|svg)'), _opts)
-      .on('all', (event, path) => {
+    chokidar.watch(join(htdocs, '**/*.+(html|shtml|php|css|js|png|jpg|gif|svg)'), _opts)
+      .on('all', (evt, path) => {
         if(![...destSet].includes(path)) return;
         browserSync.reload(path);
       });
