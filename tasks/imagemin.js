@@ -40,7 +40,7 @@ export default class Imagemin extends Base {
    */
   _buildAll() {
     const { minify } = config.images;
-    return super._buildAll('imagemin', join(minify, '**/*.+(png|jpg|gif|svg)'));
+    return super._buildAll('imagemin', join(minify, '**/*.+(png|jpg|gif|svg)'), true);
   }
 
   /**
