@@ -186,8 +186,9 @@ export default class BrowserSync {
         const _path = _incPath.match(/^\/.*$/g)
           ? join(htdocs, _incPath) : join(dir, _incPath);
         const _buf = readFileSync(_path, (err, path) => {
-          errorLog('browser-sync ssi', `No such file, open '${ path }'.`);
+          errorLog('browser-sync ssi', `No such file, open '${ _path }'.`);
         });
+        if(!_buf) continue;
         _str = _str.replace(inc, _buf.toString());
       }
     }
