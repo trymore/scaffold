@@ -189,7 +189,8 @@ export default class BrowserSync {
           errorLog('browser-sync ssi', `No such file, open '${ _path }'.`);
         });
         if(!_buf) continue;
-        _str = _str.replace(inc, _buf.toString());
+        const __buf = this._ssi(dir, _buf);
+        _str = _str.replace(inc, __buf.toString());
       }
     }
     return new Buffer(_str);
