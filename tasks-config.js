@@ -36,7 +36,7 @@ export default {
     imports       : 'webpack/imports',
     dest          : 'htdocs',
     minify        : true,
-    notMinifyFiles: ['webpack/**/vender.js'],
+    notMinifyFiles: ['webpack/**/vendor.js'],
   },
   images: {
     root      : 'images',
