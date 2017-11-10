@@ -87,10 +87,10 @@ export default class Base {
   /**
    * @param {string} name
    * @param {string} path
-   * @param {boolean} [needsSeries]
+   * @param {boolean} [needsSerial]
    * @return {Promsie}
    */
-  _buildAll(name, path, needsSeries = false) {
+  _buildAll(name, path, needsSerial = false) {
     return (async () => {
       const { argv, isFirstBuild } = NS;
       const _curtPathSet = NS.curtFiles[`${ name }Set`];
@@ -104,22 +104,22 @@ export default class Base {
           _otherPaths.push(p);
         }
       }
-      if(_curtPaths.length) await this._buildMultiple(_curtPaths, needsSeries);
+      if(_curtPaths.length) await this._buildMultiple(_curtPaths, needsSerial);
       if(!isFirstBuild && (argv['viewing-update'] || argv[`viewing-update-${ name }`])) {
         return;
       }
-      if(_otherPaths.length) await this._buildMultiple(_otherPaths, needsSeries);
+      if(_otherPaths.length) await this._buildMultiple(_otherPaths, needsSerial);
     })();
   }
 
   /**
    * @param {Array<string>} paths
-   * @param {boolean} needsSeries
+   * @param {boolean} needsSerial
    * @return {Promise}
    */
-  _buildMultiple(paths) {
+  _buildMultiple(paths, needsSerial) {
     return (async () => {
-      if(needsSeries) {
+      if(needsSerial) {
         for(const p of paths) {
           await this._build(p);
         }
