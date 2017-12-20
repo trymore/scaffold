@@ -15,6 +15,13 @@ const browserSyncUrlList = bs.create();
 
 export default class BrowserSync {
 
+  get _middleware() {
+    return [
+      this._setViewingFile.bind(this),
+      this._convert.bind(this),
+    ];
+  }
+
   get _bsUrlListOpts() {
     const { root } = config.urlList;
     return {
@@ -36,12 +43,6 @@ export default class BrowserSync {
       notify              : false,
       reloadOnRestart     : true,
       scrollProportionally: false,
-      server: {
-        middleware: [
-          this._setViewingFile.bind(this),
-          this._convert.bind(this),
-        ],
-      },
     };
   }
 
@@ -50,7 +51,8 @@ export default class BrowserSync {
     const { _bsBaseOpts } = this;
     return deepAssign(_bsBaseOpts, {
       server: {
-        baseDir: htdocs,
+        baseDir   : htdocs,
+        middleware: this._middleware,
       },
     });
   }
@@ -58,7 +60,8 @@ export default class BrowserSync {
   get _bsPhpOpts() {
     const { _bsBaseOpts } = this;
     return deepAssign(_bsBaseOpts, {
-      proxy: '0.0.0.0:3010',
+      proxy     : '0.0.0.0:3010',
+      middleware: this._middleware,
     });
   }
 
