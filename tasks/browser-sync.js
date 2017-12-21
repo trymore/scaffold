@@ -1,6 +1,6 @@
 import config from '../tasks-config';
 import fs from 'fs';
-import { join, dirname, extname, relative } from 'path';
+import { join, dirname, extname, relative, parse } from 'path';
 import bs from 'browser-sync';
 import TaskLog from './utility/task-log';
 import { errorLog } from './utility/error-log';
@@ -14,13 +14,6 @@ const browserSync        = bs.create();
 const browserSyncUrlList = bs.create();
 
 export default class BrowserSync {
-
-  get _middleware() {
-    return [
-      this._setViewingFile.bind(this),
-      this._convert.bind(this),
-    ];
-  }
 
   get _bsUrlListOpts() {
     const { root } = config.urlList;
@@ -43,6 +36,12 @@ export default class BrowserSync {
       notify              : false,
       reloadOnRestart     : true,
       scrollProportionally: false,
+      server: {
+        middleware: [
+          this._setViewingFile.bind(this),
+          this._convert.bind(this),
+        ],
+      },
     };
   }
 
@@ -51,8 +50,7 @@ export default class BrowserSync {
     const { _bsBaseOpts } = this;
     return deepAssign(_bsBaseOpts, {
       server: {
-        baseDir   : htdocs,
-        middleware: this._middleware,
+        baseDir: htdocs,
       },
     });
   }
@@ -60,8 +58,7 @@ export default class BrowserSync {
   get _bsPhpOpts() {
     const { _bsBaseOpts } = this;
     return deepAssign(_bsBaseOpts, {
-      proxy     : '0.0.0.0:3010',
-      middleware: this._middleware,
+      proxy: '0.0.0.0:3010',
     });
   }
 
@@ -156,6 +153,11 @@ export default class BrowserSync {
             _buf = this._decode(_buf, charset);
           }
           _buf = await this._ssi(dirname(path), _buf);
+          const { comp } = NS.argv;
+          if(comp) {
+            const { htdocs } = config.project;
+            _buf = await this._comp(path.replace(htdocs, ''), _buf);
+          }
           resolve(_buf);
         })();
       });
@@ -175,7 +177,7 @@ export default class BrowserSync {
   /**
    * @param {string} dir
    * @param {Buffer} buf
-   * @return {Promise<Buffer>}
+   * @return {Buffer}
    */
   _ssi(dir, buf) {
     let _str        = buf.toString();
@@ -195,6 +197,42 @@ export default class BrowserSync {
         const __buf = this._ssi(dir, _buf);
         _str = _str.replace(inc, __buf.toString());
       }
+    }
+    return new Buffer(_str);
+  }
+
+  /**
+   * @param {string} path
+   * @param {Buffer} buf
+   * @return {Buffer}
+   */
+  _comp(path, buf) {
+    let _str  = buf.toString();
+    const _headEndStr = '</head>';
+    const _strs = _str.split(_headEndStr);
+
+    if(_strs) {
+      const { script, src, imgExt, types } = config.comp;
+
+      const _scriptBuf = readFileSync(script, (err, path) => {
+        errorLog('browser-sync check script', `No such file, open '${ script }'.`);
+      });
+      if(!_scriptBuf) return buf;
+
+      const { dir, name } = parse(join(src, path));
+      const _data = types.reduce((memo, { id, dpi }) => {
+        const _path = `${ join(dir, name) }--${ id }.${ imgExt }`;
+        const _buf  = readFileSync(_path, 'base64');
+        if(_buf) {
+          memo[id] = { src: `data:image/png;base64,${ _buf }`, dpi };
+        }
+        return memo;
+      }, {});
+      if(!Object.keys(_data).length) return buf;
+
+      const _scriptStr = _scriptBuf.toString().replace('{{data}}', JSON.stringify(_data));
+
+      _str = _strs[0] + _headEndStr + _scriptStr + _strs[1];
     }
     return new Buffer(_str);
   }

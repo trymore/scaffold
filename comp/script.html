@@ -1,0 +1,335 @@
+<style>
+#comp {
+  display: none;
+  opacity: .5;
+  width: 100%;
+  background-position: center top;
+  background-repeat: no-repeat;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 10000;
+}
+#compOpacitySlider {
+  width: 100px;
+  height: 6px;
+  margin: 0;
+  border-radius: 3px;
+  background-color: #ccc;
+  position: fixed;
+  z-index: 10001;
+  -webkit-appearance: none;
+  appearance: none;
+}
+#compOpacitySlider:focus, #compOpacitySlider:active {
+  outline: none;
+}
+#compOpacitySlider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  cursor: pointer;
+  position: relative;
+  border: 2px solid rgba(0, 0, 0, .4);
+  width: 14px;
+  height: 14px;
+  display: block;
+  background-color: #fff;
+  border-radius: 50%;
+  -webkit-border-radius: 50%;
+}
+#compOpacitySlider:active::-webkit-slider-thumb {
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, .4);
+  transition: .4s;
+}
+#compMoveBtn, #compToggleBtn, #compTypes input {
+  border: 1px solid #ccc;
+  background-color: #fff;
+  color: #999;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all ease-in-out .2s;
+}
+#compMoveBtn:hover, #compToggleBtn:hover, #compTypes input:hover {
+  background-color: #eee;
+}
+#compToggleBtn.is-selseced, #compTypes input.is-selseced {
+  border-color: #69c;
+  background-color: #69c;
+  color: #fff;
+}
+#compMoveBtn {
+  width: 30px;
+  height: 30px;
+  border-radius: 15px;
+  position: fixed;
+  z-index: 10001;
+}
+#compToggleBtn {
+  width: 100px;
+  padding: 5px 10px;
+  border-radius: 20px;
+  position: fixed;
+  z-index: 10001;
+}
+#compTypes {
+  position: fixed;
+  z-index: 10001;
+}
+#compTypes input {
+  width: 40px;
+  height: 40px;
+  border-radius: 20px;
+  transition: all ease-in-out .2s;
+}
+#compTypes input ~ input {
+  margin-left: 4px;
+}
+
+/* bottom right */
+#compOpacitySlider.bottom-right {
+  right: 10px;
+  bottom: 12px;
+}
+#compMoveBtn.bottom-right {
+  right: 115px;
+  bottom: 12px;
+}
+#compToggleBtn.bottom-right {
+  right: 10px;
+  bottom: 32px;
+}
+#compTypes.bottom-right {
+  right: 10px;
+  bottom: 68px;
+}
+
+/* bottom left */
+#compOpacitySlider.bottom-left {
+  bottom: 12px;
+  left: 10px;
+}
+#compMoveBtn.bottom-left {
+  bottom: 12px;
+  left: 115px;
+}
+#compToggleBtn.bottom-left {
+  bottom: 32px;
+  left: 10px;
+}
+#compTypes.bottom-left {
+  bottom: 68px;
+  left: 10px;
+}
+
+/* top left */
+#compOpacitySlider.top-left {
+  top: 12px;
+  left: 10px;
+}
+#compMoveBtn.top-left {
+  top: 12px;
+  left: 115px;
+}
+#compToggleBtn.top-left {
+  top: 32px;
+  left: 10px;
+}
+#compTypes.top-left {
+  top: 68px;
+  left: 10px;
+}
+
+/* top right */
+#compOpacitySlider.top-right {
+  top: 12px;
+  right: 10px;
+}
+#compMoveBtn.top-right {
+  top: 12px;
+  right: 115px;
+}
+#compToggleBtn.top-right {
+  top: 32px;
+  right: 10px;
+}
+#compTypes.top-right {
+  top: 68px;
+  right: 10px;
+}
+
+</style>
+
+<script>
+var data        = {{data}};
+var img         = new Image();
+var selectedCls = 'is-selseced';
+var positions   = [
+  { cls: 'bottom-right', val: '↙' },
+  { cls: 'bottom-left' , val: '↖' },
+  { cls: 'top-left'    , val: '↗' },
+  { cls: 'top-right'   , val: '↘' }
+];
+
+var $comp = document.createElement('div');
+$comp.id  = 'comp';
+
+var $opacity = document.createElement('input');
+$opacity.id   = 'compOpacitySlider';
+$opacity.type = 'range';
+$opacity.min  = '0';
+$opacity.max  = '100';
+
+var $move = document.createElement('input');
+$move.id    = 'compMoveBtn';
+$move.type  = 'button';
+
+var $toggle  = document.createElement('input');
+$toggle.id   = 'compToggleBtn';
+$toggle.type = 'button';
+
+var $types = document.createElement('div');
+$types.id  = 'compTypes';
+
+var typeElms = Object.keys(data).map(function(id) {
+  var $type = document.createElement('input');
+  $type.type       = 'button';
+  $type.dataset.id = id;
+  $type.value      = id.toUpperCase();
+  return $type;
+});
+
+/**
+ * functions
+ */
+
+var setStorage = function(key, val) {
+  try {  // for safari private window
+    sessionStorage.setItem(key, val);
+  } catch(e) {
+    console.warn(e);
+  }
+}
+
+var move = function(curtIndex, nextIndex) {
+  $move.value = positions[nextIndex].val;
+  [$move, $opacity, $toggle, $types].forEach(function($el) {
+    $el.classList.remove(positions[curtIndex].cls);
+    $el.classList.add(positions[nextIndex].cls);
+  });
+  setStorage('comp-pos', nextIndex);
+}
+
+var nextMove = function() {
+  var curtIndex = parseInt(sessionStorage.getItem('comp-pos'), 10) || 0;
+  var nextIndex = ([curtIndex + 1] in positions) ? (curtIndex + 1) : 0;
+  move(curtIndex, nextIndex);
+}
+
+var show = function() {
+  $comp.style.display = 'block';
+  $toggle.value       = 'is Shown';
+  $toggle.classList.add(selectedCls);
+  setStorage('comp-shown', '1');
+}
+
+var hide = function() {
+  $comp.style.display = 'none';
+  $toggle.value       = 'is Hidden';
+  $toggle.classList.remove(selectedCls);
+  setStorage('comp-shown', '0');
+}
+
+var setImg = function(id) {
+  var src = data[id].src;
+  img.onload = function() {
+    $comp.style.height          = img.height + 'px';
+    $comp.style.backgroundImage = 'url(' + src + ')';
+    $comp.style.zoom            = 1 / data[id].dppx;
+  }
+  img.src = src;
+}
+
+var toggleTypeCls = function(id) {
+  var _curtId = sessionStorage.getItem('comp-id');
+  var _nextId = id;
+
+  for(var i in typeElms) {
+    var $type = typeElms[i];
+    if($type.dataset.id === _curtId) {
+      $type.classList.remove(selectedCls);
+    }
+    if($type.dataset.id === _nextId) {
+      $type.classList.add(selectedCls);
+    }
+  }
+}
+
+var updateOpacity = function() {
+  var val = $opacity.value;
+  $comp.style.opacity = val / 100;
+  setStorage('comp-opacity', val);
+}
+
+var toggleImg = function() {
+  getComputedStyle($comp, '').display === 'block' ? hide() : show();
+}
+
+var changeType = function(e) {
+  var $type = e.currentTarget;
+  var id    = $type.dataset.id;
+
+  toggleTypeCls(id);
+  setImg(id);
+  setStorage('comp-id', id);
+}
+
+/**
+ * init
+ */
+
+sessionStorage.getItem('comp-shown') === '1' ? show() : hide();
+
+var posIndex = parseInt(sessionStorage.getItem('comp-pos'), 10) || 0;
+$move.value = positions[posIndex].val;
+move(0, posIndex);
+
+var opacityVal = sessionStorage.getItem('comp-opacity');
+if(opacityVal !== undefined) {
+  var val = parseInt(opacityVal, 10);
+  $comp.style.opacity = val / 100;
+  $opacity.value      = val;
+}
+
+var typeId = sessionStorage.getItem('comp-id') || Object.keys(data)[0];
+toggleTypeCls(typeId);
+setImg(typeId);
+setStorage('comp-id', typeId);
+
+/**
+ * contents loaded
+ */
+
+window.addEventListener('DOMContentLoaded', function() {
+
+  var df     = document.createDocumentFragment();
+  var typeDf = document.createDocumentFragment();
+  df.appendChild($comp);
+  df.appendChild($move);
+  df.appendChild($opacity);
+  df.appendChild($toggle);
+  for(var i in typeElms) {
+    typeDf.appendChild(typeElms[i]);
+  }
+  $types.appendChild(typeDf);
+  df.appendChild($types);
+  document.body.appendChild(df);
+
+  $move.addEventListener('click', nextMove);
+  $toggle.addEventListener('click', toggleImg);
+  $opacity.addEventListener('change', updateOpacity);
+  for(var i in typeElms) {
+    typeElms[i].addEventListener('click', changeType);
+  }
+
+});
+</script>

@@ -56,6 +56,17 @@ export default {
     tmp : '.url-list/index.tmp',
     dest: '.url-list/index.html',
   },
+  comp: {
+    root  : 'comp',
+    script: 'comp/script.html',
+    src   : 'comp/src',
+    imgExt: 'jpg',
+    types : [
+      { id: 'pc' , dppx: 1.0 },
+      { id: 'tab', dppx: 1.0 },
+      { id: 'sp' , dppx: 2.0 },
+    ],
+  },
   deletes: [
     'htdocs/**/.DS_Store', 'htdocs/**/Thumb.db', 'htdocs/**/*.map',
   ],
