@@ -30,7 +30,7 @@ export default class Webpack extends Base {
       },
       'coffee': {
         test: /\.coffee$/,
-        loader : 'coffee-loader',
+        loader : 'babel-loader!coffee-loader',
       },
     })[transcompiler];
 
