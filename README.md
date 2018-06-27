@@ -5,11 +5,11 @@
 ## 事前準備
 
 ### [node.js](https://nodejs.org/en/)（v6~）をグローバルインストール
-インストール済みの場合はスキップ  
+インストール済みの場合はスキップ
 node.js は直接インストールやバージョン管理ツールを使う方法など複数あるのでインストール方法は省略
 
 ### [npm](https://www.npmjs.com/) を v5~ にアップデート
-アップデート済みの場合はスキップ  
+アップデート済みの場合はスキップ
 v5 以降では `package-lock.json` が使えるので依存関係を共通化できる為
 ```
 $ npm update -g npm
@@ -24,7 +24,7 @@ $ npm install
 ```bash
 $ npm install --prefer-offline
 ```
-直接速度に影響するものではないが、あればローカルキャッシュを使う為、ネットワーク利用率が下り高速化される可能性もある。  
+直接速度に影響するものではないが、あればローカルキャッシュを使う為、ネットワーク利用率が下り高速化される可能性もある。
 通信が状況が悪い時などに使用するとよいかと。
 
 
@@ -46,6 +46,7 @@ $ npm install --prefer-offline
 | pug.php                |pug を PHP で出力するファイル               |
 | pug.minify             |pug の production 時の圧縮設定              |
 | pug.relativePath       |pug のルートパスを相対パスへ変更            |
+| pug.spaceFilling       |pug を出力時にスペースを詰める設定            |
 | pug.cacheBusterExts    |pug のキャシュバスター対応ファイル形式      |
 | stylus.charset         |stylus の出力ファイル文字コード             |
 | stylus.lineFeedCode    |stylus の出力ファイル改行コード             |
@@ -121,7 +122,7 @@ $ npm run build -- --coding
 
 
 # Local Server
-ローカルサーバは [BrowserSync](https://www.browsersync.io/) を使用  
+ローカルサーバは [BrowserSync](https://www.browsersync.io/) を使用
 ※PHP 使用時は PHP ビルトインサーバと連携
 
 ### ポート
@@ -167,7 +168,7 @@ $ npm run build -- --coding
 テンプレート（pug）とデータ（json）からファイルを生成し `htdocs/` に出力
 
 ### テンプレートファイル
-`pug/factory/` 以下の pug ファイル  
+`pug/factory/` 以下の pug ファイル
 ※ファイル内の `{{vars}}` が json のデータに置き換えられる
 
 ### データファイル
@@ -192,7 +193,7 @@ $ npm run build -- --coding
 
 
 # CSS
-[Stylus](http://stylus-lang.com/) でトランスパイル  
+[Stylus](http://stylus-lang.com/) でトランスパイル
 `stylus/src/` 以下の stylus ファイルをトランスパイルし `htdocs/` に出力
 
 
@@ -200,16 +201,16 @@ $ npm run build -- --coding
 # Image
 
 ## Sprite
-`images/sprite/` 以下の画像をスプライト化して `htdocs/` に出力  
+`images/sprite/` 以下の画像をスプライト化して `htdocs/` に出力
 最終ディレクトリ名がファイル名になる
 
-> 例  
-`images/sprite/images/sample/a.png`  
-`images/sprite/images/sample/b.png`  
-↓  
+> 例
+`images/sprite/images/sample/a.png`
+`images/sprite/images/sample/b.png`
+↓
 `htdocs/images/sample.png`
 
-Stylus で使用する為に `stylus/imports/sprite.styl` を出力  
+Stylus で使用する為に `stylus/imports/sprite.styl` を出力
 [mixins](http://stylus-lang.com/docs/mixins.html) を import して使用
 
 ```stylus
@@ -222,16 +223,16 @@ Stylus で使用する為に `stylus/imports/sprite.styl` を出力
 ```
 
 ## Image Minify
-production 時に `images/minify/` 以下の画像を圧縮して `htdocs/` に出力  
+production 時に `images/minify/` 以下の画像を圧縮して `htdocs/` に出力
 ※ production 時以外は圧縮なしで出力
 
 
 
 # JavaScript
-[Babel](https://babeljs.io/)（[es2015](https://babeljs.io/docs/plugins/preset-es2015/), [stage-0](https://babeljs.io/docs/plugins/preset-stage-0/)）または [CoffeeScript](http://coffeescript.org/) でトランスパイルし [webpack](https://webpack.js.org/) でバンドル  
+[Babel](https://babeljs.io/)（[es2015](https://babeljs.io/docs/plugins/preset-es2015/), [stage-0](https://babeljs.io/docs/plugins/preset-stage-0/)）または [CoffeeScript](http://coffeescript.org/) でトランスパイルし [webpack](https://webpack.js.org/) でバンドル
 `webpack/src/` 以下の js ファイルをトランスパイルし `htdocs/` に出力
 
-デフォルトは Babel  
+デフォルトは Babel
 変更する場合は `task-config.js` の以下を更新
 ```js
     transcompiler: 'babel',  // ['babel', 'coffee']
@@ -254,7 +255,7 @@ const root = 'http://domain.com/';
 
 
 # Comp
-`--comp` オプションでカンプを重ねて表示  
+`--comp` オプションでカンプを重ねて表示
 
 `task-config.js` の以下を設定
 ```js
@@ -265,14 +266,14 @@ const root = 'http://domain.com/';
       { id: 'sp' , dppx: 2.0 },
     ],
 ```
-`comp/src/` 以下に同様ディレクトリで `ファイル名--[id].[拡張子]` で設置  
-URL が `/sample/index.html` で拡張子が `png` で ID が `pc` の場合は  
+`comp/src/` 以下に同様ディレクトリで `ファイル名--[id].[拡張子]` で設置
+URL が `/sample/index.html` で拡張子が `png` で ID が `pc` の場合は
 `comp/src/sample/` ディレクトリに `index--pc.png` を設置
 
 
 
 # Clean
-不要ファイル削除  
+不要ファイル削除
 変更する場合は `task-config.js` の以下を更新
 ```js
   deletes: [

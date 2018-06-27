@@ -64,7 +64,7 @@ export default class Pug extends PugBase {
   _build(path) {
     const {
       project: { htdocs },
-      pug    : { charset, lineFeedCode, src, dest, relativePath },
+      pug    : { charset, lineFeedCode, src, dest, relativePath, spaceFilling },
     } = config;
     const { _pugOpts } = this;
 
@@ -74,8 +74,14 @@ export default class Pug extends PugBase {
       const _opts = Object.assign(_pugOpts, this._getMembers(path));
 
       const _html = await new Promise((resolve, reject) => {
+        if (spaceFilling) {
+          _opts['pretty'] = '\t';
+        }
         pug.renderFile(path, _opts, (err, html) => {
           if(err) return reject(err);
+          if (spaceFilling) {
+            html = html.replace(new RegExp("^[\t| ]+", 'gm'), '');
+          }
           resolve(html);
         });
       })

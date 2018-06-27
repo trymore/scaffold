@@ -14,6 +14,7 @@ export default {
     php            : [],  // 'all', ['index.pug', 'sp/index.pug']
     minify         : true,
     relativePath   : false,
+    spaceFilling   : false,
     cacheBusterExts: [],
   },
   stylus: {
