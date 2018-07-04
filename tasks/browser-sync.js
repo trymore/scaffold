@@ -143,9 +143,12 @@ export default class BrowserSync {
    * @return {Promise<Buffer>}
    */
   _pageConvert(path) {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       fs.readFile(path, (err, buf) => {
-        if(err) return next();
+        if(err) {
+          resolve(err);
+          // return next();
+        }
         const { charset } = config.pug;
         (async () => {
           let _buf = buf;
