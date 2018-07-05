@@ -128,7 +128,7 @@ export default class BrowserSync {
         case '.html':
         case '.shtml':
         case '.php':
-          const _buf = await this._pageConvert(_path);
+          const _buf = await this._pageConvert(_path, next);
           res.writeHead(200, { 'Content-Type': 'text/html' });
            res.end(_buf.toString());
           break;
@@ -140,15 +140,13 @@ export default class BrowserSync {
 
   /**
    * @param {string} path
+   * @param {function} next
    * @return {Promise<Buffer>}
    */
-  _pageConvert(path) {
+  _pageConvert(path, next) {
     return new Promise((resolve, reject) => {
       fs.readFile(path, (err, buf) => {
-        if(err) {
-          resolve(err);
-          // return next();
-        }
+        if(err) return next();
         const { charset } = config.pug;
         (async () => {
           let _buf = buf;
