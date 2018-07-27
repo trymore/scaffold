@@ -3,7 +3,7 @@ import config from '../tasks-config';
 import { join, relative, dirname, basename } from 'path';
 import CacheBuster from './utility/cache-buster';
 import { errorLog } from './utility/error-log';
-import { mkfile, sameFile } from './utility/file';
+import { mkfile, sameFile, isFile } from './utility/file';
 import { fileLog } from './utility/file-log';
 import { readFileSync } from './utility/fs';
 import { encodeLineFeedCode } from './utility/line-feed-code';
@@ -72,7 +72,6 @@ export default class Stylus extends Base {
     const _path = join(root, path);
     const _buf  = readFileSync(_path, (err) => errorLog('stylus', err));
     if(!_buf) return;
-
     const _stylus = stylus(_buf.toString())
       .use(nib())
       .import('nib')
@@ -87,6 +86,11 @@ export default class Stylus extends Base {
       const _css = await new Promise((resolve, reject) => {
         _stylus.render((err, css) => {
           if(err) return reject(err);
+          if(_stylus.sourcemap) {
+            _stylus.sourcemap.sourcesContent = _stylus.sourcemap.sources.map((file) => {
+              return !isFile(file) ? readFileSync(path) : readFileSync(file);
+            });
+          }
           resolve(css);
         });
       })
