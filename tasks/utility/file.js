@@ -41,6 +41,6 @@ export const mvfile = (oldPath, newPath) => {
   return new Promise((resolve) => {
     mkdirp(dirname(newPath), () => {
       rename(oldPath, newPath, resolve);
-    })
+    });
   });
 };
