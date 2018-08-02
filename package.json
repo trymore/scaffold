@@ -6,7 +6,7 @@
     "watch": "babel-node tasks.js",
     "build": "babel-node tasks.js --build",
     "build:production": "babel-node tasks.js --build --production",
-    "imagemin": "babel-node task-imagemin.js",
+    "imagemin": "babel-node task-imagemin.js --build --production",
     "php-server": "php -S 0.0.0.0:3010 -t htdocs"
   },
   "repository": {
