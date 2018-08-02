@@ -5,12 +5,13 @@ import { ucfirst } from './string-convert';
  * @param {string} status
  */
 const _getStatus = (status) => {
-  const { green, blue, red, yellow } = colors;
+  const { green, blue, red, yellow, magenta } = colors;
   return ({
     create: { ico: '=', color: green },
     add   : { ico: '+', color: blue },
     unlink: { ico: '-', color: red },
     change: { ico: '*', color: yellow },
+    move  : { ico: '/', color: magenta },
   })[status];
 };
 

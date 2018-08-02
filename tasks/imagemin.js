@@ -74,7 +74,7 @@ export default class Imagemin extends Base {
         if (production) {
           const _orignal = join(original, relative(minify, path))
           await mvfile(path, _orignal);
-          fileLog('change', _orignal);
+          fileLog('move', `${path} -> ${_orignal}`);
         }
       }
     })();
