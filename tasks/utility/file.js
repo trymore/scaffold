@@ -1,5 +1,5 @@
 import { dirname } from 'path';
-import { existsSync, statSync, readFileSync, writeFile } from 'fs';
+import { existsSync, statSync, readFileSync, writeFile, rename } from 'fs';
 import mkdirp from 'mkdirp';
 import { getType } from './type';
 
@@ -34,5 +34,13 @@ export const mkfile = (path, data, opts = {}) => {
     mkdirp(dirname(path), () => {
       writeFile(path, data, opts, resolve);
     });
+  });
+};
+
+export const mvfile = (oldPath, newPath) => {
+  return new Promise((resolve) => {
+    mkdirp(dirname(newPath), () => {
+      rename(oldPath, newPath, resolve);
+    })
   });
 };

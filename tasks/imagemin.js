@@ -2,7 +2,7 @@ import Base from './base';
 import config from '../tasks-config';
 import { join, relative, extname } from 'path';
 import { errorLog } from './utility/error-log';
-import { mkfile, sameFile } from './utility/file';
+import { mkfile, sameFile, mvfile } from './utility/file';
 import { fileLog } from './utility/file-log';
 import { readFileSync } from './utility/fs';
 import imagemin from 'imagemin';
@@ -48,7 +48,7 @@ export default class Imagemin extends Base {
    * @return {Promsie}
    */
   _build(path) {
-    const { minify, dest } = config.images;
+    const { root, minify, original, dest } = config.images;
     const { _plugins } = this;
 
     return (async () => {
@@ -71,6 +71,11 @@ export default class Imagemin extends Base {
       if(!sameFile(_dest, _buf, true)) {
         await mkfile(_dest, _buf.toString('base64'), 'base64');
         fileLog('create', _dest);
+        if (production) {
+          const _orignal = join(original, relative(minify, path))
+          await mvfile(path, _orignal);
+          fileLog('change', _orignal);
+        }
       }
     })();
   }

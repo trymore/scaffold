@@ -43,6 +43,7 @@ export default {
     root      : 'images',
     minify    : 'images/minify',
     sprite    : 'images/sprite',
+    original  : 'images/original',
     dest      : 'htdocs',
     stylusDest: 'stylus/imports/sprite.styl',
     minifyOpts: {
