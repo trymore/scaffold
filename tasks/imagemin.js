@@ -48,7 +48,7 @@ export default class Imagemin extends Base {
    * @return {Promsie}
    */
   _build(path) {
-    const { root, minify, original, dest } = config.images;
+    const { minify, original, dest } = config.images;
     const { _plugins } = this;
 
     return (async () => {
