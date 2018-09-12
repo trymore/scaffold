@@ -2,13 +2,11 @@ import Base from './base';
 import config from '../tasks-config';
 import MemoryFS from 'memory-fs';
 import { join, relative, dirname, basename } from 'path';
-import FileCache from './utility/file-cache';
 import { errorLog } from './utility/error-log';
-import { isFile, mkfile, sameFile } from './utility/file';
+import { mkfile, sameFile } from './utility/file';
 import { fileLog } from './utility/file-log';
 import { glob } from './utility/glob';
 import { encodeLineFeedCode } from './utility/line-feed-code';
-import chokidar from 'chokidar';
 import webpack from 'webpack';
 import iconv from 'iconv-lite';
 
@@ -50,22 +48,6 @@ export default class Webpack extends Base {
       devtool: 'source-map',
       plugins: [],
     };
-  }
-
-  get _productionPlugins() {
-    return [
-      new webpack.LoaderOptionsPlugin({
-        minimize: true,
-        debug   : false,
-      }),
-      new webpack.optimize.UglifyJsPlugin({
-        compress : true,
-        mangle   : false,
-        beautify : false,
-        output   : { comments: false },
-        sourceMap: false,
-      }),
-    ];
   }
 
   constructor() {
@@ -121,25 +103,23 @@ export default class Webpack extends Base {
       webpack: { charset, lineFeedCode, src, dest, minify },
     } = config;
     const { argv } = NS;
-    const { _webpackOpts, _productionPlugins, _ext, _notMinifyFiles } = this;
+    const { _webpackOpts, _ext, _notMinifyFiles } = this;
 
     return (async () => {
       const _root     = relative(src, file.replace(_ext, '.js'));
       const _dest     = join(dest, _root);
       const _destDir  = dirname(_dest);
       const _destFile = basename(_dest);
+
+      const _needsMinify = !_notMinifyFiles.includes(file);
       const _opts = Object.assign({
+        mode: !!(argv['production'] && minify && _needsMinify) ? 'production' : 'development',
         entry: join(root, file),
         output: {
           path    : join(root, _destDir),
           filename: _destFile,
         },
       }, _webpackOpts);
-
-      const _needsMinify = !_notMinifyFiles.includes(file);
-      if(argv['production'] && minify && _needsMinify) {
-        Object.assign(_opts.plugins, _productionPlugins);
-      }
 
       const _compiler = webpack(_opts);
       _compiler.outputFileSystem = memoryFs;
