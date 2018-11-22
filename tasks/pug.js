@@ -91,7 +91,7 @@ export default class Pug extends PugBase {
 
       if(!_html) return;
 
-      let _buf = new Buffer(_html);
+      let _buf = Buffer.from(_html);
 
       if(relativePath) {
         const _rootDirname = `/${ dirname(relative(htdocs, _dest)) }`;

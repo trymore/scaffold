@@ -60,12 +60,12 @@ export default class Imagemin extends Base {
       let _buf = null;
       const { production } = NS.argv;
       if(production) {
-        _buf = await imagemin.buffer(new Buffer(_img, 'base64'), { plugins: [_plugins[_ext]] })
+        _buf = await imagemin.buffer(Buffer.from(_img, 'base64'), { plugins: [_plugins[_ext]] })
           .catch((err) => {
             errorLog('imagemin', err);
           });
       } else {
-        _buf = new Buffer(_img, 'base64');
+        _buf = Buffer.from(_img, 'base64');
       }
 
       if(!sameFile(_dest, _buf, true)) {

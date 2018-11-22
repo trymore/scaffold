@@ -90,7 +90,7 @@ sprite-retina(filepath)
       })());
 
       const _css = this._getCss(this._flatten(_spritehashs));
-      if(_css && !sameFile(stylusDest, new Buffer(_css))) {
+      if(_css && !sameFile(stylusDest, Buffer.from(_css))) {
         await mkfile(stylusDest, _css);
         fileLog('create', stylusDest);
       }

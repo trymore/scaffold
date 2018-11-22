@@ -63,7 +63,7 @@ export default class UrlList {
       if(!_buf) return;
 
       const _html = _buf.toString().replace('{{data}}', JSON.stringify(_urlHash));
-      if(!sameFile(dest, new Buffer(_html))) {
+      if(!sameFile(dest, Buffer.from(_html))) {
         await mkfile(dest, _html);
         fileLog('create', dest);
       }

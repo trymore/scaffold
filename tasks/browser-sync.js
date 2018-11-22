@@ -172,7 +172,7 @@ export default class BrowserSync {
    */
   _decode(buf, encoding) {
     const _str = iconv.decode(buf, encoding);
-    return new Buffer(_str.replace(/(<meta charset=")(.+)(">)/g, '$1utf-8$3'));
+    return Buffer.from(_str.replace(/(<meta charset=")(.+)(">)/g, '$1utf-8$3'));
   }
 
   /**
@@ -199,7 +199,7 @@ export default class BrowserSync {
         _str = _str.replace(inc, __buf.toString());
       }
     }
-    return new Buffer(_str);
+    return Buffer.from(_str);
   }
 
   /**
@@ -235,7 +235,7 @@ export default class BrowserSync {
 
       _str = _strs[0] + _headEndStr + _scriptStr + _strs[1];
     }
-    return new Buffer(_str);
+    return Buffer.from(_str);
   }
 
   /**

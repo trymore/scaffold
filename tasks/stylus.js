@@ -100,7 +100,7 @@ export default class Stylus extends Base {
       if(!_css) return;
 
       const _dest = join(dest, relative(src, path)).replace('.styl', '.css');
-      let _cssBuf = new Buffer(_css);
+      let _cssBuf = Buffer.from(_css);
 
       if(relativePath) {
         const _rootDirname = `/${ dirname(relative(htdocs, _dest)) }`;

@@ -58,7 +58,7 @@ export default class CacheBuster {
   start(buf, dest) {
     const { _exts } = this;
     const _str = buf.toString();
-    return new Buffer(
+    return Buffer.from(
       _str.replace(
         /(['"])(([^\s'"]+\.([a-zA-Z]+))(\?.+)?)['"]/g,
         (all, q, path, filePath, ext, query) => {
@@ -79,7 +79,7 @@ export default class CacheBuster {
           else {
             const _file = readFileSync(_path);
             if(!_file) return all;
-            _hash = toHash(new Buffer(_file));
+            _hash = toHash(Buffer.from(_file));
           }
 
           _fileHashMap.set(_fromHtdocsPath, _hash);

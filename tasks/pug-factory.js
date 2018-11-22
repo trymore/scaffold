@@ -126,7 +126,7 @@ export default class PugFactory extends PugBase {
 
               const _ext  = this._getExt(_srcPath);
               const _dest = join(dest, _srcPath).replace('.pug', _ext);
-              let _buf    = new Buffer(_html);
+              let _buf    = Buffer.from(_html);
 
               if(relativePath) {
                 const _rootDirname = `/${ dirname(relative(htdocs, _dest)) }`;

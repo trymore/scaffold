@@ -5,7 +5,8 @@
  */
 export const encodeLineFeedCode = (buf, encode) => {
   const _str = buf.toString();
-  return new Buffer(({
+
+  return Buffer.from(({
     'CR+LF': () => _str.replace(/(\r|\n)/g, '\r\n'),
     'LF'   : () => _str.replace(/(\r\n|\r)/g, '\n'),
     'CR'   : () => _str.replace(/(\r\n|\n)/g, '\r'),
