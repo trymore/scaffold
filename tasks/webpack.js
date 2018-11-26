@@ -21,14 +21,27 @@ export default class Webpack extends Base {
     const _rules = ({
       'babel': {
         test: /\.js$/,
-        loader : 'babel-loader',
-        options: {
-          presets: ['latest', 'stage-0'],
-        },
+        use: [
+          {
+            loader : 'babel-loader',
+            options: {
+              presets: ['@babel/preset-env'],
+            }
+          }
+        ]
       },
       'coffee': {
         test: /\.coffee$/,
-        loader : 'babel-loader!coffee-loader',
+        use: [
+          {
+            loader: 'coffee-loader',
+            options: {
+              transpile: {
+                presets: ['@babel/preset-env']
+              }
+            }
+          }
+        ]
       },
     })[transcompiler];
 

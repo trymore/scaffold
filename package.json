@@ -16,16 +16,16 @@
   "auther": "TryMore.inc",
   "license": "MIT",
   "devDependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-loader": "^7.1.2",
-    "babel-plugin-syntax-async-functions": "^6.13.0",
-    "babel-plugin-transform-regenerator": "^6.24.1",
-    "babel-preset-latest": "^6.24.1",
-    "babel-preset-stage-0": "^6.24.1",
+    "@babel/cli": "^7.1.5",
+    "@babel/core": "^7.1.6",
+    "@babel/node": "^7.0.0",
+    "@babel/preset-env": "^7.1.6",
+    "babel-core": "^7.0.0-bridge.0",
+    "babel-loader": "^8.0.4",
     "browser-sync": "^2.18.8",
     "chokidar": "^1.7.0",
     "coffee-loader": "^0.9.0",
-    "coffeescript": "^2.1.0",
+    "coffeescript": "^2.3.2",
     "deep-assign": "^2.0.0",
     "iconv-lite": "^0.4.15",
     "imagemin": "^6.0.0",
@@ -38,8 +38,10 @@
     "nib": "^1.1.2",
     "pug": "^2.0.0-beta11",
     "spritesmith": "^3.3.1",
+    "static-eval": ">=2.0.0",
     "stylus": "^0.54.5",
     "uglify-es": "^3.0.27",
     "webpack": "^4.18.0"
-  }
+  },
+  "dependencies": {}
 }

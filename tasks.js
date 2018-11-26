@@ -58,3 +58,7 @@ if(needsAllTask || argv['scripting']) {
   const _browserSync = new BrowserSync();
   await _browserSync.start();
 })();
+
+process.on('SIGINT', () => {
+  process.kill(0);
+});
