@@ -3,10 +3,9 @@ use('../plugins/has-own-property.js')
 blank-png = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVQI12NgYAAAAAMAASDVlMcAAAAASUVORK5CYII='
 
 _unit-base-px(value)
-  if unit(value) == ''
-    unit(value, 'px')
-  else
-    value
+  return value if typeof(value) is ident or typeof(value) is literal
+  return unit(value, 'px') if unit(value) is ''
+  value
 
 //ディープマージしたオブジェクトを取得する
 get-deep-merge(a, b)
