@@ -3,7 +3,7 @@ use('../plugins/has-own-property.js')
 blank-png = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVQI12NgYAAAAAMAASDVlMcAAAAASUVORK5CYII='
 
 _unit-base-px(value)
-  return value if typeof(value) is ident or typeof(value) is literal
+  return value if auto is value or typeof(value) is literal and match('^calc', value)
   return unit(value, 'px') if unit(value) is ''
   value
 
