@@ -1,13 +1,7 @@
 mixin switch-img(fileName, alt)
   picture&attributes(attributes)
-    source(media="(min-width:769px)" srcset=`${dirImg}${fileName}` sizes="100vw")
-    source(media="(max-width:768px)" srcset=`${dirImg}sp/${fileName}` sizes="100vw")
-    img(src=`${dirImg}${fileName}` alt!=alt ? alt : '')
-
-mixin switchImg(fileName, alt)
-  picture&attributes(attributes)
-    source(media="(min-width:751px)" srcset=`${pathImg}${fileName}` sizes="100vw")
-    source(media="(max-width:750px)" srcset=`${pathImg}sp/${fileName}` sizes="100vw")
+    source(media=`(min-width:769px)` srcset=`${pathImg}${fileName}` sizes="100vw")
+    source(media=`(max-width:768px)` srcset=`${pathImg}sp/${fileName}` sizes="100vw")
     img(src=`${pathImg}${fileName}` alt!=alt)
 
 mixin share-twitter()
