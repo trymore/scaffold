@@ -1,3 +1,5 @@
+include /includes/mixin
+
 block vars
   //-
     1.タイトル設定
@@ -28,11 +30,23 @@ block html
       head
         block meta
           include /includes/meta.pug
+          meta(http-equiv="X-UA-Compatible" content="IE=edge")
+          //- ピンチでズームさせない
+          meta(name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no,maximum-scale=1")
+          //- ピンチでズームさせる
+            meta(content="width=device-width,initial-scale=1" name="viewport")
+          meta(name='format-detection', content='telephone=no')
         //-block ogp
           include /includes/ogp.pug
-        block else
         block styles
-        block scripts
+          link(rel="stylesheet" href=relative('styles/style.css'))
+        //-block scripts
+          script(src=relative('scripts/bundle.js'))
+        //-block else
+          link(rel="shortcut icon" href=favicon)
+          link(href="/favicon.ico" rel="shortcut icon", type="image/ico")
+          include /includes/tags.pug
     block body
       body&attributes(bodyAttrs)
         block body-contents
+        block modal

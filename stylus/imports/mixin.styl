@@ -19,11 +19,11 @@ get-deep-merge(a, b)
   return c
 
 //画像のサイズを取得する
-// @example
-// ----------
-// get-img-size('../../htdocs/images/sample.png')  // image
-// get-img-size('images/sample/a.png')  // sprite
-// ----------
+//@example
+//----------
+//get-img-size('../../htdocs/images/sample.png')  // image
+//get-img-size('images/sample/a.png')  // sprite
+//----------
 get-img-size(imgpath)
   if match('^.+(htdocs).+$', imgpath)
     img-size = image-size(imgpath)
@@ -88,11 +88,11 @@ percent-container-centering(width, base-width)
   margin-right auto
 
 //コンテンツを上下左右センタリング
-// @example
-// ----------
-// centering()  // translate
-// centering(500px)  // margin
-// centering(500px, 200px)  // margin
+//@example
+//----------
+//centering()  // translate
+//centering(500px)  // margin
+//centering(500px, 200px)  // margin
 // ----------
 centering(width = null, height = width)
   if width
@@ -102,11 +102,11 @@ centering(width = null, height = width)
   absolute top 50% left 50%
 
 //アスペクト比を固定したままリサイズ（IE8以上）
-// @example
-// ----------
-// aspect-ratio('../../htdocs/images/sample.png')  // image
-// aspect-ratio('images/sample/a.png')  // sprite
-// aspect-ratio(500, 300)  // size
+//@example
+//----------
+//aspect-ratio-kept-container('../../htdocs/images/sample.png')  // image
+//aspect-ratio-kept-container('images/sample/a.png')  // sprite
+//aspect-ratio-kept-container(500, 300)  // size
 // ----------
 aspect-ratio-kept-container(width-or-imgpath, height = null)
   if typeof(width-or-imgpath) is 'string'
@@ -229,11 +229,11 @@ iphone-device-aspect-ratio()
       display block
 
 //三角形を生成
-// @example
-// ----------
-// triangle()
-// triangle({ dirction: 'bottom', size: 15px, color: #ccc, { right: 0 }})
-// ----------
+//@example
+//----------
+//triangle()
+//triangle({ dirction: 'bottom', size: 15px, color: #ccc, { right: 0 }})
+//----------
 triangle(opts = {})
   default-opts = {
     dirction : 'left'
@@ -268,12 +268,12 @@ triangle(opts = {})
 
 
 //スプライト
-// @example
-// ----------
-// sprites('images/button/logo.png')  // hover 無し
-// sprites('images/button/logo', '-hover', '.png')  // hover 有り
-// sprites('images/button/logo', '-hover', '.png', '&.is-located')  // hover & selector 有り
-// ----------
+//@example
+//----------
+//sprites('images/button/logo.png')  // hover 無し
+//sprites('images/button/logo', '-hover', '.png')  // hover 有り
+//sprites('images/button/logo', '-hover', '.png', '&.is-located')  // hover & selector 有り
+//----------
 sprites(path, suffix = false, extension = false, selector = false)
   if !suffix and !extension
     sprite path
@@ -287,26 +287,26 @@ sprites(path, suffix = false, extension = false, selector = false)
         sprite path + suffix + extension
 
 //景画像指定
-// @example
-// ----------
-// bg-img("aaa.jpg", left, top, no-repeat, #fff)
-// ----------
+//@example
+//----------
+//bg-img("aaa.jpg", left, top, no-repeat, #fff)
+//----------
 bg-img(file-name, position-x = left, position-y = top, repeat-type = null, bg-color = null, bg-size = false)
   background url(image-path + file-name) position-x position-y repeat-type bg-color
   if bg-size
     background-size bg-size
 
 //背景画像指定（複数）
-// @example
-// ----------
-// bg-img-multiple({
-//   '1': "aaa.jpg" (left top) no-repeat
-//   '2': "bbb.jpg" (left top) no-repeat #fff
-// }, {
-//   '1': (50px 100px)
-//   '2': (50px 100px)
-// })
-// ----------
+//@example
+//----------
+//bg-img-multiple({
+//  '1': "aaa.jpg" (left top) no-repeat
+//  '2': "bbb.jpg" (left top) no-repeat #fff
+//}, {
+//  '1': (50px 100px)
+//  '2': (50px 100px)
+//})
+//----------
 bg-img-multiple(imagesHash, sizesHash = false)
   images = null
   for i, props in imagesHash
@@ -331,13 +331,13 @@ bg-img-multiple(imagesHash, sizesHash = false)
     background-size sizes
 
 //スプライト画像のホバーアニメーション（フェード）
-// @example
-// ----------
-// sprite-fade-hover('images/sample/a.png')
-// sprite-fade-hover('images/sample/a.png', {
-//   duration: .5, crossFade: true, suffixBefore: '_off', suffixAfter: '_on'
-// })
-// ----------
+//@example
+//----------
+//sprite-fade-hover('images/sample/a.png')
+//sprite-fade-hover('images/sample/a.png', {
+//  duration: .5, crossFade: true, suffixBefore: '_off', suffixAfter: '_on'
+//})
+//----------
 sprite-fade-hover(image, opts = {})
   default-opts = {
     duration    : .2
@@ -373,14 +373,14 @@ sprite-fade-hover(image, opts = {})
       animation: fadeIn (opts.duration)s linear
 
 //ループアニメーションの生成
-// @example
-// ----------
-// create-keyframes(sampleAnime, 3, 10, {
-//     '0': { opacity: 1 },
-//    '50': { opacity: 0 },
-//   '100': { opacity: 1 }
-// })
-// ----------
+//@example
+//----------
+//create-keyframes(sampleAnime, 3, 10, {
+//    '0': { opacity: 1 },
+//   '50': { opacity: 0 },
+//  '100': { opacity: 1 }
+//})
+//----------
 create-keyframes(name, duration, interval, animationHash)
   @keyframes name
     durationRatio = duration / (duration + interval)
@@ -390,39 +390,39 @@ create-keyframes(name, duration, interval, animationHash)
           {key} val
 
 //cssアニメーション イージングのベースパターン
-// @example
-// ----------
-// transition opacity .5s easeOutQuint
-// ----------
-// Cubic
+//@example
+//----------
+//transition opacity .5s easeOutQuint
+//----------
+//Cubic
 easeInCubic    = cubic-bezier(0.550, 0.055, 0.675, 0.190);
 easeOutCubic   = cubic-bezier(0.215, 0.610, 0.355, 1.000);
 easeInOutCubic = cubic-bezier(0.645, 0.045, 0.355, 1.000);
-// Circ
+//Circ
 easeInCirc     = cubic-bezier(0.600, 0.040, 0.980, 0.335);
 easeOutCirc    = cubic-bezier(0.075, 0.820, 0.165, 1.000);
 easeInOutCirc  = cubic-bezier(0.785, 0.135, 0.150, 0.860);
-// Expo
+//Expo
 easeInExpo     = cubic-bezier(0.950, 0.050, 0.795, 0.035);
 easeOutExpo    = cubic-bezier(0.190, 1.000, 0.220, 1.000);
 easeInOutExpo  = cubic-bezier(1.000, 0.000, 0.000, 1.000);
-// Quad
+//Quad
 easeInQuad     = cubic-bezier(0.550, 0.085, 0.680, 0.530);
 easeOutQuad    = cubic-bezier(0.250, 0.460, 0.450, 0.940);
 easeInOutQuad  = cubic-bezier(0.455, 0.030, 0.515, 0.955);
-// Quart
+//Quart
 easeInQuart    = cubic-bezier(0.895, 0.030, 0.685, 0.220);
 easeOutQuart   = cubic-bezier(0.165, 0.840, 0.440, 1.000);
 easeInOutQuart = cubic-bezier(0.770, 0.000, 0.175, 1.000);
-// Quint
+//Quint
 easeInQuint    = cubic-bezier(0.755, 0.050, 0.855, 0.060);
 easeOutQuint   = cubic-bezier(0.230, 1.000, 0.320, 1.000);
 easeInOutQuint = cubic-bezier(0.860, 0.000, 0.070, 1.000);
-// Sine
+//Sine
 easeInSine     = cubic-bezier(0.470, 0.000, 0.745, 0.715);
 easeOutSine    = cubic-bezier(0.390, 0.575, 0.565, 1.000);
 easeInOutSine  = cubic-bezier(0.445, 0.050, 0.550, 0.950);
-// Back
+//Back
 easeInBack     = cubic-bezier(0.600, -0.280, 0.735, 0.045);
 easeOutBack    = cubic-bezier(0.175,  0.885, 0.320, 1.275);
 easeInOutBack  = cubic-bezier(0.680, -0.550, 0.265, 1.550);
@@ -551,3 +551,62 @@ animation-play-state(vals...)
   if support-android4
     -webkit-animation-play-state vals
   animation-play-state vals
+
+
+media(device)
+  if device == 'pc'
+    @media only screen and (min-width:(size-sp + 1)px)
+      {block}
+  //if device == 'pc-small'
+  // @media only screen and (min-width: (size-sp + 1)px) and (max-width: (size-pc)px)
+  //   {block}
+  if device == 'sp'
+    @media only screen and (max-width: (size-sp)px)
+      {block}
+  //if device == 'sp-small'
+  // @media (max-width:  374px)
+  //   {block}
+
+
+lineheight(font-size, line-height-size)
+  line-height = (line-height-size / font-size)
+  line-height line-height
+
+letter-spacing(letter-spacing-size)
+  letter-spacing = (letter-spacing-size / 1000)
+  letter-spacing letter-spacing em
+
+font-rem(font-size, line-height-size = null, letter-spacing-size = null)
+  font-rem-size = (font-size / 10)
+  font-size font-rem-size rem
+
+  if (line-height-size)
+    lineheight(font-size, line-height-size)
+
+  if (letter-spacing-size)
+    letter-spacing(letter-spacing-size)
+
+hover-opacity()
+  transition opacity .3s
+  &:hover
+    opacity .6
+  @media sp
+    &:hover
+      opacity 1
+
+anchor-position-adjustment()
+  margin-top -1em
+  padding-top 1em
+
+common-resets()
+  li
+    list-style none
+  img
+    width 100%
+    vertical-align top
+  button
+    outline none
+    cursor: pointer;
+    border 0
+    padding 0
+    background none

@@ -1,4 +1,4 @@
-extends /extends/pc/pc-template.pug
+extends /extends/site-base
 
 append vars
   //- 各ページのmeta情報
@@ -12,5 +12,6 @@ append vars
 
   //- body の id, class 設定
     - var bodyAttrs = { 'id': 'body-id', 'class': 'body-class' };
+    - var dirImg         = 'images/'
 
 block body-contents
