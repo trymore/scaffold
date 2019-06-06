@@ -13,6 +13,7 @@ export default {
     dest           : 'htdocs',
     php            : [],  // 'all', ['index.pug', 'sp/index.pug']
     minify         : true,
+    pretty         : true,  // '\t', '\b'
     relativePath   : false,
     spaceFilling   : false,
     cacheBusterExts: [],

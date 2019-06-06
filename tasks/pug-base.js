@@ -6,10 +6,10 @@ import { getType } from './utility/type';
 export default class PugBase extends Base {
 
   get _pugOpts() {
-    const { minify } = config.pug;
+    const { minify, pretty } = config.pug;
     const { argv } = NS;
     return {
-      pretty : !(argv['production'] && minify),
+      pretty : !(argv['production'] && minify) ? pretty : false,
       filters: this._getFilters(),
     };
   }
