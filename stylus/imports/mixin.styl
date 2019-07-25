@@ -5,6 +5,14 @@ _unit-base-px(value)
   return unit(value, 'px') if unit(value) is ''
   value
 
+// ==========================================================================
+// size
+// ==========================================================================
+//サイズ指定
+size(width, height = width)
+  width _unit-base-px(width)
+  height _unit-base-px(height)
+
 //画像のサイズを取得する
 //@example
 //----------
@@ -24,28 +32,9 @@ get-img-size(imgpath)
       height: sprite-hash[imgpath].height
     }
 
-//パーセントのサイズを割り出す
-get-percent-size(size, base-size)
-  (size / base-size * 100)%
-
-//サイズ指定
-size(width, height = width)
-  width _unit-base-px(width)
-  height _unit-base-px(height)
-
-//コンテンツをセンタリング1
-container-centering(width)
-  position relative
-  width _unit-base-px(width)
-  margin-right auto
-  margin-left auto
-
-//コンテンツをセンタリング2（パーセント指定）
-percent-container-centering(width, base-width)
-  width get-percent-size(width, base-width)
-  margin-left auto
-  margin-right auto
-
+// ==========================================================================
+// centering
+// ==========================================================================
 //コンテンツを上下左右センタリング
 //@example
 //----------
@@ -60,53 +49,20 @@ centering(width = null, height = width)
     transform translateX(-50%) translateY(-50%)
   absolute top 50% left 50%
 
-//アスペクト比を固定したままリサイズ（IE8以上）
-//@example
-//----------
-//aspect-ratio-kept-container('../../htdocs/images/sample.png')  // image
-//aspect-ratio-kept-container('images/sample/a.png')  // sprite
-//aspect-ratio-kept-container(500, 300)  // size
-// ----------
-aspect-ratio-kept-container(width-or-imgpath, height = null)
-  if typeof(width-or-imgpath) is 'string'
-    img-size = get-img-size(width-or-imgpath)
-    width  = img-size.width
-    height = img-size.height
-  else
-    width = width-or-imgpath
-  width 100%
+//コンテンツをセンタリング
+container-centering(width, base-width = null)
   position relative
-  &::before
-    content ""
-    display block
-    padding-top (height / width * 100)%
-  > *
-    position absolute
+  if base-width
+    width percentage(width / base-width)
+  else
+    width _unit-base-px(width)
+  margin-right auto
+  margin-left auto
 
-//aタグをブロック要素にする
-a-block()
-  a
-    display block
-
-//10pxより小さいfont-size指定（chrome対策）
-small-text(size)
-  display inline-block
-  transform scale(size)
-  transform-origin 0 0
-
-//文字置換
-text-replace()
-  text-indent 100%
-  text-decoration none
-  white-space nowrap
-  overflow hidden
-
-//2行目以降を一文字下げる
-second-line-indent(width)
-  padding-left width
-  text-indent -1 * width
-
-//スプライト
+// ==========================================================================
+// sprite
+// ==========================================================================
+//スプライト画像
 //@example
 //----------
 //sprites('button/logo.png')  // hover 無し
@@ -124,50 +80,6 @@ sprites(path, suffix = false, extension = false, selector = false)
     else
       &:hover
         sprite sprite-path + path + suffix + extension
-
-//景画像指定
-//@example
-//----------
-//bg-img("aaa.jpg", left, top, no-repeat, #fff)
-//----------
-bg-img(file-name, position-x = left, position-y = top, repeat-type = null, bg-color = null, bg-size = false)
-  background url(image-path + file-name) position-x position-y repeat-type bg-color
-  if bg-size
-    background-size bg-size
-
-//背景画像指定（複数）
-//@example
-//----------
-//bg-img-multiple({
-//  '1': "aaa.jpg" (left top) no-repeat
-//  '2': "bbb.jpg" (left top) no-repeat #fff
-//}, {
-//  '1': (50px 100px)
-//  '2': (50px 100px)
-//})
-//----------
-bg-img-multiple(imagesHash, sizesHash = false)
-  images = null
-  for i, props in imagesHash
-    for prop, j in props
-      if j is 0
-        if i is 1
-          images = images url(image-path + prop)
-        else
-          images = images, url(image-path + prop)
-      else
-        if prop
-          images = images prop
-  background images
-  if sizesHash
-    sizes = null
-    for i, prop in sizesHash
-      if prop
-        if i is 1
-          sizes = sizes prop
-        else
-          sizes = sizes, prop
-    background-size sizes
 
 //スプライト画像のホバーアニメーション（フェード）
 //@example
@@ -210,6 +122,117 @@ sprite-fade-hover(image, opts = {})
     &::after
       opacity 1
       animation: fadeIn (opts.duration)s linear
+
+// ==========================================================================
+// text
+// ==========================================================================
+//10pxより小さいfont-size指定（chrome対策）
+small-text(size)
+  display inline-block
+  transform scale(size)
+  transform-origin 0 0
+
+//文字置換
+text-replace()
+  text-indent 100%
+  text-decoration none
+  white-space nowrap
+  overflow hidden
+
+//2行目以降を一文字下げる
+second-line-indent(width)
+  padding-left width
+  text-indent -1 * width
+
+// ==========================================================================
+// background
+// ==========================================================================
+//背景画像指定
+//@example
+//----------
+//bg-img("aaa.jpg", left, top, no-repeat, #fff)
+//----------
+bg-img(file-name, position-x = left, position-y = top, repeat-type = null, bg-color = null, bg-size = false)
+  background url((image-path) + file-name) position-x position-y repeat-type bg-color
+  if bg-size
+    background-size bg-size
+
+//背景画像指定（複数）
+//@example
+//----------
+//bg-img-multiple({
+//  '1': "aaa.jpg" (left top) no-repeat
+//  '2': "bbb.jpg" (left top) no-repeat #fff
+//}, {
+//  '1': (50px 100px)
+//  '2': (50px 100px)
+//})
+//----------
+bg-img-multiple(imagesHash, sizesHash = false)
+  images = null
+  for i, props in imagesHash
+    for prop, j in props
+      if j is 0
+        if i is 1
+          images = images url((image-path) + prop)
+        else
+          images = images, url((image-path) + prop)
+      else
+        if prop
+          images = images prop
+  background images
+  if sizesHash
+    sizes = null
+    for i, prop in sizesHash
+      if prop
+        if i is 1
+          sizes = sizes prop
+        else
+          sizes = sizes, prop
+    background-size sizes
+
+// ==========================================================================
+// mediaquery
+// ==========================================================================
+media(device)
+  if device == 'pc'
+    @media only screen and (min-width:(size-sp + 1)px)
+      {block}
+  if device == 'pc-small'
+    @media only screen and (min-width: (size-sp + 1)px) and (max-width: (size-pc)px)
+      {block}
+  if device == 'sp'
+    @media only screen and (max-width: (size-sp)px)
+      {block}
+  if device == 'sp-small'
+    @media (max-width: (size-sp / 2)px)
+      {block}
+
+// ==========================================================================
+// others
+// ==========================================================================
+//アスペクト比を固定したままリサイズ（IE8以上）
+//@example
+//----------
+//aspect-ratio-kept-container('../../htdocs/images/sample.png')  // image
+//aspect-ratio-kept-container('images/sample/a.png')  // sprite
+//aspect-ratio-kept-container(500, 300)  // size
+// ----------
+aspect-ratio-kept-container(width-or-imgpath, height = null)
+  if typeof(width-or-imgpath) is 'string'
+    img-size = get-img-size(width-or-imgpath)
+    width  = img-size.width
+    height = img-size.height
+  else
+    width = width-or-imgpath
+  width 100%
+  position relative
+  &::before
+    content ""
+    display block
+    padding-top (height / width * 100)%
+  > *
+    position absolute
 
 // ==========================================================================
 // nib override
