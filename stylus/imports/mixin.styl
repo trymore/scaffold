@@ -5,6 +5,25 @@ _unit-base-px(value)
   return unit(value, 'px') if unit(value) is ''
   value
 
+//画像のサイズを取得する
+//@example
+//----------
+//get-img-size('../../htdocs/images/sample.png')  // image
+//get-img-size('images/sample/a.png')  // sprite
+//----------
+get-img-size(imgpath)
+  if match('^.+(htdocs).+$', imgpath)
+    img-size = image-size(imgpath)
+    return {
+      width : img-size[0]
+      height: img-size[1]
+    }
+  else
+    return {
+      width : sprite-hash[imgpath].width
+      height: sprite-hash[imgpath].height
+    }
+
 //パーセントのサイズを割り出す
 get-percent-size(size, base-size)
   (size / base-size * 100)%
@@ -23,7 +42,7 @@ container-centering(width)
 
 //コンテンツをセンタリング2（パーセント指定）
 percent-container-centering(width, base-width)
-  width  get-percent-size(width, base-width)
+  width get-percent-size(width, base-width)
   margin-left auto
   margin-right auto
 
@@ -90,21 +109,21 @@ second-line-indent(width)
 //スプライト
 //@example
 //----------
-//sprites('images/button/logo.png')  // hover 無し
-//sprites('images/button/logo', '-hover', '.png')  // hover 有り
-//sprites('images/button/logo', '-hover', '.png', '&.is-located')  // hover & selector 有り
+//sprites('button/logo.png')  // hover 無し
+//sprites('button/logo', '-hover', '.png')  // hover 有り
+//sprites('button/logo', '-hover', '.png', '&.is-located')  // hover & selector 有り
 //----------
 sprites(path, suffix = false, extension = false, selector = false)
   if !suffix and !extension
-    sprite path
+    sprite sprite-path + path
   if suffix
-    sprite path + extension
+    sprite sprite-path + path + extension
     if selector
       &:hover, {selector}
-        sprite path + suffix + extension
+        sprite sprite-path + path + suffix + extension
     else
       &:hover
-        sprite path + suffix + extension
+        sprite sprite-path + path + suffix + extension
 
 //景画像指定
 //@example
@@ -133,9 +152,9 @@ bg-img-multiple(imagesHash, sizesHash = false)
     for prop, j in props
       if j is 0
         if i is 1
-          images = images url(prop)
+          images = images url(image-path + prop)
         else
-          images = images, url(prop)
+          images = images, url(image-path + prop)
       else
         if prop
           images = images prop
@@ -153,8 +172,8 @@ bg-img-multiple(imagesHash, sizesHash = false)
 //スプライト画像のホバーアニメーション（フェード）
 //@example
 //----------
-//sprite-fade-hover('images/sample/a.png')
-//sprite-fade-hover('images/sample/a.png', {
+//sprite-fade-hover('sample/a')
+//sprite-fade-hover('sample/a', {
 //  duration: .5, crossFade: true, suffixBefore: '_off', suffixAfter: '_on'
 //})
 //----------
@@ -166,7 +185,7 @@ sprite-fade-hover(image, opts = {})
     suffixAfter : '-on'
   }
   opts = merge(default-opts, opts)
-  image-size = get-img-size(image + opts.suffixBefore + '.png')
+  image-size = get-img-size(sprite-path + image + opts.suffixBefore + '.png')
   width : (image-size.width)px
   height: (image-size.height)px
   position relative
@@ -176,12 +195,12 @@ sprite-fade-hover(image, opts = {})
     display block
     absolute top 0 left 0
   &::before
-    sprite(image + opts.suffixBefore + '.png')
+    sprite(sprite-path + image + opts.suffixBefore + '.png')
     if opts.crossFade
       animation: fadeIn (opts.duration)s linear
   &::after
     opacity 0
-    sprite(image + opts.suffixAfter + '.png')
+    sprite(sprite-path + image + opts.suffixAfter + '.png')
     animation: fadeOut (opts.duration)s linear
   &:hover
     if opts.crossFade
