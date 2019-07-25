@@ -1,78 +1,18 @@
 use('../plugins/has-own-property.js')
 
-blank-png = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVQI12NgYAAAAAMAASDVlMcAAAAASUVORK5CYII='
-
 _unit-base-px(value)
   return value if auto is value or typeof(value) is literal and match('^calc', value)
   return unit(value, 'px') if unit(value) is ''
   value
 
-//ディープマージしたオブジェクトを取得する
-get-deep-merge(a, b)
-  c = merge({}, a)
-  for key in b
-    if has-own-property(b, key)
-      if has-own-property(a, key) && (typeof(a[key]) == 'object' && typeof(b[key]) == 'object')
-        c[key] = get-deep-merge(a[key], b[key])
-      else
-        c[key] = b[key]
-  return c
-
-//画像のサイズを取得する
-//@example
-//----------
-//get-img-size('../../htdocs/images/sample.png')  // image
-//get-img-size('images/sample/a.png')  // sprite
-//----------
-get-img-size(imgpath)
-  if match('^.+(htdocs).+$', imgpath)
-    img-size = image-size(imgpath)
-    return {
-      width : img-size[0]
-      height: img-size[1]
-    }
-  else
-    return {
-      width : sprite-hash[imgpath].width
-      height: sprite-hash[imgpath].height
-    }
-
 //パーセントのサイズを割り出す
 get-percent-size(size, base-size)
   (size / base-size * 100)%
 
-//半分のサイズを割り出す
-get-half-size(size)
-  (size / 2)px
-
-//サイズ指定1
+//サイズ指定
 size(width, height = width)
   width _unit-base-px(width)
   height _unit-base-px(height)
-
-//サイズ指定2（最小）
-min-size(width, height = width)
-  min-width _unit-base-px(width)
-  min-height _unit-base-px(height)
-
-//サイズ指定3（100%）
-full-size()
-  width 100%
-  height 100%
-
-//画像を100%にする
-full-sized-img()
-  img
-    width 100%
-
-//画像の親に出来る隙間をなくす
-img-container()
-  line-height 0
-
-//子の画像の大きさを指定する
-img-width(width)
-  img
-    width _unit-base-px(width)
 
 //コンテンツをセンタリング1
 container-centering(width)
@@ -129,11 +69,6 @@ a-block()
   a
     display block
 
-//要素をボタンとして扱う
-button()
-  display block
-  cursor pointer
-
 //10pxより小さいfont-size指定（chrome対策）
 small-text(size)
   display inline-block
@@ -151,121 +86,6 @@ text-replace()
 second-line-indent(width)
   padding-left width
   text-indent -1 * width
-
-//IE8・9・ハック
-ie8(value)
-  return value unquote("\9")
-
-//selectカスタマイズ
-select-customize(width, height)
-  width width
-  height height
-  line-height height
-  border none
-  cursor pointer
-  appearance button
-  &:focus
-    outline none
-
-//radioカスタマイズ
-radio-customize(width, height)
-  position relative
-  width width
-  height height
-  line-height height
-  border none
-  cursor pointer
-  appearance button
-  &:focus
-    outline none
-  &:checked:after
-    display block
-    absolute left top
-    size(width, height)
-    content ""
-
-//テーブルレイアウトのdlリスト
-dl-list(dl-width, dt-width, dd-width)
-  width _unit-base-px(dl-width)
-  dt
-    float left
-    width _unit-base-px(dt-width)
-    clear both
-  dd
-    width _unit-base-px(dd-width)
-    margin-left _unit-base-px(dt-width)
-
-//Android4 文章の折り返し位置のバグ対応
-fix-android-word-wrap()
-  body, div, span, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, abbr, address, cite, code, del, dfn, em, img, ins, kbd, q, samp, small, strong, sub, sup, var, b, i, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, figcaption, figure, footer, header, hgroup, menu, nav, section, summary, time, mark, audio, video
-    background url(blank-png) no-repeat
-
-//背景に透明画像を指定する（IE対策を含める）
-//IEではalphaで背景を消すと表示範囲を確保できないため透明画像を配置する必要がある。
-transparent()
-  background url(blank-png)
-
-//IE10でinputに出てくるクリアボタンを表示させない
-input-clear-invisible()
-  &::-ms-clear
-    display none
-
-//アスペクト比で出し分け（iPhone）
-iphone-device-aspect-ratio()
-  @media screen and (device-aspect-ratio: 2/3)
-    .iphone-under5
-      display block
-    .iphone-over5
-      display none
-  @media screen and (device-aspect-ratio: 40/71)
-    .iphone-under5
-      display none
-    .iphone-over5
-      display block
-  @media screen and (device-aspect-ratio: 3/4)
-    .iphone-under5
-      display none
-    .iphone-over5
-      display block
-
-//三角形を生成
-//@example
-//----------
-//triangle()
-//triangle({ dirction: 'bottom', size: 15px, color: #ccc, { right: 0 }})
-//----------
-triangle(opts = {})
-  default-opts = {
-    dirction : 'left'
-    size     : 10
-    color    : #000
-    positions: { top: auto, right: auto, bottom: auto, left: auto }
-  }
-  opts = get-deep-merge(default-opts, opts)
-  color-set = {
-    'top'        : 0 0 1
-    'left'       : 0 1 0 0
-    'bottom'     : 1 0 0
-    'right'      : 0 0 0 1
-    'topLeft'    : 1 0 0 1
-    'topRight'   : 1 1 0 0
-    'bottomRight': 0 1 1 0
-    'bottomLeft' : 0 0 1 1
-  }
-  colors = null
-  for val in color-set[opts.dirction]
-    colors = colors (val ? opts.color : transparent)
-  content ""
-  display block
-  width 0
-  height 0
-  border-width: _unit-base-px(opts.size)
-  border-style solid
-  border-color colors
-  position absolute
-  for prop, pos in opts.positions
-    {prop} pos
-
 
 //スプライト
 //@example
@@ -372,64 +192,9 @@ sprite-fade-hover(image, opts = {})
       opacity 1
       animation: fadeIn (opts.duration)s linear
 
-//ループアニメーションの生成
-//@example
-//----------
-//create-keyframes(sampleAnime, 3, 10, {
-//    '0': { opacity: 1 },
-//   '50': { opacity: 0 },
-//  '100': { opacity: 1 }
-//})
-//----------
-create-keyframes(name, duration, interval, animationHash)
-  @keyframes name
-    durationRatio = duration / (duration + interval)
-    for progress, cssHash in animationHash
-      {durationRatio * progress}{unquote('%')}
-        for key, val in cssHash
-          {key} val
-
-//cssアニメーション イージングのベースパターン
-//@example
-//----------
-//transition opacity .5s easeOutQuint
-//----------
-//Cubic
-easeInCubic    = cubic-bezier(0.550, 0.055, 0.675, 0.190);
-easeOutCubic   = cubic-bezier(0.215, 0.610, 0.355, 1.000);
-easeInOutCubic = cubic-bezier(0.645, 0.045, 0.355, 1.000);
-//Circ
-easeInCirc     = cubic-bezier(0.600, 0.040, 0.980, 0.335);
-easeOutCirc    = cubic-bezier(0.075, 0.820, 0.165, 1.000);
-easeInOutCirc  = cubic-bezier(0.785, 0.135, 0.150, 0.860);
-//Expo
-easeInExpo     = cubic-bezier(0.950, 0.050, 0.795, 0.035);
-easeOutExpo    = cubic-bezier(0.190, 1.000, 0.220, 1.000);
-easeInOutExpo  = cubic-bezier(1.000, 0.000, 0.000, 1.000);
-//Quad
-easeInQuad     = cubic-bezier(0.550, 0.085, 0.680, 0.530);
-easeOutQuad    = cubic-bezier(0.250, 0.460, 0.450, 0.940);
-easeInOutQuad  = cubic-bezier(0.455, 0.030, 0.515, 0.955);
-//Quart
-easeInQuart    = cubic-bezier(0.895, 0.030, 0.685, 0.220);
-easeOutQuart   = cubic-bezier(0.165, 0.840, 0.440, 1.000);
-easeInOutQuart = cubic-bezier(0.770, 0.000, 0.175, 1.000);
-//Quint
-easeInQuint    = cubic-bezier(0.755, 0.050, 0.855, 0.060);
-easeOutQuint   = cubic-bezier(0.230, 1.000, 0.320, 1.000);
-easeInOutQuint = cubic-bezier(0.860, 0.000, 0.070, 1.000);
-//Sine
-easeInSine     = cubic-bezier(0.470, 0.000, 0.745, 0.715);
-easeOutSine    = cubic-bezier(0.390, 0.575, 0.565, 1.000);
-easeInOutSine  = cubic-bezier(0.445, 0.050, 0.550, 0.950);
-//Back
-easeInBack     = cubic-bezier(0.600, -0.280, 0.735, 0.045);
-easeOutBack    = cubic-bezier(0.175,  0.885, 0.320, 1.275);
-easeInOutBack  = cubic-bezier(0.680, -0.550, 0.265, 1.550);
-
-
-//nib override
-
+// ==========================================================================
+// nib override
+// ==========================================================================
 opacity(val)
   opacity val
 
@@ -551,62 +316,3 @@ animation-play-state(vals...)
   if support-android4
     -webkit-animation-play-state vals
   animation-play-state vals
-
-
-media(device)
-  if device == 'pc'
-    @media only screen and (min-width:(size-sp + 1)px)
-      {block}
-  //if device == 'pc-small'
-  // @media only screen and (min-width: (size-sp + 1)px) and (max-width: (size-pc)px)
-  //   {block}
-  if device == 'sp'
-    @media only screen and (max-width: (size-sp)px)
-      {block}
-  //if device == 'sp-small'
-  // @media (max-width:  374px)
-  //   {block}
-
-
-lineheight(font-size, line-height-size)
-  line-height = (line-height-size / font-size)
-  line-height line-height
-
-letter-spacing(letter-spacing-size)
-  letter-spacing = (letter-spacing-size / 1000)
-  letter-spacing letter-spacing em
-
-font-rem(font-size, line-height-size = null, letter-spacing-size = null)
-  font-rem-size = (font-size / 10)
-  font-size font-rem-size rem
-
-  if (line-height-size)
-    lineheight(font-size, line-height-size)
-
-  if (letter-spacing-size)
-    letter-spacing(letter-spacing-size)
-
-hover-opacity()
-  transition opacity .3s
-  &:hover
-    opacity .6
-  @media sp
-    &:hover
-      opacity 1
-
-anchor-position-adjustment()
-  margin-top -1em
-  padding-top 1em
-
-common-resets()
-  li
-    list-style none
-  img
-    width 100%
-    vertical-align top
-  button
-    outline none
-    cursor: pointer;
-    border 0
-    padding 0
-    background none
