@@ -3,28 +3,16 @@ global-reset()
 html
   font-size 62.5%
 body
-  min-width 320px
-  font-family "ヒラギノ角ゴ ProN W3","Hiragino Kaku Gothic ProN","メイリオ","Meiryo","ＭＳ Ｐゴシック","MS PGothic",sans-serif
-  background-color #fff
+  font-rem(24)
+  font-family $font-family-base
+  color $font-color-base
+  background-color $base-color
   -webkit-text-size-adjust 100%
-  common-resets()
-  a
-    text-decoration none
-    cursor pointer
-    //hover-opacity()
-  button
-    font-family "ヒラギノ角ゴ ProN W3","Hiragino Kaku Gothic ProN","メイリオ","Meiryo","ＭＳ Ｐゴシック","MS PGothic",sans-serif
-    cursor pointer
-    //hover-opacity()
-  @media sp
-    min-width 320px
-  @media sp-small
-    overflow-x hidden
 
 .for-sp
   display none
-  @media sp
+  @media $sp
     display inline-block
 .for-pc
-  @media sp
+  @media $sp
     display none

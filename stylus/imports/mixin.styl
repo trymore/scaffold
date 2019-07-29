@@ -33,6 +33,29 @@ get-img-size(imgpath)
     }
 
 // ==========================================================================
+// mediaquery
+// ==========================================================================
+media(device)
+  if device == 'pc'
+    @media only screen and (min-width:(media-sp + 1)px)
+      {block}
+  if device == 'pc-small'
+    @media only screen and (min-width: (media-sp + 1)px) and (max-width: (media-pc - 1)px)
+      {block}
+  if device == 'pc-large'
+    @media only screen and (min-width: (media-pc + 1)px)
+      {block}
+  if device == 'sp'
+    @media only screen and (max-width: (media-sp)px)
+      {block}
+  if device == 'sp-small'
+    @media only screen and (max-width: (media-sp / 2 - 1)px)
+      {block}
+  if device == 'landscape'
+    @media only screen and (orientation: landscape)
+      {block}
+
+// ==========================================================================
 // centering
 // ==========================================================================
 //コンテンツを上下左右センタリング
@@ -65,27 +88,27 @@ container-centering(width, base-width = null)
 //スプライト画像
 //@example
 //----------
-//sprites('button/logo.png')  // hover 無し
-//sprites('button/logo', '-hover', '.png')  // hover 有り
-//sprites('button/logo', '-hover', '.png', '&.is-located')  // hover & selector 有り
+//sprites($sprite-path + 'button/logo.png')  // hover 無し
+//sprites($sprite-path + 'button/logo', '-hover', '.png')  // hover 有り
+//sprites($sprite-path + 'button/logo', '-hover', '.png', '&.is-located')  // hover & selector 有り
 //----------
 sprites(path, suffix = false, extension = false, selector = false)
   if !suffix and !extension
-    sprite sprite-path + path
+    sprite path
   if suffix
-    sprite sprite-path + path + extension
+    sprite path + extension
     if selector
       &:hover, {selector}
-        sprite sprite-path + path + suffix + extension
+        sprite path + suffix + extension
     else
       &:hover
-        sprite sprite-path + path + suffix + extension
+        sprite path + suffix + extension
 
 //スプライト画像のホバーアニメーション（フェード）
 //@example
 //----------
-//sprite-fade-hover('sample/a')
-//sprite-fade-hover('sample/a', {
+//sprite-fade-hover($sprite-path + 'sample/a')
+//sprite-fade-hover($sprite-path + 'sample/a', {
 //  duration: .5, crossFade: true, suffixBefore: '_off', suffixAfter: '_on'
 //})
 //----------
@@ -97,7 +120,7 @@ sprite-fade-hover(image, opts = {})
     suffixAfter : '-on'
   }
   opts = merge(default-opts, opts)
-  image-size = get-img-size(sprite-path + image + opts.suffixBefore + '.png')
+  image-size = get-img-size(image + opts.suffixBefore + '.png')
   width : (image-size.width)px
   height: (image-size.height)px
   position relative
@@ -107,12 +130,12 @@ sprite-fade-hover(image, opts = {})
     display block
     absolute top 0 left 0
   &::before
-    sprite(sprite-path + image + opts.suffixBefore + '.png')
+    sprite(image + opts.suffixBefore + '.png')
     if opts.crossFade
       animation: fadeIn (opts.duration)s linear
   &::after
     opacity 0
-    sprite(sprite-path + image + opts.suffixAfter + '.png')
+    sprite(image + opts.suffixAfter + '.png')
     animation: fadeOut (opts.duration)s linear
   &:hover
     if opts.crossFade
@@ -122,6 +145,43 @@ sprite-fade-hover(image, opts = {})
     &::after
       opacity 1
       animation: fadeIn (opts.duration)s linear
+
+// ==========================================================================
+// font settion
+// ==========================================================================
+ineheight($font-size = null, $line-height-size = $font-size)
+ line-height ($line-height-size / $font-size)
+
+letterspacing($letter-spacing-size)
+ letter-spacing ($letter-spacing-size / 1000) em
+
+font-rem($font-size, $line-height-size = null, $letter-spacing-size = null)
+ font-size ($font-size / 10) rem
+ if $line-height-size
+   lineheight($font-size, $line-height-size)
+ if $letter-spacing-size
+   letterspacing($letter-spacing-size)
+
+font-pixel($font-size, $line-height-size = null, $letter-spacing-size = null)
+ font-size $font-size px
+ if $line-height-size
+   lineheight($font-size, $line-height-size)
+ if $letter-spacing-size
+   letterspacing($letter-spacing-size)
+
+font-percent($font-size, $line-height-size = null, $letter-spacing-size = null)
+ font-size ($font-size / 16 * 100) %
+ if $line-height-size
+   lineheight($font-size, $line-height-size)
+ if $letter-spacing-size
+   letterspacing($letter-spacing-size)
+
+font-vw($font-size, $line-height-size = null, $letter-spacing-size = null)
+ font-size ($font-size / $sp-size * 100) vw
+ if $line-height-size
+   lineheight($font-size, $line-height-size)
+ if $letter-spacing-size
+   letterspacing($letter-spacing-size)
 
 // ==========================================================================
 // text
@@ -150,10 +210,10 @@ second-line-indent(width)
 //背景画像指定
 //@example
 //----------
-//bg-img("aaa.jpg", left, top, no-repeat, #fff)
+//bg-img($image-path + "aaa.jpg", left, top, no-repeat, #fff)
 //----------
 bg-img(file-name, position-x = left, position-y = top, repeat-type = null, bg-color = null, bg-size = false)
-  background url((image-path) + file-name) position-x position-y repeat-type bg-color
+  background url(file-name) position-x position-y repeat-type bg-color
   if bg-size
     background-size bg-size
 
@@ -161,8 +221,8 @@ bg-img(file-name, position-x = left, position-y = top, repeat-type = null, bg-co
 //@example
 //----------
 //bg-img-multiple({
-//  '1': "aaa.jpg" (left top) no-repeat
-//  '2': "bbb.jpg" (left top) no-repeat #fff
+//  '1': $image-path + "aaa.jpg" (left top) no-repeat
+//  '2': $image-path + "bbb.jpg" (left top) no-repeat #fff
 //}, {
 //  '1': (50px 100px)
 //  '2': (50px 100px)
@@ -174,9 +234,9 @@ bg-img-multiple(imagesHash, sizesHash = false)
     for prop, j in props
       if j is 0
         if i is 1
-          images = images url((image-path) + prop)
+          images = images url(prop)
         else
-          images = images, url((image-path) + prop)
+          images = images, url(prop)
       else
         if prop
           images = images prop
@@ -190,23 +250,6 @@ bg-img-multiple(imagesHash, sizesHash = false)
         else
           sizes = sizes, prop
     background-size sizes
-
-// ==========================================================================
-// mediaquery
-// ==========================================================================
-media(device)
-  if device == 'pc'
-    @media only screen and (min-width:(size-sp + 1)px)
-      {block}
-  if device == 'pc-small'
-    @media only screen and (min-width: (size-sp + 1)px) and (max-width: (size-pc)px)
-      {block}
-  if device == 'sp'
-    @media only screen and (max-width: (size-sp)px)
-      {block}
-  if device == 'sp-small'
-    @media (max-width: (size-sp / 2)px)
-      {block}
 
 // ==========================================================================
 // others
