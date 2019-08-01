@@ -1,12 +1,4 @@
-mixin switch-img(fileName, alt)
-  picture&attributes(attributes)
-    source(media=`(min-width:769px)` srcset=`${pathImg}${fileName}` sizes="100vw")
-    source(media=`(max-width:768px)` srcset=`${pathImg}sp/${fileName}` sizes="100vw")
-    img(src=`${pathImg}${fileName}` alt!=alt)
-
-mixin share-twitter()
-  a(href!=`http://twitter.com/share?url=${ ogUrl }&text=${ encode(desc[0]) }&hashtags=${ encode('hoge,HOGE') }` onclick="window.open(this.href,'tweetwindow','width=550, height=450,personalbar=0,toolbar=0,scrollbars=1,resizable=1'); return false; void(0);")
-mixin share-facebook()
-  a(href="http://www.facebook.com/share.php?u=" + ogUrl , onclick="window.open(this.href,'FBwindow','width=640, height=400, menubar=no, toolbar=no, scrollbars=yes'); return false;")
-mixin share-line()
-  a(href!=`http://line.me/R/msg/text/?${ encode(desc[0]) }` + ogUrl onclick="window.open(this.href,'tweetwindow','width=550, height=450,personalbar=0,toolbar=0,scrollbars=1,resizable=1'); return false; void(0);")
+//- SVG
+mixin svg(id, url="")
+  svg()&attributes(attributes)
+      use(xlink:href=url+"#"+id)

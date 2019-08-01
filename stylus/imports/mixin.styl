@@ -5,13 +5,16 @@ _unit-base-px(value)
   return unit(value, 'px') if unit(value) is ''
   value
 
-// ==========================================================================
-// size
-// ==========================================================================
 //サイズ指定
 size(width, height = width)
   width _unit-base-px(width)
   height _unit-base-px(height)
+
+vw-pc(value)
+  return (value/$size-pc * 100)vw
+
+vw-sp(value)
+  return (value/$size-sp * 100)vw
 
 //画像のサイズを取得する
 //@example
@@ -32,32 +35,29 @@ get-img-size(imgpath)
       height: sprite-hash[imgpath].height
     }
 
-// ==========================================================================
-// mediaquery
-// ==========================================================================
 media(device)
   if device == 'pc'
-    @media only screen and (min-width:(media-sp + 1)px)
+    @media only screen and (min-width:($size-sp + 1)px)
       {block}
   if device == 'pc-small'
-    @media only screen and (min-width: (media-sp + 1)px) and (max-width: (media-pc - 1)px)
+    @media only screen and (min-width: ($size-sp + 1)px) and (max-width: ($size-pc - 1)px)
       {block}
   if device == 'pc-large'
-    @media only screen and (min-width: (media-pc + 1)px)
+    @media only screen and (min-width: ($size-pc + 1)px)
+      {block}
+  if device == 'tab'
+    @media only screen and (min-width:($size-sp + 1)px) and (max-width:($size-tab)px)
       {block}
   if device == 'sp'
-    @media only screen and (max-width: (media-sp)px)
+    @media only screen and (max-width: ($size-sp)px)
       {block}
   if device == 'sp-small'
-    @media only screen and (max-width: (media-sp / 2 - 1)px)
+    @media only screen and (max-width: ($size-sp / 2 - 1)px)
       {block}
   if device == 'landscape'
     @media only screen and (orientation: landscape)
       {block}
 
-// ==========================================================================
-// centering
-// ==========================================================================
 //コンテンツを上下左右センタリング
 //@example
 //----------
@@ -82,9 +82,6 @@ container-centering(width, base-width = null)
   margin-right auto
   margin-left auto
 
-// ==========================================================================
-// sprite
-// ==========================================================================
 //スプライト画像
 //@example
 //----------
@@ -146,10 +143,7 @@ sprite-fade-hover(image, opts = {})
       opacity 1
       animation: fadeIn (opts.duration)s linear
 
-// ==========================================================================
-// font settion
-// ==========================================================================
-ineheight($font-size = null, $line-height-size = $font-size)
+lineheight($font-size = null, $line-height-size = $font-size)
  line-height ($line-height-size / $font-size)
 
 letterspacing($letter-spacing-size)
@@ -183,9 +177,6 @@ font-vw($font-size, $line-height-size = null, $letter-spacing-size = null)
  if $letter-spacing-size
    letterspacing($letter-spacing-size)
 
-// ==========================================================================
-// text
-// ==========================================================================
 //10pxより小さいfont-size指定（chrome対策）
 small-text(size)
   display inline-block
@@ -204,9 +195,6 @@ second-line-indent(width)
   padding-left width
   text-indent -1 * width
 
-// ==========================================================================
-// background
-// ==========================================================================
 //背景画像指定
 //@example
 //----------
@@ -251,9 +239,6 @@ bg-img-multiple(imagesHash, sizesHash = false)
           sizes = sizes, prop
     background-size sizes
 
-// ==========================================================================
-// others
-// ==========================================================================
 //アスペクト比を固定したままリサイズ（IE8以上）
 //@example
 //----------

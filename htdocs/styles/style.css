@@ -94,52 +94,21 @@ html {
   font-size: 62.5%;
 }
 body {
-  min-width: 320px;
-  font-family: "ヒラギノ角ゴ ProN W3", "Hiragino Kaku Gothic ProN", "メイリオ", "Meiryo", "ＭＳ Ｐゴシック", "MS PGothic", sans-serif;
-  background-color: #fff;
+  font-size: 2.4rem;
+  font-family: 'ヒラギノ角ゴ Pro W3', 'Hiragino Kaku Gothic Pro', 'メイリオ', Meiryo, sans-serif;
+  color: #000;
+  background-color: '#ffffff';
   -webkit-text-size-adjust: 100%;
-}
-body li {
-  list-style: none;
-}
-body img {
-  width: 100%;
-  vertical-align: top;
-}
-body button {
-  outline: none;
-  cursor: pointer;
-  border: 0;
-  padding: 0;
-  background: none;
-}
-body a {
-  text-decoration: none;
-  cursor: pointer;
-}
-body button {
-  font-family: "ヒラギノ角ゴ ProN W3", "Hiragino Kaku Gothic ProN", "メイリオ", "Meiryo", "ＭＳ Ｐゴシック", "MS PGothic", sans-serif;
-  cursor: pointer;
-}
-@media sp {
-  body {
-    min-width: 320px;
-  }
-}
-@media sp-small {
-  body {
-    overflow-x: hidden;
-  }
 }
 .for-sp {
   display: none;
 }
-@media sp {
+@media only screen and (max-width: 750px) {
   .for-sp {
     display: inline-block;
   }
 }
-@media sp {
+@media only screen and (max-width: 750px) {
   .for-pc {
     display: none;
   }

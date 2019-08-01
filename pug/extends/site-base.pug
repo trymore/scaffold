@@ -1,6 +1,5 @@
 include /includes/variables
 include /includes/functions
-include /includes/mixin
 
 block vars
   //-
@@ -18,8 +17,8 @@ block vars
   - var desc     = ['ディスクリプション', 'ogディスクリプション'];
   - var keyword  = 'キーワード,キーワード';
   - var siteName = 'サイト名';
-  - var ogUrl    = 'http://hoge.com/';
-  - var ogImg    = 'http://hoge.com/hoge.png';
+  - var ogUrl    = `${url}`;
+  - var ogImg    = `${url}hoge.png`;
   - var ogType   = 'website';
 
   //- body の id, class 設定
@@ -27,6 +26,7 @@ block vars
 
 block html
   doctype html
+  include /includes/mixin
   html(lang="ja")
     block head
       head
@@ -37,18 +37,19 @@ block html
           meta(name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no,maximum-scale=1")
           //- ピンチでズームさせる
             meta(content="width=device-width,initial-scale=1" name="viewport")
-          meta(name='format-detection', content='telephone=no')
+          meta(name="format-detection" content="telephone=no")
         //-block ogp
           include /includes/ogp.pug
         block styles
-          link(rel="stylesheet" href=relative('styles/style.css'))
+          link(rel="stylesheet" href=`${pathCss}style.css`)
         //-block scripts
-          script(src=relative('scripts/bundle.js'))
+          script(src=`${pathJs}bundle.js`)
         //-block else
           link(rel="shortcut icon" href=favicon)
           link(href="/favicon.ico" rel="shortcut icon", type="image/ico")
           include /includes/tags.pug
     block body
       body&attributes(bodyAttrs)
+        //- include /includes/svg-sprites
         block body-contents
         block modal
