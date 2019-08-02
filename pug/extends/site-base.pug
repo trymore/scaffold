@@ -31,15 +31,15 @@ block html
     block head
       head
         block meta
-          include /includes/meta.pug
+          //- include /includes/meta
           meta(http-equiv="X-UA-Compatible" content="IE=edge")
           //- ピンチでズームさせない
           meta(name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no,maximum-scale=1")
           //- ピンチでズームさせる
             meta(content="width=device-width,initial-scale=1" name="viewport")
           meta(name="format-detection" content="telephone=no")
-        //-block ogp
-          include /includes/ogp.pug
+        //- block ogp
+          include /includes/ogp
         block styles
           link(rel="stylesheet" href=`${pathCss}style.css`)
         //-block scripts
@@ -47,9 +47,9 @@ block html
         //-block else
           link(rel="shortcut icon" href=favicon)
           link(href="/favicon.ico" rel="shortcut icon", type="image/ico")
-          include /includes/tags.pug
+          include /includes/tags.html
     block body
       body&attributes(bodyAttrs)
-        //- include /includes/svg-sprites
+        include /includes/svg-sprites
         block body-contents
         block modal
