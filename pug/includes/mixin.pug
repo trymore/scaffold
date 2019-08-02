@@ -19,10 +19,10 @@ mixin picture(pathImg, alt = '', ratina = false, pcDir = '/pc/')
     img(src=pathImg alt!=alt)
 
 //- img ratina
-mixin img-ratina(pathImg, alt = '', ratina = true)
+mixin img-ratina(pathImg, alt = '')
   -
     const arrySuffix = ['']
-    if (ratina) arrySuffix.push('@2x')
+    const ratina = arrySuffix.push('@2x')
     if (!pathImg) throw new Error('pathImg is not defined.')
     const { dir, base, name, ext } = parsePath(pathImg)
     const srcset = map(arrySuffix, (suffix) => `${ dir }/${ name }${ suffix }${ ext } ${ suffix.substring(1) }`)
