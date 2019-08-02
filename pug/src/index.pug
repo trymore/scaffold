@@ -6,12 +6,13 @@ append vars
     - var desc     = ['ディスクリプション', 'ogディスクリプション'];
     - var keyword  = 'キーワード,キーワード';
     - var siteName = 'サイト名';
-    - var ogUrl    = `${url}`;
-    - var ogImg    = `${url}hoge.png`;
+    - var ogUrl    = `${siteUrl}`;
+    - var ogImg    = `${siteUrl}hoge.png`;
     - var ogType   = 'website';
 
   //- body の id, class 設定
     - var bodyAttrs = { 'id': 'body-id', 'class': 'body-class' };
 
 block body-contents
+  +img-ratina(`${pathImg}example-img.jpg`, 'ここにalt')
 
