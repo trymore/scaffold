@@ -1,38 +1,16 @@
 -
-  //- ==========================================================================
-  //- encode
-  //- ==========================================================================
-  //- @example
-  //- --------
-  //- encode('hoge')
-  //- --------
   function encode (str) {
     return encodeURIComponent(str).replace(/[!'()*]/g, function(c) {
       return '%' + c.charCodeAt(0).toString(16);
     });
   }
 
-  //- ==========================================================================
-  //- each
-  //- ==========================================================================
-  //- @example
-  //- --------
-  //- each i in range(1, 10)
-  //- --------
-  function range (start, end) {
-    const arry = []
-    for (let i = start; i < end + 1; i++) arry.push(i)
-    return arry
-  }
-
-  //- ==========================================================================
-  //- get file name
-  //- ==========================================================================
-  //- @example
-  //- --------
-  //- getFileName(hoge)
-  //- --------
-  function getFileName (str) {
-    const fileName = str.split('/').pop()
-    return fileName
+  function map(array, iteratee) {
+    let index = -1
+    const length = array == null ? 0 : array.length
+    const result = new Array(length)
+    while (++index < length) {
+      result[index] = iteratee(array[index], index, array)
+    }
+    return result
   }

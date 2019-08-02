@@ -1,4 +1,24 @@
+mixin source({ srcset = [], media = `(max-width: ${ breakPointSp }px)`, size = '100vw'} = {})
+  source(media=media size=size srcset=`${ srcset.join(', ') }`)
+
+mixin picture(pathImg, alt = '', ratina = false, pcDir = '/pc/')
+  -
+    const arrySuffix = ['']
+    if (ratina) arrySuffix.push('@2x')
+    if (!pathImg) throw new Error('pathImg is not defined.')
+    const { dir, base, name, ext } = parsePath(pathImg)
+    const spImg = `${ dir }/${ base }`
+    const srcset = map(arrySuffix, (suffix) => `${ dir }${ pcDir }${ name }${ suffix }${ ext } ${ suffix.substring(1) }`)
+    pathImg = `${ dir }${ pcDir }${ name }${ ext }`
+  picture&attributes(attributes)
+    +source({ srcset:[spImg] })
+    +source({ srcset, media: `(min-width: ${ breakPointPc }px)`, arrySuffix})
+    img(src=pathImg alt!=alt)
+
 //- SVG
-mixin svg(id, url="")
-  svg()&attributes(attributes)
-      use(xlink:href=url+"#"+id)
+mixin svg(id, title = '', url = '')
+  svg&attributes(attributes)
+    if title
+      title!=title
+    use(xlink:href=`${ url }#${ id }`)/
+
