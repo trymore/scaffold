@@ -1,0 +1,28 @@
+// pxをつける
+// すでに単位が付いている場合（px|rem|vw|vh|calc）はそのまま
+-add-pixel($val)
+  return unit($val, 'px') unless is-width($val) or typeof($val) is literal
+  $val
+
+// vwの計算
+-vw($val, $viewport)
+  ($val / $viewport * 100)vw
+
+//画像のサイズを取得する
+//@example
+//----------
+//get-img-size('../../htdocs/images/sample.png')  // image
+//get-img-size('images/sample/a.png')  // sprite
+//----------
+-get-img-size($imgpath)
+  if match('^.+(htdocs|public).+$', $imgpath)
+    $img-size = image-size($imgpath)
+    return {
+      width : $img-size[0]
+      height: $img-size[1]
+    }
+  else
+    return {
+      width : sprite-hash[$imgpath].width
+      height: sprite-hash[$imgpath].height
+    }
