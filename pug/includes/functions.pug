@@ -14,3 +14,11 @@
     }
     return result
   }
+
+  function getSrcset(pathImg, injectDir = '/', ratinaSuffix = ['', '@2x']) {
+    if (!pathImg) throw new Error('pathImg is not defined.')
+    const { dir, base, name, ext } = parsePath(pathImg)
+    return map(ratinaSuffix, (suffix) => {
+      return `${ dir }${ injectDir }${ name }${ suffix }${ ext } ${ suffix.substring(1) }`.trim()
+    })
+  }
