@@ -4,9 +4,22 @@
   return unit($val, 'px') unless is-width($val) or typeof($val) is literal
   $val
 
+// get-percent-sizeの代わり
+// -percentage(1) -> 100%
+// -percentage(9, 16) -> 56.25% - 動画の比率
+-percentage()
+  if length(arguments) is 1
+    return percentage(arguments[0])
+  else
+    return percentage(arguments[0] / arguments[1])
+
 // vwの計算
 -vw($val, $viewport)
-  ($val / $viewport * 100)vw
+  1vw * -percentage($val, $viewport)
+
+// vhの計算
+-vh($val, $viewport)
+  1vh * -percentage($val, $viewport)
 
 //画像のサイズを取得する
 //@example

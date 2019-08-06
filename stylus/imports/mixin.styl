@@ -52,7 +52,7 @@ centering($width = null, $height = $width)
 container-centering($width, $base-width = null)
   position relative
   if $base-width
-    width percentage($width / $base-width)
+    width -percentage($width, $base-width)
   else
     width -add-pixel($width)
   margin-right auto
