@@ -1,14 +1,13 @@
 use('../plugins/has-own-property.js')
 
-_unit-base-px(value)
-  return value if auto is value or typeof(value) is literal and match('^calc', value)
-  return unit(value, 'px') if unit(value) is ''
-  value
+-add-pixel($val)
+  return unit($val, 'px') unless is-width($val) or typeof($val) is literal
+  $val
 
 //サイズ指定
 size(width, height = width)
-  width _unit-base-px(width)
-  height _unit-base-px(height)
+  width -add-pixel(width)
+  height -add-pixel(height)
 
 vw-pc(value)
   return (value/$size-pc * 100)vw
@@ -78,7 +77,7 @@ container-centering(width, base-width = null)
   if base-width
     width percentage(width / base-width)
   else
-    width _unit-base-px(width)
+    width -add-pixel(width)
   margin-right auto
   margin-left auto
 
