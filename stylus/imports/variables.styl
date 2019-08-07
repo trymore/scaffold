@@ -2,6 +2,16 @@ $size-pc = 1200
 $size-tab = 768
 $size-sp = 750
 
+$breakpoint = {
+  pc: s("only screen and (min-width: %spx)", $size-sp + 1),
+  pc-small: s("only screen and (min-width: %spx) and (max-width: %spx)", $size-sp + 1, $size-pc - 1),
+  pc-large: s("only screen and (min-width: %spx)", $size-pc + 1),
+  tab: s("only screen and (min-width: %spx) and (max-width:%spx)", $size-sp + 1, $size-tab),
+  sp: s("only screen and (max-width: %spx)", $size-sp),
+  sp-small: s("only screen and (max-width: %spx)", $size-sp / 2 - 1),
+  landscape: "only screen and (orientation: landscape)"
+}
+
 $image-path  = "../images/"
 $sprite-path = 'images/'
 
@@ -10,3 +20,4 @@ $font-family-base = $font-hiragino
 $font-color-base  = #000000
 $link-color-base  = #000000
 $base-color       = '#ffffff'
+
