@@ -12,7 +12,7 @@ mixin source({ srcset = [], media = `(max-width: ${ breakPointSp }px)`, size = '
 //-
 //- 使い方 その3
 //- spディレクトリも含めたい場合
-//- e.g +picture('images/test.png', 'alt', { dirs = ['/sp/', '/pc/'] })
+//- e.g +picture('images/test.png', 'alt', { dirs: ['/sp/', '/pc/'] })
 mixin picture(pathImg, alt = '', { ratina = false, arraySuffix = ['@2x'], dirs = ['/', '/pc/'] } = {})
   -
     if (!pathImg) throw new Error('pathImg is not defined.')
@@ -25,6 +25,7 @@ mixin picture(pathImg, alt = '', { ratina = false, arraySuffix = ['@2x'], dirs =
     img(src=imgs[1] alt!=alt)
 
 //- img ratina
+//- e.g +img-ratina('images/test.png', 'alt')
 mixin img-ratina(pathImg, alt = '', arraySuffix = ['@2x'])
   -
     if (!pathImg) throw new Error('pathImg is not defined.')
