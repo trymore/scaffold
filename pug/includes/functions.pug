@@ -5,6 +5,14 @@
     });
   }
 
+  function range(start, end) {
+    const arry = []
+    for (let i = start; i < end; i++) {
+      arry.push(i)
+    }
+    return arry
+  }
+
   function map(array, iteratee) {
     let index = -1
     const length = array == null ? 0 : array.length
