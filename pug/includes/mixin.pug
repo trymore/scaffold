@@ -24,14 +24,6 @@ mixin picture(pathImg, alt = '', { ratina = false, arraySuffix = ['@2x'], dirs =
     +source({ srcset: getSrcset(pathImg, dirs[1], arraySuffix), media: `(min-width: ${ breakPointPc }px)`})
     img(src=imgs[1] alt!=alt)
 
-//- img ratina
-//- e.g +img-ratina('images/test.png', 'alt')
-mixin img-ratina(pathImg, alt = '', arraySuffix = ['@2x'])
-  -
-    if (!pathImg) throw new Error('pathImg is not defined.')
-    if (arraySuffix[0] !== '') arraySuffix.unshift('')
-  img&attributes(attributes)(src=`${pathImg}` srcset=`${ getSrcset(pathImg, '/', arraySuffix).join(', ')}` alt!=`${alt}`)
-
 //- SVG
 mixin svg(id, title = '', url = '')
   svg&attributes(attributes)
