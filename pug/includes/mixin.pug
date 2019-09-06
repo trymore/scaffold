@@ -13,7 +13,7 @@ mixin source({ srcset = [], media = `(max-width: ${ breakPointSp }px)`, size = '
 //- 使い方 その3
 //- spディレクトリも含めたい場合
 //- e.g +picture('images/test.png', 'alt', { dirs: ['/sp/', '/pc/'] })
-mixin picture(pathImg, alt = '', { ratina = true, arraySuffix = ['@2x', '@3x'], dirs = ['/', '/pc/'] } = {})
+mixin picture(pathImg, alt = '', { ratina = true, arraySuffix = ['@2x'], dirs = ['/', '/pc/'] } = {})
   -
     if (!pathImg) throw new Error('pathImg is not defined.')
     if (arraySuffix[0] !== '') arraySuffix.unshift('')
