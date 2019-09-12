@@ -9,7 +9,8 @@ $breakpoint = {
   tab: s("only screen and (min-width: %spx) and (max-width:%spx)", $size-sp + 1, $size-tab),
   sp: s("only screen and (max-width: %spx)", $size-sp),
   sp-small: s("only screen and (max-width: %spx)", $size-sp / 2 - 1),
-  landscape: "only screen and (orientation: landscape)"
+  landscape: "only screen and (orientation: landscape)",
+  ratina: s("only screen and (min-resolution: 192dpi), (-webkit-min-device-pixel-ratio: 2) and (min-width: %spx)", $size-sp + 1)
 }
 
 $image-path  = "../images/"
