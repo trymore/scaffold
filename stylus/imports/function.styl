@@ -14,8 +14,8 @@ _add-pixel($val)
   $val
 
 // get-percent-sizeの代わり
-// -percentage(1) -> 100%
-// -percentage(9, 16) -> 56.25% - 動画の比率
+// _percentage(1) -> 100%
+// _percentage(9, 16) -> 56.25% - 動画の比率
 _percentage()
   if length(arguments) is 1
     return percentage(arguments[0])
@@ -24,11 +24,11 @@ _percentage()
 
 // vwの計算
 _vw($val, $viewport)
-  1vw * -percentage($val, $viewport)
+  1vw * _percentage($val, $viewport)
 
 // vhの計算
 _vh($val, $viewport)
-  1vh * -percentage($val, $viewport)
+  1vh * _percentage($val, $viewport)
 
 //画像のサイズを取得する
 //@example
