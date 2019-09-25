@@ -206,7 +206,7 @@ bg-img-multiple($imagesHash, $sizesHash = false)
 //aspect-ratio-kept-container('images/sample/a.png')  // sprite
 //aspect-ratio-kept-container(500, 300)  // size
 // ----------
-aspect-ratio-kept-container($width-or-imgpath, height = null)
+aspect-ratio-kept-container($width-or-imgpath, $height = null)
   if typeof($width-or-imgpath) is 'string'
     $img-size = _get-img-size($width-or-imgpath)
     $width  = $img-size.width

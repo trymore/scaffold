@@ -1,17 +1,27 @@
-$size-pc = 1200
-$size-tab = 768
-$size-sp = 750
+// ==========================================================================
+// Break point
+// ==========================================================================
+$break-point-sp       = 767
+$break-point-tb       = 1024
+$break-point-pc       = 768
+$break-point-pc-large = 1280
 
 $breakpoint = {
-  pc: s("only screen and (min-width: %spx)", $size-sp + 1),
-  pc-small: s("only screen and (min-width: %spx) and (max-width: %spx)", $size-sp + 1, $size-pc - 1),
-  pc-large: s("only screen and (min-width: %spx)", $size-pc + 1),
-  tab: s("only screen and (min-width: %spx) and (max-width:%spx)", $size-sp + 1, $size-tab),
-  sp: s("only screen and (max-width: %spx)", $size-sp),
-  sp-small: s("only screen and (max-width: %spx)", $size-sp / 2 - 1),
-  landscape: "only screen and (orientation: landscape)",
-  ratina: s("only screen and (min-resolution: 192dpi), (-webkit-min-device-pixel-ratio: 2) and (min-width: %spx)", $size-sp + 1)
+  pc: s("only screen and (min-width: %spx)", $break-point-pc),
+  pc-small: s("only screen and (min-width: %spx) and (max-width: %spx)", $break-point-pc px, $break-point-pc-large),
+  pc-large: s("only screen and (min-width: %spx)", $break-point-pc-large + 1),
+  tab: s("only screen and (min-width: %spx) and (max-width:%spx)", $break-point-sp + 1, $break-point-tb),
+  sp: s("only screen and (max-width: %spx)", $break-point-sp),
+  sp-small: s("only screen and (max-width: %spx)", $break-point-sp / 2 - 1),
+  landscape: "only screen and (orientation: landscape)"
 }
+
+// ==========================================================================
+// Size
+// ==========================================================================
+$size-pc = 1200
+$size-tb = 768
+$size-sp = 750
 
 $image-path  = "../images/"
 $sprite-path = 'images/'

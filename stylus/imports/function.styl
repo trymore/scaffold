@@ -22,6 +22,9 @@ _percentage()
   else
     return percentage(arguments[0] / arguments[1])
 
+_half($value)
+  (_add-pixel($value) / 2)
+
 // vwの計算
 _vw($val, $viewport)
   1vw * _percentage($val, $viewport)
