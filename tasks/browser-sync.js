@@ -285,8 +285,8 @@ export default class BrowserSync {
   _getFilePath(path) {
     let _path = path.replace(/[?#].+$/, '');
     for(const ext of ['.html', '.shtml', '.php']) {
-      if(extname(path)) break;
-      const __path = join(path, `index${ ext }`);
+      if(extname(_path)) break;
+      const __path = join(_path, `index${ ext }`);
       if(isFile(__path)) {
         _path = __path;
         break;
