@@ -81,7 +81,7 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = "./webpack/src/scripts/bundle.js");
+/******/ 	return __webpack_require__(__webpack_require__.s = "./webpack/src/sp/scripts/bundle.js");
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -176,10 +176,10 @@ function () {
 
 /***/ }),
 
-/***/ "./webpack/src/scripts/bundle.js":
-/*!***************************************!*\
-  !*** ./webpack/src/scripts/bundle.js ***!
-  \***************************************/
+/***/ "./webpack/src/sp/scripts/bundle.js":
+/*!******************************************!*\
+  !*** ./webpack/src/sp/scripts/bundle.js ***!
+  \******************************************/
 /*! no exports provided */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -188,8 +188,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var view_ui_anchor__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! view/ui/anchor */ "./webpack/imports/view/ui/anchor.js");
 
 window.addEventListener('DOMContentLoaded', function () {
-  Array.from(document.querySelectorAll('a[href^="#"]'), function (el) {
-    new view_ui_anchor__WEBPACK_IMPORTED_MODULE_0__["default"](el);
+  Array.from(document.querySelectorAll('a[href^="#"]'), function ($el) {
+    new view_ui_anchor__WEBPACK_IMPORTED_MODULE_0__["default"]($el);
   });
 });
 
