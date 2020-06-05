@@ -3,21 +3,21 @@ mixin source({ srcset = [], media = `(max-width: ${ breakPointSp }px)`, size = '
 
 //-
 //- 使い方 その1
-//- ratina用の画像も用意する場合
-//- e.g +picture('images/test.png', 'alt', { ratina: true })
+//- retina用の画像も用意する場合
+//- e.g +picture('images/test.png', 'alt', { retina: true })
 //-
 //- 使い方 その2
-//- ratinaを3倍まで使う場合（ほぼ使うことはないかと思いますが。。。）
-//- e.g +picture('images/test.png', 'alt', { ratina: true, arraySuffix: ['@2x', '@3x'] })
+//- retinaを3倍まで使う場合（ほぼ使うことはないかと思いますが。。。）
+//- e.g +picture('images/test.png', 'alt', { retina: true, arraySuffix: ['@2x', '@3x'] })
 //-
 //- 使い方 その3
 //- spディレクトリも含めたい場合
 //- e.g +picture('images/test.png', 'alt', { dirs: ['/sp/', '/pc/'] })
-mixin picture(pathImg, alt = '', { ratina = true, arraySuffix = ['@2x'], dirs = ['/', '/pc/'] } = {})
+mixin picture(pathImg, alt = '', { retina = true, arraySuffix = ['@2x'], dirs = ['/', '/pc/'] } = {})
   -
     if (!pathImg) throw new Error('pathImg is not defined.')
     if (arraySuffix[0] !== '') arraySuffix.unshift('')
-    if (!ratina) arraySuffix = [arraySuffix[0]]
+    if (!retina) arraySuffix = [arraySuffix[0]]
     const { dir, base, name, ext } = parsePath(pathImg)
     const imgs = map(dirs, (injectDir) => `${ dir }${injectDir}${ base }`)
   picture&attributes(attributes)
