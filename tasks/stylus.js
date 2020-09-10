@@ -7,10 +7,12 @@ import { mkfile, sameFile, isFile } from './utility/file';
 import { fileLog } from './utility/file-log';
 import { readFileSync } from './utility/fs';
 import { encodeLineFeedCode } from './utility/line-feed-code';
-import { toRelativePath, cacheBuster } from './utility/path-convert';
+import { toRelativePath } from './utility/path-convert';
 import stylus from 'stylus';
 import nib from 'nib';
 import iconv from 'iconv-lite';
+import postcss from 'postcss';
+import autoprefixer from 'autoprefixer';
 
 export default class Stylus extends Base {
 
@@ -100,7 +102,12 @@ export default class Stylus extends Base {
       if(!_css) return;
 
       const _dest = join(dest, relative(src, path)).replace('.styl', '.css');
-      let _cssBuf = Buffer.from(_css);
+      const _output = await postcss([autoprefixer({ grid: true })]).process(_css, {
+        from: undefined,
+        to: _dest
+      });
+
+      let _cssBuf = Buffer.from(_output.css);
 
       if(relativePath) {
         const _rootDirname = `/${ dirname(relative(htdocs, _dest)) }`;
