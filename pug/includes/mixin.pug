@@ -32,3 +32,26 @@ mixin svg(id, title = '', url = '')
       title!=title
     use(xlink:href=`${ url }#${ id }`)/
 
+//- デバイステキスト分割
+//- @example
+//- --------
+//- +splitText('test')
+//- +splitText('test<br>test') //- 改行あり
+//- +splitText('test', { tagName: 'div' })  //- tag指定。デフォルトはspan。
+//- +splitText('test', { charClass: 'text' })  //- class指定。デフォルトは.char。
+//- --------
+mixin splitText(str, { type = 'char', tagName = 'span', charClass = 'char' } = {})
+  -
+    if (typeof(str) !== 'string') throw new TypeError(`${ str }: type isn't string`)
+    const { regex, className } = {
+      char: {
+        regex: /(?=[^>]*(?:<|$))/,
+        className: charClass
+      },
+    }[type]
+  each val, i in str.split(regex)
+    - const nbsp = val === ' ' && '&nbsp;'
+    if val.match(/[&<>'"]/)
+      !=val
+    else
+      #{ tagName }(class=className class=`${ className }-${ i + 1 }` class=nbsp && 'space')&attributes(attributes)!=nbsp ? nbsp : val
