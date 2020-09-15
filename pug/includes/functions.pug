@@ -23,10 +23,10 @@
     return result
   }
 
-  function getSrcset(pathImg, injectDir = '/', ratinaSuffix = ['', '@2x']) {
+  function getSrcset(pathImg, injectDir = '/', retinaSuffix = ['', '@2x']) {
     if (!pathImg) throw new Error('pathImg is not defined.')
     const { dir, base, name, ext } = parsePath(pathImg)
-    return map(ratinaSuffix, (suffix) => {
+    return map(retinaSuffix, (suffix) => {
       if(suffix == '@large') {
         return `${ dir }${ injectDir }${ name }${ suffix }${ ext }`.trim()
       } else {
