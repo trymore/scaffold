@@ -7,8 +7,8 @@
 //- +picture('images/test.png', 'alt', { large: true })  //- pc大画面対応
 //- +picture('images/test.png', 'alt', { dirs: ['/sp/', '/pc/'] })  //- ディレクトリを指定
 //- --------
-mixin source({ srcset = [], media = `(max-width: ${ breakPointSp }px)`, size = '100vw'} = {})
-  source(media=media size=size srcset=`${ srcset.join(', ') }`)
+mixin source({ srcset = [], media = `(max-width: ${ breakPointSp }px)` } = {})
+  source(media=media srcset=`${ srcset.join(', ') }`)
 
 mixin picture(pathImg, alt = '', { retina = true, large = false, arraySuffix = ['@2x'], largeSuffix = ['@large', '@2x'], dirs = ['/', '/pc/'] } = {})
   -
