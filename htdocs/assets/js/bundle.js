@@ -81,7 +81,7 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = "./webpack/src/scripts/bundle.js");
+/******/ 	return __webpack_require__(__webpack_require__.s = "./webpack/src/assets/js/bundle.js");
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -176,10 +176,10 @@ function () {
 
 /***/ }),
 
-/***/ "./webpack/src/scripts/bundle.js":
-/*!***************************************!*\
-  !*** ./webpack/src/scripts/bundle.js ***!
-  \***************************************/
+/***/ "./webpack/src/assets/js/bundle.js":
+/*!*****************************************!*\
+  !*** ./webpack/src/assets/js/bundle.js ***!
+  \*****************************************/
 /*! no exports provided */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 

@@ -1,11 +1,11 @@
 //- 画像切り替え
 //- @example
 //- --------
-//- +picture('images/test.png', 'alt')  //- デフォルトはretina対応
-//- +picture('images/test.png', 'alt', { retina: false })  //- retina非対応
-//- +picture('images/test.png', 'alt', { arraySuffix: ['@2x', '@3x'] })  //- retina2〜3倍対応
-//- +picture('images/test.png', 'alt', { large: true })  //- pc大画面対応
-//- +picture('images/test.png', 'alt', { dirs: ['/sp/', '/pc/'] })  //- ディレクトリを指定
+//- +picture('assets/img/test.png', 'alt')  //- デフォルトはretina対応
+//- +picture('assets/img/test.png', 'alt', { retina: false })  //- retina非対応
+//- +picture('assets/img/test.png', 'alt', { arraySuffix: ['@2x', '@3x'] })  //- retina2〜3倍対応
+//- +picture('assets/img/test.png', 'alt', { large: true })  //- pc大画面対応
+//- +picture('assets/img/test.png', 'alt', { dirs: ['/sp/', '/pc/'] })  //- ディレクトリを指定
 //- --------
 mixin source({ srcset = [], media = `(max-width: ${ breakPointSp }px)` } = {})
   source(media=media srcset=`${ srcset.join(', ') }`)
