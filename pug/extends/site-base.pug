@@ -6,23 +6,23 @@ block vars
     1.タイトル設定
       配列の1番目は通常のタイトルタグ、2番目はog用のタイトルタグです。
       2番目を削除すると、通常のタイトルタグと共有されます。
-      通常タグと共有の例: - var title = ['タイトル'];
+      通常タグと共有の例: - let title = ['タイトル'];
     2.ディスクリプション設定
       タイトル設定と同様の形になります。
       2番目の配列を記述するとogタグ用のディスクリプションが設定されます。
-      通常タグ+ogタグ用: - var desc = ['ディスクリプション','ogディスクリプション'];
+      通常タグ+ogタグ用: - let desc = ['ディスクリプション','ogディスクリプション'];
 
   //- サイト全体のmeta情報
-  - var title    = ['タイトル', 'ogタグ用タイトル'];
-  - var desc     = ['ディスクリプション', 'ogディスクリプション'];
-  - var keyword  = 'キーワード,キーワード';
-  - var siteName = 'サイト名';
-  - var ogUrl    = `${siteUrl}`;
-  - var ogImg    = `${siteUrl}images/hoge.png`;
-  - var ogType   = 'website';
+  - let title    = ['タイトル', 'ogタグ用タイトル'];
+  - let desc     = ['ディスクリプション', 'ogディスクリプション'];
+  - let keyword  = 'キーワード,キーワード';
+  - let siteName = 'サイト名';
+  - let ogUrl    = `${siteUrl}`;
+  - let ogImg    = `${siteUrl}assets/img/hoge.png`;
+  - let ogType   = 'website';
 
   //- body の id, class 設定
-  - var bodyAttrs = {};
+  - let bodyAttrs = {};
 
 block html
   doctype html
@@ -32,12 +32,6 @@ block html
       head
         block meta
           include /includes/meta
-          meta(http-equiv="X-UA-Compatible" content="IE=edge")
-          //- ピンチでズームさせない
-          meta(name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no,maximum-scale=1")
-          //- ピンチでズームさせる
-            meta(content="width=device-width,initial-scale=1" name="viewport")
-          meta(name="format-detection" content="telephone=no")
         //- block ogp
           include /includes/ogp
         block styles

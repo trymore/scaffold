@@ -8,8 +8,9 @@ $break-point-pc-large = 1280
 
 $breakpoint = {
   pc: s("only screen and (min-width: %spx)", $break-point-pc),
-  pc-small: s("only screen and (min-width: %spx) and (max-width: %spx)", $break-point-pc px, $break-point-pc-large),
+  pc-small: s("only screen and (min-width: %spx) and (max-width: %spx)", $break-point-pc, $break-point-pc-large),
   pc-large: s("only screen and (min-width: %spx)", $break-point-pc-large + 1),
+  pc-retina: s("only screen and (min-width: %spx) and (-webkit-min-device-pixel-ratio: 2)", $break-point-pc),
   tab: s("only screen and (min-width: %spx) and (max-width:%spx)", $break-point-sp + 1, $break-point-tb),
   sp: s("only screen and (max-width: %spx)", $break-point-sp),
   sp-small: s("only screen and (max-width: %spx)", $break-point-sp / 2 - 1),

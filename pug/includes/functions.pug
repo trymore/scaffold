@@ -5,14 +5,6 @@
     });
   }
 
-  function range(start, end) {
-    const arry = []
-    for (let i = start; i <= end; i++) {
-      arry.push(i)
-    }
-    return arry
-  }
-
   function map(array, iteratee) {
     let index = -1
     const length = array == null ? 0 : array.length
@@ -27,6 +19,10 @@
     if (!pathImg) throw new Error('pathImg is not defined.')
     const { dir, base, name, ext } = parsePath(pathImg)
     return map(retinaSuffix, (suffix) => {
-      return `${ dir }${ injectDir }${ name }${ suffix }${ ext } ${ suffix.substring(1) }`.trim()
+      if(suffix == '@large') {
+        return `${ dir }${ injectDir }${ name }${ suffix }${ ext }`.trim()
+      } else {
+        return `${ dir }${ injectDir }${ name }${ suffix }${ ext } ${ suffix.substring(1) }`.trim()
+      }
     })
   }

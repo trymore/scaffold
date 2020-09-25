@@ -1,34 +1,57 @@
-mixin source({ srcset = [], media = `(max-width: ${ breakPointSp }px)`, size = '100vw'} = {})
-  source(media=media size=size srcset=`${ srcset.join(', ') }`)
+//- 画像切り替え
+//- @example
+//- --------
+//- +picture('assets/img/test.png', 'alt')  //- デフォルトはretina対応
+//- +picture('assets/img/test.png', 'alt', { retina: false })  //- retina非対応
+//- +picture('assets/img/test.png', 'alt', { arraySuffix: ['@2x', '@3x'] })  //- retina2〜3倍対応
+//- +picture('assets/img/test.png', 'alt', { large: true })  //- pc大画面対応
+//- +picture('assets/img/test.png', 'alt', { dirs: ['/sp/', '/pc/'] })  //- ディレクトリを指定
+//- --------
+mixin source({ srcset = [], media = `(max-width: ${ breakPointSp }px)` } = {})
+  source(media=media srcset=`${ srcset.join(', ') }`)
 
-//-
-//- 使い方 その1
-//- retina用の画像も用意する場合
-//- e.g +picture('images/test.png', 'alt', { retina: true })
-//-
-//- 使い方 その2
-//- retinaを3倍まで使う場合（ほぼ使うことはないかと思いますが。。。）
-//- e.g +picture('images/test.png', 'alt', { retina: true, arraySuffix: ['@2x', '@3x'] })
-//-
-//- 使い方 その3
-//- spディレクトリも含めたい場合
-//- e.g +picture('images/test.png', 'alt', { dirs: ['/sp/', '/pc/'] })
-mixin picture(pathImg, alt = '', { retina = true, arraySuffix = ['@2x'], dirs = ['/', '/pc/'] } = {})
+mixin picture(pathImg, alt = '', { retina = true, large = false, arraySuffix = ['@2x'], largeSuffix = ['@large', '@2x'], dirs = ['/', '/pc/'] } = {})
   -
     if (!pathImg) throw new Error('pathImg is not defined.')
     if (arraySuffix[0] !== '') arraySuffix.unshift('')
     if (!retina) arraySuffix = [arraySuffix[0]]
+    if (!retina) largeSuffix = [largeSuffix[0]]
     const { dir, base, name, ext } = parsePath(pathImg)
     const imgs = map(dirs, (injectDir) => `${ dir }${injectDir}${ base }`)
   picture&attributes(attributes)
     +source({ srcset:[imgs[0]] })
+    if large
+      +source({ srcset: getSrcset(pathImg, dirs[1], largeSuffix), media: `(min-width: ${ breakPointPcLarge }px)`})
     +source({ srcset: getSrcset(pathImg, dirs[1], arraySuffix), media: `(min-width: ${ breakPointPc }px)`})
     img(src=imgs[1] alt!=alt)
 
-//- SVG
+//- svg呼び出し
 mixin svg(id, title = '', url = '')
   svg&attributes(attributes)
     if title
       title!=title
     use(xlink:href=`${ url }#${ id }`)/
 
+//- デバイステキスト分割
+//- @example
+//- --------
+//- +splitText('test')
+//- +splitText('test<br>test') //- 改行あり
+//- +splitText('test', { tagName: 'div' })  //- tag指定。デフォルトはspan。
+//- +splitText('test', { charClass: 'text' })  //- class指定。デフォルトは.char。
+//- --------
+mixin splitText(str, { type = 'char', tagName = 'span', charClass = 'char' } = {})
+  -
+    if (typeof(str) !== 'string') throw new TypeError(`${ str }: type isn't string`)
+    const { regex, className } = {
+      char: {
+        regex: /(?=[^>]*(?:<|$))/,
+        className: charClass
+      },
+    }[type]
+  each val, i in str.split(regex)
+    - const nbsp = val === ' ' && '&nbsp;'
+    if val.match(/[&<>'"]/)
+      !=val
+    else
+      #{ tagName }(class=className class=`${ className }-${ i + 1 }` class=nbsp && 'space')&attributes(attributes)!=nbsp ? nbsp : val
