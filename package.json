@@ -46,7 +46,7 @@
   },
   "dependencies": {},
   "browserslist": [
-    ">1%",
-    "last 2 versions"
+    "last 1 version",
+    "IE 11"
   ]
 }
