@@ -41,7 +41,7 @@
     "regenerator-runtime": "^0.13.7",
     "spritesmith": "^3.3.1",
     "static-eval": ">=2.0.2",
-    "stylus": "^0.54.5",
+    "stylus": "^0.56.0",
     "uglify-es": "^3.0.27",
     "webpack": "^5.11.0"
   },
