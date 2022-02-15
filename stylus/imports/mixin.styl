@@ -103,39 +103,39 @@ sprite-fade-hover($image, $opts = {})
       animation: fadeIn ($opts.duration)s linear
 
 lineheight($font-size = null, $line-height-size = $font-size)
- line-height ($line-height-size / $font-size)
+  line-height ($line-height-size / $font-size)
 
 letterspacing($letter-spacing-size)
- letter-spacing ($letter-spacing-size / 1000) em
+  letter-spacing ($letter-spacing-size / 1000) em
 
 font-rem($font-size, $line-height-size = null, $letter-spacing-size = null)
- font-size ($font-size / 10) rem
- if $line-height-size
-   lineheight($font-size, $line-height-size)
- if $letter-spacing-size
-   letterspacing($letter-spacing-size)
+  font-size ($font-size / 10) rem
+  if $line-height-size
+    lineheight($font-size, $line-height-size)
+  if $letter-spacing-size
+    letterspacing($letter-spacing-size)
 
 font-pixel($font-size, $line-height-size = null, $letter-spacing-size = null)
- font-size $font-size px
- if $line-height-size
-   lineheight($font-size, $line-height-size)
- if $letter-spacing-size
-   letterspacing($letter-spacing-size)
+  font-size $font-size px
+  if $line-height-size
+    lineheight($font-size, $line-height-size)
+  if $letter-spacing-size
+    letterspacing($letter-spacing-size)
 
 font-percent($font-size, $line-height-size = null, $letter-spacing-size = null)
- font-size ($font-size / 16 * 100) %
- if $line-height-size
-   lineheight($font-size, $line-height-size)
- if $letter-spacing-size
-   letterspacing($letter-spacing-size)
+  font-size ($font-size / 16 * 100) %
+  if $line-height-size
+    lineheight($font-size, $line-height-size)
+  if $letter-spacing-size
+    letterspacing($letter-spacing-size)
 
 font-vw($font-size, $line-height-size = null, $letter-spacing-size = null)
- // font-size -vw($font-size, $size-sp)
- font-size ($font-size / $size-sp * 100) vw
- if $line-height-size
-   lineheight($font-size, $line-height-size)
- if $letter-spacing-size
-   letterspacing($letter-spacing-size)
+  // font-size -vw($font-size, $size-sp)
+  font-size ($font-size / $size-sp * 100) vw
+  if $line-height-size
+    lineheight($font-size, $line-height-size)
+  if $letter-spacing-size
+    letterspacing($letter-spacing-size)
 
 //10pxより小さいfont-size指定（chrome対策）
 small-text($size)
