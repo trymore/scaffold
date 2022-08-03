@@ -7,12 +7,53 @@ body
   font-family $font-family-base
   color $font-color-base
   background-color $base-color
+  text-rendering auto
+  font-feature-settings "palt"
+  -moz-osx-font-smoothing grayscale
   -webkit-text-size-adjust 100%
+  -webkit-font-smoothing antialiased
 
-.for-sp
+img
+  width 100%
+  height auto
+  vertical-align bottom
+
+svg
+  size 100%
+  backface-visibility hidden
+
+button,
+input[type="text"],
+select,
+textarea
+  appearance none
+  display block
+  margin 0
+  padding 0
+  font-family $font-family-base
+  font-size 100%
+  border 0
+  border-radius 0
+  background none
+  outline none
+
+button,
+input[type="button"],
+label,
+select
+  cursor pointer
+
+main,
+section
+  position relative
+
+a
+  text-decoration none
+
+.sp
   display none
-  +media(sp)
+  +media('sp')
     display inline-block
-.for-pc
-  +media(sp)
+.pc
+  +media('sp')
     display none

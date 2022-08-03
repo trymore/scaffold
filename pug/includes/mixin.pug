@@ -25,6 +25,12 @@ mixin picture(pathImg, alt = '', { retina = true, large = false, arraySuffix = [
     +source({ srcset: getSrcset(pathImg, dirs[1], arraySuffix), media: `(min-width: ${ breakPointPc }px)`})
     img(src=imgs[1] alt!=alt)
 
+mixin webp(fileName,alt,lazy = '')
+  if lazy == 'false'
+    img(src=`${pathImg}` + fileName alt=alt)
+  else
+    img(src=`${pathImg}` + fileName alt=alt loading="lazy")
+
 //- svg呼び出し
 mixin svg(id, title = '', url = '')
   svg&attributes(attributes)
