@@ -32,6 +32,26 @@ centering($width = null, $height = $width)
   else
     transform translateX(-50%) translateY(-50%)
 
+//コンテンツを上下左右センタリング（transform不使用）
+//@example
+//----------
+//centering-1('y')
+//----------
+centering-1($direction = false)
+  position absolute
+  margin auto
+  if $direction == y
+    top 0
+    bottom 0
+  else if $direction == x
+    right 0
+    left 0
+  else
+    top 0
+    bottom 0
+    right 0
+    left 0
+
 //コンテンツをセンタリング
 container-centering($width, $base-width = null)
   position relative

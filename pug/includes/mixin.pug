@@ -10,7 +10,7 @@
 mixin source({ srcset = [], media = `(max-width: ${ breakPointSp }px)` } = {})
   source(media=media srcset=`${ srcset.join(', ') }`)
 
-mixin picture(pathImg, alt = '', { retina = true, large = false, arraySuffix = ['@2x'], largeSuffix = ['@large', '@2x'], dirs = ['/', '/pc/'] } = {})
+mixin picture(pathImg, alt = '', lazy = true, { retina = true, large = false, arraySuffix = ['@2x'], largeSuffix = ['@large', '@2x'], dirs = ['/', '/pc/'] } = {})
   -
     if (!pathImg) throw new Error('pathImg is not defined.')
     if (arraySuffix[0] !== '') arraySuffix.unshift('')
@@ -23,9 +23,12 @@ mixin picture(pathImg, alt = '', { retina = true, large = false, arraySuffix = [
     if large
       +source({ srcset: getSrcset(pathImg, dirs[1], largeSuffix), media: `(min-width: ${ breakPointPcLarge }px)`})
     +source({ srcset: getSrcset(pathImg, dirs[1], arraySuffix), media: `(min-width: ${ breakPointPc }px)`})
-    img(src=imgs[1] alt!=alt)
+    if lazy == 'false'
+      img(src=imgs[1] alt!=alt)
+    else
+      img(src=imgs[1] alt!=alt loading="lazy")
 
-mixin webp(fileName,alt,lazy = '')
+mixin webp(fileName,alt,lazy = true)
   if lazy == 'false'
     img(src=`${pathImg}` + fileName alt=alt)
   else

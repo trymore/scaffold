@@ -19,7 +19,6 @@ block vars
   - let siteName = 'サイト名';
   - let ogUrl    = `${siteUrl}`;
   - let ogImg    = `${siteUrl}assets/img/hoge.png`;
-  - let ogType   = 'website';
 
   //- body の id, class 設定
   - let bodyAttrs = {};
@@ -39,8 +38,8 @@ block html
         //-block scripts
           script(src=`${pathJs}bundle.js`)
         //-block else
-          link(rel="shortcut icon" href=favicon)
-          link(href="/favicon.ico" rel="shortcut icon", type="image/ico")
+          link(rel="shortcut icon" href=`${pathImg}favicon.ico`)
+          link(href=`${pathImg}favicon.ico` rel="shortcut icon", type="image/ico")
           include /includes/tags.html
     block body
       body&attributes(bodyAttrs)

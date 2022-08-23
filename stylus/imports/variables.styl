@@ -1,7 +1,7 @@
 // ==========================================================================
 // Break point
 // ==========================================================================
-$break-point-sp       = 768
+$break-point-sp       = 767
 $break-point-tb       = 1024
 //$break-point-pc       = 768
 $break-point-pc-large = 1280
@@ -11,7 +11,7 @@ $breakpoint = {
   pc-small: s("only screen and (min-width: %spx) and (max-width: %spx)", $break-point-sp + 1, $break-point-pc-large),
   pc-large: s("only screen and (min-width: %spx)", $break-point-pc-large + 1),
   pc-retina: s("only screen and (min-width: %spx) and (-webkit-min-device-pixel-ratio: 2)", $break-point-sp + 1),
-  tab: s("only screen and (min-width: %spx) and (max-width:%spx)", $break-point-sp + 1, $break-point-tb),
+  tab: s("only screen and (min-width: %spx) and (max-width:%spx)", $break-point-sp + 1, $break-point-tb - 1),
   sp: s("only screen and (max-width: %spx)", $break-point-sp),
   sp-small: s("only screen and (max-width: %spx)", $break-point-sp / 2 - 1),
   landscape: "only screen and (orientation: landscape)"
@@ -20,16 +20,14 @@ $breakpoint = {
 // ==========================================================================
 // Size
 // ==========================================================================
-$size-pc = 1200
-$size-tb = 768
+$size-pc = 1280
+//$size-tb = 768
 $size-sp = 750
 
 $image-path  = "../img/"
 //$sprite-path = 'images/'
 
-$font-hiragino    = 'ヒラギノ角ゴ Pro W3', 'Hiragino Kaku Gothic Pro', 'メイリオ', Meiryo, sans-serif
-$font-family-base = $font-hiragino
+$font-family-base = 'ヒラギノ角ゴ Pro W3', 'Hiragino Kaku Gothic Pro', 'メイリオ', Meiryo, sans-serif
 $font-color-base  = #000000
-$link-color-base  = #000000
 $base-color       = '#ffffff'
 

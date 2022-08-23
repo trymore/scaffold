@@ -6,9 +6,8 @@ body
   font-rem(24)
   font-family $font-family-base
   color $font-color-base
-  background-color $base-color
   text-rendering auto
-  font-feature-settings "palt"
+  //font-feature-settings "palt"
   -moz-osx-font-smoothing grayscale
   -webkit-text-size-adjust 100%
   -webkit-font-smoothing antialiased
@@ -23,7 +22,7 @@ svg
   backface-visibility hidden
 
 button,
-input[type="text"],
+input,
 select,
 textarea
   appearance none
@@ -38,7 +37,7 @@ textarea
   outline none
 
 button,
-input[type="button"],
+input,
 label,
 select
   cursor pointer
@@ -49,6 +48,7 @@ section
 
 a
   text-decoration none
+  color $font-color-base
 
 .sp
   display none
