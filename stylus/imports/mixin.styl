@@ -20,11 +20,11 @@ media($device)
 //コンテンツを上下左右センタリング
 //@example
 //----------
-//centering()  // translate
-//centering(500px)  // margin
-//centering(500px, 200px)  // margin
+//centering-translate()  // translate
+//centering-translate(500px)  // margin
+//centering-translate(500px, 200px)  // margin
 // ----------
-centering($width = null, $height = $width)
+centering-translate($width = null, $height = $width)
   absolute top 50% left 50%
   if $width
     margin ($height / -2)px 0 0 ($width / -2)px
@@ -35,9 +35,9 @@ centering($width = null, $height = $width)
 //コンテンツを上下左右センタリング（transform不使用）
 //@example
 //----------
-//centering-1('y')
+//centering('y')
 //----------
-centering-1($direction = false)
+centering($direction = false)
   position absolute
   margin auto
   if $direction == y
