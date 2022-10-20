@@ -1,7 +1,7 @@
 //- 画像切り替え
 //- @example
 //- --------
-//- +picture('assets/img/test.png', 'alt')  //- デフォルトはRetina対応
+//- +picture('assets/img/test.png', 'alt')  //- RetinaとLazy Loadはデフォルト対応
 //- +picture('assets/img/test.png', 'alt', { retina: false })  //- Retina非対応
 //- +picture('assets/img/test.png', 'alt', { arraySuffix: ['@2x', '@3x'] })  //- Retina2〜3倍対応
 //- +picture('assets/img/test.png', 'alt', { large: true })  //- PC大画面対応
@@ -26,11 +26,12 @@ mixin picture(pathImg, alt = '', { retina = true, arraySuffix = ['@2x'], largeSu
       +source({ srcset: getSrcset(pathImg, dirs[1], largeSuffix), media: `(min-width: ${ breakPointPcLarge }px)` })
     img(src=imgs[1] alt!=alt loading=loading)
 
-mixin webp(fileName,alt,lazy = true)
-  if lazy == 'false'
-    img(src=`${pathImg}` + fileName alt=alt)
-  else
-    img(src=`${pathImg}` + fileName alt=alt loading="lazy")
+//- @example
+//- --------
+//- +webp('example.png', '', false) //- Lazy Load非対応
+//- --------
+mixin webp(fileName, alt, loading = 'lazy')
+  img(src=`${ pathImg }${ fileName }` alt!=alt loading=loading)
 
 //- svg呼び出し
 mixin svg(id, title = '', url = '')
