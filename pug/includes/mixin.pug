@@ -21,9 +21,9 @@ mixin picture(pathImg, alt = '', { retina = true, arraySuffix = ['@2x'], largeSu
     const imgs = map(dirs, (injectDir) => `${ dir }${ injectDir }${ base }`)
   picture&attributes(attributes)
     +source({ srcset:[imgs[0]] })
-    if large
-      +source({ srcset: getSrcset(pathImg, dirs[1], largeSuffix), media: `(min-width: ${ breakPointPcLg }px)` })
     +source({ srcset: getSrcset(pathImg, dirs[1], arraySuffix), media: `(min-width: ${ breakPointPc }px)` })
+    if large
+      +source({ srcset: getSrcset(pathImg, dirs[1], largeSuffix), media: `(min-width: ${ breakPointPcLarge }px)` })
     img(src=imgs[1] alt!=alt loading=loading)
 
 mixin webp(fileName,alt,lazy = true)
