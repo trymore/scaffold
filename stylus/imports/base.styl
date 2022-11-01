@@ -50,6 +50,12 @@ a
   text-decoration none
   color $font-color-base
 
+input[type=text],
+textarea
+  +media('sp')
+    font-vw(32)
+    transform-origin left center
+
 .sp
   display none
   +media('sp')
