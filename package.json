@@ -20,7 +20,7 @@
     "@babel/core": "^7.12.10",
     "@babel/node": "^7.12.10",
     "@babel/preset-env": "^7.12.11",
-    "autoprefixer": "^9.7.4",
+    "autoprefixer": "^10.4.13",
     "babel-loader": "^8.2.2",
     "browser-sync": "^2.26.13",
     "chokidar": "^3.0.1",
@@ -36,7 +36,7 @@
     "memory-fs": "^0.4.1",
     "mkdirp": "^0.5.1",
     "nib": "^1.1.2",
-    "postcss": "^7.0.26",
+    "postcss-cli": "^10.1.0",
     "pug": "^3.0.2",
     "regenerator-runtime": "^0.13.7",
     "spritesmith": "^3.3.1",
@@ -45,9 +45,7 @@
     "uglify-es": "^3.0.27",
     "webpack": "^5.11.0"
   },
-  "dependencies": {},
   "browserslist": [
-    "last 1 version",
-    "IE 11"
+    "defaults, not dead"
   ]
 }
