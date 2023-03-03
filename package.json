@@ -24,8 +24,6 @@
     "babel-loader": "^8.2.2",
     "browser-sync": "^2.26.13",
     "chokidar": "^3.0.1",
-    "coffee-loader": "^2.0.0",
-    "coffeescript": "^2.5.1",
     "deep-assign": "^2.0.0",
     "iconv-lite": "^0.4.15",
     "imagemin": "^6.1.0",

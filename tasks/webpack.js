@@ -40,19 +40,6 @@ export default class Webpack extends Base {
           },
         ],
       },
-      coffee: {
-        test: /\.coffee$/,
-        use: [
-          {
-            loader: 'coffee-loader',
-            options: {
-              transpile: {
-                presets: ['@babel/preset-env'],
-              },
-            },
-          },
-        ],
-      },
     }[transcompiler]
 
     return {
@@ -76,7 +63,6 @@ export default class Webpack extends Base {
     const { transcompiler } = config.webpack
     this._ext = {
       babel: '.js',
-      coffee: '.coffee',
     }[transcompiler]
   }
 

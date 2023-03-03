@@ -229,13 +229,13 @@ production 時に `images/minify/` 以下の画像を圧縮して `htdocs/` に�
 
 
 # JavaScript
-[Babel](https://babeljs.io/)（[es2015](https://babeljs.io/docs/plugins/preset-es2015/), [stage-0](https://babeljs.io/docs/plugins/preset-stage-0/)）または [CoffeeScript](http://coffeescript.org/) でトランスパイルし [webpack](https://webpack.js.org/) でバンドル
+[Babel](https://babeljs.io/)（[es2015](https://babeljs.io/docs/plugins/preset-es2015/), [stage-0](https://babeljs.io/docs/plugins/preset-stage-0/)）でトランスパイルし [webpack](https://webpack.js.org/) でバンドル
 `webpack/src/` 以下の js ファイルをトランスパイルし `htdocs/` に出力
 
 デフォルトは Babel
 変更する場合は `task-config.js` の以下を更新
 ```js
-    transcompiler: 'babel',  // ['babel', 'coffee']
+    transcompiler: 'babel',  // ['babel']
 ```
 
 ## webpack

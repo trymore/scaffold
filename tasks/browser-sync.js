@@ -270,7 +270,7 @@ export default class BrowserSync {
           const { transcompiler, webpack } = config;
           webpackSet.add(join(
             webpack.src,
-            transcompiler === 'coffee' ? _taskRoot.replace(_ext, '.coffee') : _taskRoot
+            _taskRoot
           ));
           break;
       }
