@@ -26,6 +26,7 @@
     "chokidar": "^3.0.1",
     "deep-assign": "^2.0.0",
     "iconv-lite": "^0.4.15",
+    "image-size": "^1.0.2",
     "imagemin": "^6.1.0",
     "imagemin-gifsicle": "^6.0.1",
     "imagemin-jpegtran": "^6.0.0",

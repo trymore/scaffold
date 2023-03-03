@@ -26,3 +26,19 @@
       }
     })
   }
+
+  function getWidth (img) {
+    try {
+      const width  = imageSize(`${ dest }/${ dirName }${ img.replace(/\.\.\//g, '') }`).width;
+      return width
+    } catch (e) {
+      console.error(`${ dest }/${ dirName }${ img.replace(/\.\.\//g, '') } img not found.`)
+    }
+  }
+
+  function getHeight (img) {
+    try {
+      const height = imageSize(`${ dest }/${ dirName }${ img.replace(/\.\.\//g, '') }`).height;
+      return height
+    } catch (e) { }
+  }

@@ -7,11 +7,12 @@
 //- +picture('assets/img/test.png', 'alt', { large: true })  //- PC大画面対応
 //- +picture('assets/img/test.png', 'alt', { dirs: ['/sp/', '/pc/'] })  //- ディレクトリを指定
 //- +picture('assets/img/test.png', 'alt', { loading: false })  //- Lazy Load非対応
+//- +picture('assets/img/test.png', 'alt', { decoding: 'async' })  //- decoding="async"対応
 //- --------
-mixin source({ srcset = [], media = `(max-width: ${ breakPointSp }px)` } = {})
-  source(media=media srcset=`${ srcset.join(', ') }`)
+mixin source({ srcset = [], media = `(max-width: ${ breakPointSp }px)` } = {}, loading)
+  source(media=media srcset=`${ srcset.join(', ') }` width=loading ? getWidth(srcset[0]) : null height=loading ? getHeight(srcset[0]) : null)
 
-mixin picture(pathImg, alt = '', { retina = true, arraySuffix = ['@2x'], largeSuffix = ['@large', '@2x'], dirs = ['/', '/pc/'], large = false, loading = 'lazy' } = {})
+mixin picture(pathImg, alt = '', { retina = true, arraySuffix = ['@2x'], largeSuffix = ['@large', '@2x'], dirs = ['/', '/pc/'], large = false, loading = 'lazy', decoding = false } = {})
   -
     if (!pathImg) throw new Error('pathImg is not defined.')
     if (arraySuffix[0] !== '') arraySuffix.unshift('')
@@ -20,11 +21,11 @@ mixin picture(pathImg, alt = '', { retina = true, arraySuffix = ['@2x'], largeSu
     const { dir, base, name, ext } = parsePath(pathImg)
     const imgs = map(dirs, (injectDir) => `${ dir }${ injectDir }${ base }`)
   picture&attributes(attributes)
-    +source({ srcset:[imgs[0]] })
-    +source({ srcset: getSrcset(pathImg, dirs[1], arraySuffix), media: `(min-width: ${ breakPointPc }px)` })
+    +source({ srcset:[imgs[0]] }, loading)
+    +source({ srcset: getSrcset(pathImg, dirs[1], arraySuffix), media: `(min-width: ${ breakPointPc }px)` }, loading)
     if large
-      +source({ srcset: getSrcset(pathImg, dirs[1], largeSuffix), media: `(min-width: ${ breakPointPcLarge }px)` })
-    img(src=imgs[1] alt!=alt loading=loading)
+      +source({ srcset: getSrcset(pathImg, dirs[1], largeSuffix), media: `(min-width: ${ breakPointPcLarge }px)` }, loading)
+    img(src=imgs[1] alt!=alt loading=loading width=loading ? getWidth(imgs[1]) : null height=loading ? getHeight(imgs[1]) : null decoding=decoding)
 
 //- @example
 //- --------

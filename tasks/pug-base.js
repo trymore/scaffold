@@ -2,6 +2,7 @@ import Base from './base';
 import config from '../tasks-config';
 import { join, relative, dirname, parse } from 'path';
 import { getType } from './utility/type';
+import imageSize from 'image-size';
 
 export default class PugBase extends Base {
 
@@ -34,16 +35,18 @@ export default class PugBase extends Base {
    * @param {string} filePath
    */
   _getMembers(filePath) {
-    const { root, src } = config.pug
+    const { root, src, dest } = config.pug
     const { production } = NS.argv
     const _dirname = dirname(filePath)
     return {
       isProduction: production,
       basedir: root,
       dirname: _dirname,
+      dest: dest,
       join: (...paths) => join(...paths),
       relative: (path) => relative(relative(src, _dirname), path),
-      parsePath: (path) => parse(path)
+      parsePath: (path) => parse(path),
+      imageSize: (path) => imageSize(path)
     }
   }
 
