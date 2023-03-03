@@ -1,9 +1,31 @@
+unless title[1]
+  - title[1] = title[0]
+
+unless desc[1]
+  - desc[1] = desc[0]
+
+//- meta設定
 meta(charset="utf-8")
 yield
 title= title[0]
-meta(http-equiv="X-UA-Compatible" content="IE=edge")
+meta(name="viewport" content="width=device-width, initial-scale=1")
+meta(name="format-detection" content="telephone=no")
+
+//- SEO
 meta(name="title" content=title[0])
 meta(name="description" content=desc[0])
-//-meta(name="keywords" content=keyword)
-meta(name="format-detection" content="telephone=no")
-meta(name="viewport" content="width=device-width, initial-scale=1")
+//- meta(name="keywords" content=keyword)
+
+//- OGP
+meta(property="og:title" content=title[1])
+meta(property="og:description" content=desc[1])
+meta(property="og:image" content=ogImg)
+meta(property="og:site_name" content=siteName)
+meta(property="og:url" content=ogUrl)
+meta(property="og:type" content=ogType)
+
+//- Twitter Card
+meta(name="twitter:card" content="summary_large_image")
+meta(name="twitter:title" content=title[1])
+meta(name="twitter:description" content=desc[1])
+meta(name="twitter:image" content=ogImg)
