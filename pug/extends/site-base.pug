@@ -15,7 +15,7 @@ block vars
   //- サイト全体のmeta情報
   - let title    = ['タイトル', 'ogタグ用タイトル'];
   - let desc     = ['ディスクリプション', 'ogディスクリプション'];
-  - let keyword  = 'キーワード,キーワード';
+  - let keyword  = 'キーワード';
   - let siteName = 'サイト名';
   - let ogUrl    = `${siteUrl}`;
   - let ogImg    = `${siteUrl}assets/img/hoge.png`;
@@ -33,8 +33,8 @@ block html
           include /includes/meta
         block styles
           link(rel="stylesheet" href=`${pathCss}style.css`)
-        //-block scripts
-          script(src=`${pathJs}bundle.js`)
+        block scripts
+          script(src=`${pathJs}bundle.js` defer)
         //-block else
           link(rel="shortcut icon" href=`${pathImg}favicon.ico`)
           link(href=`${pathImg}favicon.ico` rel="shortcut icon", type="image/ico")
