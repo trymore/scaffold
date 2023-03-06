@@ -30,7 +30,7 @@ export default {
     cacheBusterExts: ['jpg', 'png', 'gif', 'svg'],
   },
   webpack: {
-    transcompiler : 'babel',  // ['babel']
+    transcompiler : 'babel',  // ['babel', 'typescript']
     charset       : 'utf8',
     lineFeedCode  : 'LF',  // 'CR+LF', 'LF', 'CR'
     root          : 'webpack',

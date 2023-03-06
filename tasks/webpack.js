@@ -40,6 +40,15 @@ export default class Webpack extends Base {
           },
         ],
       },
+      typescript: {
+        test: /\.ts$/,
+        use: [
+          {
+            loader: 'ts-loader',
+          },
+        ],
+        exclude: /node_modules/
+      },
     }[transcompiler]
 
     return {
@@ -63,6 +72,7 @@ export default class Webpack extends Base {
     const { transcompiler } = config.webpack
     this._ext = {
       babel: '.js',
+      typescript: '.ts',
     }[transcompiler]
   }
 

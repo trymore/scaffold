@@ -270,7 +270,7 @@ export default class BrowserSync {
           const { transcompiler, webpack } = config;
           webpackSet.add(join(
             webpack.src,
-            _taskRoot
+            transcompiler === 'typescript' ? _taskRoot.replace(_ext, '.ts') : _taskRoot
           ));
           break;
       }
