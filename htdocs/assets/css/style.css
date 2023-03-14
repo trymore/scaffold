@@ -97,19 +97,70 @@ body {
   font-size: 2.4rem;
   font-family: 'ヒラギノ角ゴ Pro W3', 'Hiragino Kaku Gothic Pro', 'メイリオ', Meiryo, sans-serif;
   color: #000;
-  background-color: '#ffffff';
+  text-rendering: auto;
+  -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
+  -webkit-font-smoothing: antialiased;
 }
-.for-sp {
+img {
+  width: 100%;
+  height: auto;
+  vertical-align: bottom;
+}
+svg {
+  width: 100%;
+  height: 100%;
+  -webkit-backface-visibility: hidden;
+          backface-visibility: hidden;
+}
+button,
+input,
+select,
+textarea {
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  display: block;
+  margin: 0;
+  padding: 0;
+  font-family: 'ヒラギノ角ゴ Pro W3', 'Hiragino Kaku Gothic Pro', 'メイリオ', Meiryo, sans-serif;
+  font-size: 100%;
+  border: 0;
+  border-radius: 0;
+  background: none;
+  outline: none;
+}
+button,
+input,
+label,
+select {
+  cursor: pointer;
+}
+main,
+section {
+  position: relative;
+}
+a {
+  text-decoration: none;
+  color: #000;
+}
+@media only screen and (max-width: 767px) {
+  input[type=text],
+  textarea {
+    font-size: 4.266666666666667vw;
+    transform-origin: left center;
+  }
+}
+.sp {
   display: none;
 }
 @media only screen and (max-width: 767px) {
-  .for-sp {
+  .sp {
     display: inline-block;
   }
 }
 @media only screen and (max-width: 767px) {
-  .for-pc {
+  .pc {
     display: none;
   }
 }
