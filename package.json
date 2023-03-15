@@ -46,7 +46,7 @@
     "ts-loader": "^9.4.2",
     "typescript": "^4.9.5",
     "uglify-es": "^3.0.27",
-    "webpack": "^5.75.0"
+    "webpack": "^5.76.0"
   },
   "browserslist": [
     "defaults, not dead"
