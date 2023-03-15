@@ -20,6 +20,7 @@
     "@babel/core": "^7.12.10",
     "@babel/node": "^7.12.10",
     "@babel/preset-env": "^7.12.11",
+    "@types/node": "^18.15.3",
     "autoprefixer": "^10.4.13",
     "babel-loader": "^8.2.2",
     "browser-sync": "^2.26.13",
@@ -49,8 +50,5 @@
   },
   "browserslist": [
     "defaults, not dead"
-  ],
-  "dependencies": {
-    "@types/node": "^18.15.2"
-  }
+  ]
 }
