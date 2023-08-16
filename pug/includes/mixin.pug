@@ -34,6 +34,13 @@ mixin picture(pathImg, alt = '', { retina = true, arraySuffix = ['@2x'], largeSu
 mixin webp(fileName, alt, loading = 'lazy')
   img(src=`${ pathImg }${ fileName }` alt!=alt loading=loading)
 
+//- @example
+//- --------
+//- +img('example.png', '', false) //- Lazy Load非対応
+//- --------
+mixin img(pathImg, alt = '', loading = 'lazy')
+  img(src=pathImg alt!=alt loading=loading width=loading ? getWidth(pathImg) : null height=loading ? getHeight(pathImg) : null)
+
 //- svg呼び出し
 mixin svg(id, title = '', url = '')
   svg&attributes(attributes)
