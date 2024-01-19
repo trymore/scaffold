@@ -46,7 +46,7 @@ mixin svg(id, title = '', url = '')
   svg&attributes(attributes)
     if title
       title!=title
-    use(xlink:href=`${ url }#${ id }`)/
+    use(href=`${ url }#${ id }`)/
 
 //- デバイステキスト分割
 //- @example
