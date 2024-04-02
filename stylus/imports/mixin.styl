@@ -178,10 +178,10 @@ second-line-indent($width)
 //背景画像指定
 //@example
 //----------
-//bg-img($image-path + "aaa.jpg", left, top, no-repeat, #fff)
+//bg-img("aaa.jpg", left, top, no-repeat, #fff)
 //----------
 bg-img($file-name, $position-x = left, $position-y = top, $repeat-type = null, $bg-color = null, $bg-size = false)
-  background url($file-name) $position-x $position-y $repeat-type $bg-color
+  background url($image-path + $file-name) $position-x $position-y $repeat-type $bg-color
   if $bg-size
     background-size $bg-size
 
