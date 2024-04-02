@@ -189,8 +189,8 @@ bg-img($file-name, $position-x = left, $position-y = top, $repeat-type = null, $
 //@example
 //----------
 //bg-img-multiple({
-//  '1': $image-path + "aaa.jpg" (left top) no-repeat
-//  '2': $image-path + "bbb.jpg" (left top) no-repeat #fff
+//  '1': "aaa.jpg" (left top) no-repeat
+//  '2': "bbb.jpg" (left top) no-repeat #fff
 //}, {
 //  '1': (50px 100px)
 //  '2': (50px 100px)
@@ -198,16 +198,16 @@ bg-img($file-name, $position-x = left, $position-y = top, $repeat-type = null, $
 //----------
 bg-img-multiple($imagesHash, $sizesHash = false)
   $images = null
-  for i, props in $imagesHash
-    for prop, j in props
+  for i, $props in $imagesHash
+    for $prop, j in $props
       if j is 0
         if i is 1
-          $images = $images url(prop)
+          $images = $images url($image-path + $prop)
         else
-          $images = $images, url(prop)
+          $images = $images, url($image-path + $prop)
       else
-        if prop
-          $images = $images prop
+        if $prop
+          $images = $images $prop
   background $images
   if $sizesHash
     $sizes = null
